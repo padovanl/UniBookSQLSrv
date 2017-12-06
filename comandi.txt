@@ -1,0 +1,19 @@
+accedere a mysql
+mysql -u nome_utente -ppassword
+
+creo database
+create database facebookDB;
+
+6creo utente e gli assegno tutti i privilegi solo sul facebookDB (username e pwd = facebook)
+CREATE USER 'facebook'@'localhost' IDENTIFIED BY 'facebook';
+GRANT ALL PRIVILEGES ON facebook.* TO facebook;
+FLUSH PRIVILEGES;
+
+
+aprire il terminale, spostarsi nella directori del progetto e aprire mc per modificare il file .env nella seconda sezione cambiare DB_DATABASE con facebookDB, e DB_USERNAME e DB_PASSWORD con facebook.
+
+lanciate il comando
+php artisan migrate
+
+se aprite localhost/phpmyadmin e effettuate il login con l'utente creato trovate il db con le tabelle. 
+
