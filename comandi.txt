@@ -4,11 +4,7 @@ mysql -u nome_utente -ppassword
 creo database
 create database facebook;
 
-6creo utente e gli assegno tutti i privilegi solo sul facebook database (username e pwd = facebook)
-CREATE USER 'facebook'@'localhost' IDENTIFIED BY 'facebook';
-GRANT ALL PRIVILEGES ON facebook.* TO facebook;
-FLUSH PRIVILEGES;
-
+create un utente e assegnategli tutti i privilegi solo su quel DB. (es username=facebook pwd=facebbok)
 
 aprire il terminale, spostarsi nella directori del progetto e aprire mc per modificare il file .env nella seconda sezione cambiare DB_DATABASE con facebookDB, e DB_USERNAME e DB_PASSWORD con facebook.
 
