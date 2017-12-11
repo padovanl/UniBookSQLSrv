@@ -1,0 +1,154 @@
+Il prof ha detto di cambiare il nome del folder con i git in project.git e clonare sul server in una nuova cartella project. 
+Questo per far si che le migration si possano evocare sul server. Quindi c'è da fare un nuovo clone o remote verso ....../project.git
+Nella cartella sul server del gruppo ha messo la pass per ilDB che ha creato per ogni gruppo.
+
+
+ 
+File modificati nel progetto registro:
+
+resources/views/students.blade.php
+
+#ogni student ha un relink verso la sua pagina con le "info"
+
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Students</title>
+
+    </head>
+    <body>
+      <b>Elenco studenti:</b>
+    </br>
+      <?php foreach ($students as $student) {
+        # code...
+        echo  "<a href=\"/students/{$student -> id}\"> {$student -> name}{$student -> surname}</a> </br>";
+      }?>
+
+    </body>
+</html>
+
+
+-----------------------------------------------------------------------------------------------------------
+
+resources/views/student.blade.php
+
+
+<!--
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Student</title>
+
+    </head>
+    <body>
+      @include('titlebar')
+      <b>Dettaglio studente:</b>
+      </br>
+      <?php echo $student->id.' '.$student->name.' '.$student->surname. '</br>'; ?>
+    </body>
+</html>
+-->
+
+      # se si utilizza il layout.blade.php sotto si può usare questa formattazione del codice
+      @extends('layout')
+
+      @section('content')
+      <b>Dettaglio studente:</b>
+      </br>
+      <?php echo $student->id.' '.$student->name.' '.$student->surname. '</br>'; ?>
+
+      @endsection
+
+
+-----------------------------------------------------------------------------------------------------------
+resources/views/titlebar.blande.php
+#un esempio di inclusione così da non dover sempre riscrivere il codice
+<h1>APPLICAZIONE</h1>
+
+-----------------------------------------------------------------------------------------------------------
+resources/views/layout.blade.php
+
+#serve solo a far vedere come funzionano i template
+ 
+<html>
+<head>
+</head>
+  <body>
+    @include('titlebar')
+
+    @yield('content')
+    
+  </body>
+</html>
+
+-----------------------------------------------------------------------------------------------------------
+lanciare da terminale php artisan make:controller StudentControl
+app/http/StudentControl
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\student;
+
+class StudentControl extends Controller
+{
+    public function index() {
+      $students = student::All();
+      return view('students',compact('students'));
+    }
+
+    public function show($id) {
+      $student = student::find($id);
+      return view('student',compact('student'));
+    }
+
+}
+
+
+-----------------------------------------------------------------------------------------------------------
+routes/web.php
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+use App\student;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/students','StudentControl@index');
+#{
+    #due modi per passare le info del db: o direttamente chiamando DB::select oppure passando per le app/model
+    #$students = DB::select("select * from students");
+    #$students = student::All();
+    #return view('students',compact('students'));
+#});
+
+Route::get('/students/{id}','StudentControl@show');
+#){
+    #$student = student::find($id);
+    #return view('student',compact('student'));
+#});
+
+
+
