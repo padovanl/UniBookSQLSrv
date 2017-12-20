@@ -6,10 +6,9 @@ create database facebook;
 
 create un utente e assegnategli tutti i privilegi solo su quel DB. (es username=facebook pwd=facebbok)
 
-aprire il terminale, spostarsi nella directori del progetto e aprire mc per modificare il file .env nella seconda sezione cambiare DB_DATABASE con facebookDB, e DB_USERNAME e DB_PASSWORD con facebook.
+aprire il terminale, spostarsi nella directory del progetto e aprire mc per modificare il file .env nella seconda sezione cambiare DB_DATABASE con facebookDB, e DB_USERNAME e DB_PASSWORD con facebook.
 
 lanciate il comando
 php artisan migrate
 
-se aprite localhost/phpmyadmin e effettuate il login con l'utente creato trovate il db con le tabelle. 
-
+se aprite localhost/phpmyadmin e effettuate il login con l'utente creato trovate il db con le tabelle.

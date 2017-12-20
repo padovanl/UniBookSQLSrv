@@ -20,7 +20,7 @@
                 </ul>
                 <ul class="list-unstyled hidden-xs" id="sidebar-footer">
                     <li>
-                        <a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3> <i class="glyphicon glyphicon-heart-empty"></i> Bootply</a>
+                        <a href="https://www.facebook.com/unife.it/"><h3>UniBook</h3> <i class="glyphicon glyphicon-heart-empty"></i> by UniFe</a>
                     </li>
                 </ul>
 
@@ -47,7 +47,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a href="http://usebootstrap.com/theme/facebook" class="navbar-brand logo">b</a>
+                        <a href="/" class="navbar-brand logo">b</a>
                     </div>
                     <nav class="collapse navbar-collapse" role="navigation">
                         <form class="navbar-form navbar-left">
@@ -66,18 +66,18 @@
                                 <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
                             </li>
                             <li>
-                                <a href="#"><span class="badge">badge</span></a>
+                                <a href="#"><span class="badge">{{$user -> name}}</span></a>
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="">More</a></li>
-                                    <li><a href="">More</a></li>
-                                    <li><a href="">More</a></li>
-                                    <li><a href="">More</a></li>
-                                    <li><a href="">More</a></li>
+                                    <li><a href="">Report..</a></li>
+                                    <li><a href="">Activity Log</a></li>
+                                    <li><a href="">Settings</a></li>
+                                    <li><a href="">About UniBook</a></li>
+                                    <li><a href="">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -95,70 +95,43 @@
                             <div class="col-sm-7">
 
                                 <div class="well">
-                                    <form class="form">
-                                        <h4>Sign-up</h4>
+                                    <form class="form" method="POST" action="/post">
+                                        <h4>New Post</h4>
                                         <div class="input-group text-center">
-                                            <input class="form-control input-lg" placeholder="Enter your email address" type="text">
-                                            <span class="input-group-btn"><button class="btn btn-lg btn-primary" type="button">OK</button></span>
+                                          <input name="_token" type="hidden" value="{{ csrf_token() }}">
+                                            <input class="form-control input-lg" name="content" placeholder="Hey, What's Up?" type="text">
+                                            <span class="input-group-btn"><button type="submit" class="btn btn-lg btn-primary">Post</button></span>
                                         </div>
                                     </form>
                                 </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="">More</a></li>
-                                                    <li><a href="">More</a></li>
-                                                    <li><a href="">More</a></li>
-                                                    <li><a href="">More</a></li>
-                                                    <li><a href="">More</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul> <h4>Bootply Editor &amp; Code Library</h4></div>
-                                    <div class="panel-body">
-                                        <p><img src="../../public/assets/img/150x150.gif" class="img-circle pull-right"> <a href="#">The Bootstrap Playground</a></p>
-                                        <div class="clearfix"></div>
-                                        <hr>
-                                        Design, build, test, and prototype
-                                        using Bootstrap in real-time from your Web browser. Bootply combines the
-                                        power of hand-coded HTML, CSS and JavaScript with the benefits of
-                                        responsive design using Bootstrap. Find and showcase Bootstrap-ready
-                                        snippets in the 100% free Bootply.com code repository.
-                                    </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading"><a href="#" class="pull-right">View all</a> <h4>Stackoverflow</h4></div>
-                                    <div class="panel-body">
-                                        <img src="../../public/assets/img/150x150.gif" class="img-circle pull-right"> <a href="#">Keyword: Bootstrap</a>
-                                        <div class="clearfix"></div>
-                                        <hr>
-
-                                        <p>If you're looking for help with Bootstrap code, the <code>twitter-bootstrap</code> tag at <a href="http://stackoverflow.com/questions/tagged/twitter-bootstrap">Stackoverflow</a> is a good place to find answers.</p>
-
-                                        <hr>
-                                        <form>
-                                            <div class="input-group">
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-                                                </div>
-                                                <input class="form-control" placeholder="Add a comment.." type="text">
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>
-
-
+                                @foreach ($posts as $post)
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
+                                              <li class="dropdown">
+                                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+                                                  <ul class="dropdown-menu">
+                                                      <li><a href="">More</a></li>
+                                                      <li><a href="">More</a></li>
+                                                      <li><a href="">More</a></li>
+                                                      <li><a href="">More</a></li>
+                                                      <li><a href="">More</a></li>
+                                                  </ul>
+                                              </li>
+                                          </ul> <h4>Post Author Name</h4></div>
+                                      <div class="panel-body">
+                                          <div class="clearfix"></div>
+                                          <hr>
+                                          {{$post -> content}}
+                                      </div>
+                                  </div>
+                                @endforeach
                             </div>
                             <div class="col-sm-5">
                                 <div class="container">
                                     <div class="row">
                                         <div class="panel panel-default user_panel">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title">User List</h3>
+                                                <h3 class="panel-title">Suggested Friends</h3>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-container">
@@ -180,7 +153,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <img class="pull-left img-circle nav-user-photo" width="50" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxhcCYW4QDWMOjOuUTxOd50KcJvK-rop9qE9zRltSbVS_bO-cfWA" />  
+                                                                <img class="pull-left img-circle nav-user-photo" width="50" src="{{asset($user -> pic_path)}}" />  
                                                             </td>
                                                             <td>
                                                                 Herbert Hoover<br><i class="fa fa-envelope"></i>
@@ -223,7 +196,7 @@
                         <hr>
 
                         <h4 class="text-center">
-                            <a href="http://usebootstrap.com/theme/facebook" target="ext">Download this Template @Bootply</a>
+                            <a href="/" target="ext">Download this Template @Bootply</a>
                         </h4>
 
                         <hr>

@@ -10,26 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//Login and Registration Routes
+Route::get('/login', 'LoginController@showLogin')->name('login.showLogin');
+Route::post('/login/submit', 'LoginController@doLogin');
 
-Route::get('/', function () {
-    return view('login');
-});
-Route::get('/admin', function () {
-    return view('admin');
-});
-Route::get('/home', function () {
-    return view('home');
-});
-Route::get('/notification', function () {
-    return view('notification_list');
-});
-Route::get('/post_detail', function () {
-    return view('post_detail');
-});
-Route::get('/register', function () {
-    return view('register');
-});
-Route::get('/report', function () {
-    return view('report');
-});
-
+//Home Routes
+Route::get('/', 'HomeController@landing');
+Route::post('/post', 'HomeController@newPost');

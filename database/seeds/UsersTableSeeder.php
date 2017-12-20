@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder
             'citta' => $faker->randomElement(['Ferrara','Bologna','Firenze','Roma','Milano','Venezia','Londra','Parigi','Berlino','Torino']),
             'ban' => 0,
             'id_user' => uniqid(),
-            'pic_path' => $faker->randomElement(['/resouces/assets/images/facebook1.jpg','/resouces/assets/images/facebook2.jpg','/resouces/assets/images/facebook3.jpeg','/resouces/assets/images/facebook4.jpeg','/resouces/assets/images/facebook5.jpeg','/resouces/assets/images/facebook6.jpeg','/resouces/assets/images/facebook7.jpeg']),
+            'pic_path' => $faker->randomElement(['assets/images/facebook1.jpg','assets/images/facebook2.jpg','assets/images/facebook3.jpeg','assets/images/facebook4.jpeg','assets/images/facebook5.jpeg','assets/images/facebook6.jpeg','assets/images/facebook7.jpeg']),
             'confirmed' => 1
 
         ]);
