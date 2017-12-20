@@ -12,5 +12,24 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
+Route::get('/admin', function () {
+    return view('admin');
+});
+Route::get('/home', function () {
+    return view('home');
+});
+Route::get('/notification', function () {
+    return view('notification_list');
+});
+Route::get('/post_detail', function () {
+    return view('post_detail');
+});
+Route::get('/register', function () {
+    return view('register');
+});
+Route::get('/report', function () {
+    return view('report');
+});
+
