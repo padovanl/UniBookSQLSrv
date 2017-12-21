@@ -7,11 +7,11 @@ use Faker\Generator as Faker;
 
 
 $factory->define(App\Post::class, function (Faker $faker) {
+
+    $userIDs = DB::table('users')->pluck('id_user')->all();
     return [
           'fixed' => 0,
           'content' => $faker->paragraph,
-          'id_author' => function () {
-              return factory(App\User::class)->create()->id_user;
-          }
+          'id_author' => $faker->randomElement($userIDs)
       ];
 });
