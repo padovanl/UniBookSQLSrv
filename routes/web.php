@@ -17,3 +17,4 @@ Route::post('/login/submit', 'LoginController@doLogin');
 //Home Routes
 Route::get('/', 'HomeController@landing');
 Route::post('/post', 'HomeController@newPost');
+Route::resource('/comment', 'CommentController');
