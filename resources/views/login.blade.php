@@ -61,7 +61,7 @@
 
 
     <div class="new_user">
-      <p>Nuovo utente? <a>Registrati!</a></p>
+      <p>Nuovo utente? <a href="/register">Registrati!</a></p>
     </div>
 
   </div>

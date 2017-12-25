@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Comment;
+use App\CommentU;
 
 class CommentController extends Controller
 {
@@ -13,7 +13,7 @@ class CommentController extends Controller
   }
 
   public function store(Request $request){
-      $comment = new Comment;
+      $comment = new CommentU;
       $comment->content = request('content');
       $comment->id_author = request('id_user');
       $comment->id_post = request('id_post');

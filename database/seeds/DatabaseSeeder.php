@@ -13,8 +13,10 @@ class DatabaseSeeder extends Seeder
     {
       $users = factory(App\User::class, 5)->create();
       $posts = factory(App\Post::class, 10)->create();
-      $comments = factory(App\Comment::class, 5)->create();
+      $commentsU = factory(App\CommentU::class, 15)->create();
+      #$commentsP = factory(App\CommentP::class, 15)->create();
       $pages = factory(App\Page::class, 5)->create();
-      $page_comments = factory(App\CommentPage::class, 5)->create();
+      #$page_comments = factory(App\CommentPage::class, 15)->create();
+      $user_comments = factory(App\CommentUser::class, 15)->create();
     }
 }

@@ -18,3 +18,4 @@ Route::post('/login/submit', 'LoginController@doLogin');
 Route::get('/', 'HomeController@landing');
 Route::post('/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
+Route::resource('/register', 'RegisterController');

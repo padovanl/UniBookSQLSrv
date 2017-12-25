@@ -13,7 +13,7 @@ e quello del post a random.
 <form action="/comment" method="post">
   {{csrf_field()}}
   Comment: <input type="text" name="content" required><br>
-  <input name="id_user" type="hidden" value=<?php echo "5a3bce0e3b383"?>>
+  <input name="id_user" type="hidden" value=<?php echo "5a41211d03ca6"?>>
   <input name="id_post" type="hidden" value=<?php echo "5"?>>
   <input type="submit" value="COMMENTA">
 </form>

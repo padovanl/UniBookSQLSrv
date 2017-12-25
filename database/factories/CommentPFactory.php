@@ -2,12 +2,14 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Comment::class, function (Faker $faker) {
-      $userIDs = DB::table('users')->pluck('id_user')->all();
+#crea commenti fatti da pagine
+
+$factory->define(App\CommentP::class, function (Faker $faker) {
+      $pageIDs = DB::table('pages')->pluck('id_page')->all();
       $postIDs = DB::table('posts')->pluck('id_post')->all();
       return [
             'content' => $faker->sentence(10),
-            'id_author' => $faker->randomElement($userIDs),
+            'id_author' => $faker->randomElement($pageIDs),
             'id_post' => $faker->randomElement($postIDs)
         ];
 });
