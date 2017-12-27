@@ -18,8 +18,6 @@ class CreateTablePostUser extends Migration
             $table->integer('id_post')->unsigned();
             $table->uuid('id_user');
 
-            //primary key
-            $table->primary('id_post', 'id_user');
             //foreign key
             $table->foreign('id_user')->references('id_user')->on('users');
             $table->foreign('id_post')->references('id_post')->on('posts');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
+use App\Users_make_friends;
 use Cookie;
 
 class HomeController extends Controller{
@@ -23,12 +24,25 @@ class HomeController extends Controller{
   public function landing()
   {
     if($this->verify_cookie()){
+
       //login
       $id = Cookie::get('session');
       $user = User::where('id_user', $id)->first();
 
-      //Caricamento dei post
+      //Caricamento della lista amici: stato=0->not friends, stato=1->pending, stato=2->ok
+      //$friends = Users_make_friends::where('id_request_user', $id)->where('status', 2)->get();
+
+      //foreach ($friend as $friends){
+
+      //}
+
+      //Caricamento dei post degli amici
+      //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
+
       $posts = Post::all();
+
+
+      //Caricamento dei post delle pagine seguite
 
       return view('home', compact('user', 'posts'));
     }

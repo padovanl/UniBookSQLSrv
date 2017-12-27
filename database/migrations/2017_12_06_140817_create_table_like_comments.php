@@ -19,8 +19,6 @@ class CreateTableLikeComments extends Migration
             $table->uuid('id_user');
             $table->boolean('like');
 
-            //primary key
-            $table->primary('id_comment', 'id_user');
             //foreign key
             $table->foreign('id_user')->references('id_user')->on('users');
             $table->foreign('id_comment')->references('id_comment')->on('comments');

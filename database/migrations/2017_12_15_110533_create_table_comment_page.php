@@ -18,8 +18,6 @@ class CreateTableCommentPage extends Migration
             $table->integer('id_comment')->unsigned();
             $table->integer('id_page')->unsigned();
 
-            //primary key
-            $table->primary('id_comment', 'id_page');
             //foreign key
             $table->foreign('id_page')->references('id_page')->on('pages');
             $table->foreign('id_comment')->references('id_comment')->on('comments');

@@ -13,9 +13,11 @@
 //Login and Registration Routes
 Route::get('/login', 'LoginController@showLogin')->name('login.showLogin');
 Route::post('/login/submit', 'LoginController@doLogin');
+Route::resource('/register', 'RegisterController');
+
 
 //Home Routes
 Route::get('/', 'HomeController@landing');
+//Qui andrà tutto sostituito con Ajax
 Route::post('/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
-Route::resource('/register', 'RegisterController');
