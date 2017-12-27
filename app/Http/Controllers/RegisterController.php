@@ -27,6 +27,7 @@ class RegisterController extends Controller
       $user -> save();
 
       #sarebbe da fare la redirect con l'utente già loggato
+      //Daniele: non credo sia una buona idea, dobbiamo mandare una mail e confermare l'utente
       return redirect('/home');
   }
 

@@ -19,8 +19,6 @@ class CreateTableUsersMakeFriends extends Migration
             $table->uuid('id_user');
             $table->integer('status')->unsigned();
 
-            //primary key
-            $table->primary('id_request_user', 'id_user');
             //foreign key
             $table->foreign('id_user')->references('id_user')->on('users');
             $table->foreign('id_request_user')->references('id_user')->on('users');

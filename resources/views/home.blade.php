@@ -146,27 +146,12 @@
                                                                 <i class="fa fa-2x fa-user fw"></i>
                                                             </td>
                                                             <td>
-                                                                John Smith<br><i class="fa fa-envelope"></i>
+                                                                <br><i class="fa fa-envelope"></i>
                                                             </td>
                                                             <td>
-                                                                Builder Admin
                                                             </td>
                                                             <td align="center">
                                                                 Last Login:  6/14/2017<br><small class="text-muted">2 days ago</small>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <img class="pull-left img-circle nav-user-photo" width="50" src="{{asset($user -> pic_path)}}" />  
-                                                            </td>
-                                                            <td>
-                                                                Herbert Hoover<br><i class="fa fa-envelope"></i>
-                                                            </td>
-                                                            <td>
-                                                                Builder Sales Agent
-                                                            </td>
-                                                            <td align="center">
-                                                                Last Login:  6/10/2017<br><small class="text-muted">5 days ago</small>
                                                             </td>
                                                         </tr>
                                                         </tbody>

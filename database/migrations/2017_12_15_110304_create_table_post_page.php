@@ -18,8 +18,6 @@ class CreateTablePostPage extends Migration
             $table->integer('id_post')->unsigned();
             $table->integer('id_page')->unsigned();
 
-            //primary key
-            $table->primary('id_post', 'id_page');
             //foreign key
             $table->foreign('id_page')->references('id_page')->on('pages');
             $table->foreign('id_post')->references('id_post')->on('posts');
