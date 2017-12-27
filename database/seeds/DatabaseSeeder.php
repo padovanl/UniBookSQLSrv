@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
       $pages = factory(App\Page::class, 5)->create();
       #$page_comments = factory(App\CommentPage::class, 15)->create();
       $user_comments = factory(App\CommentUser::class, 15)->create();
+      $report_comments = factory(App\ReportComment::class, 10)->create();
+      $report_posts = factory(App\ReportPost::class, 10)->create();
     }
 }
