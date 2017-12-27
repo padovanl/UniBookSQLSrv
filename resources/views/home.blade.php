@@ -66,7 +66,7 @@
                                 <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
                             </li>
                             <li>
-                                <a href="#"><span class="badge">{{$user -> name}}</span></a>
+                                <a href="#"><span class="badge">{{$user -> name}} {{$user -> surname}}</span></a>
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -77,7 +77,7 @@
                                     <li><a href="">Activity Log</a></li>
                                     <li><a href="">Settings</a></li>
                                     <li><a href="">About UniBook</a></li>
-                                    <li><a href="">Logout</a></li>
+                                    <li><a href="/logout">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -117,7 +117,11 @@
                                                       <li><a href="">More</a></li>
                                                   </ul>
                                               </li>
-                                          </ul> <h4>Post Author Name</h4></div>
+                                          </ul> <h4>
+                                            <?php $u = $controller->ShowUser($post->id_author); ?>
+                                            {{$u->name.' '.$u->surname}}
+                                          </h4>
+                                        </div>
                                       <div class="panel-body">
                                           <div class="clearfix"></div>
                                           <hr>

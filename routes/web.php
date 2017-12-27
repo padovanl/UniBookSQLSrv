@@ -19,3 +19,4 @@ Route::get('/', 'HomeController@landing');
 Route::post('/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
 Route::resource('/register', 'RegisterController');
+Route::get('/logout', 'LoginController@logout');

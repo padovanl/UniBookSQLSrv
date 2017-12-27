@@ -29,8 +29,9 @@ class HomeController extends Controller{
 
       //Caricamento dei post
       $posts = Post::all();
-
-      return view('home', compact('user', 'posts'));
+      //gli passo il controller stesso così posso richiamare le funzioni direttamente dalle views
+      $controller = $this;
+      return view('home', compact('user', 'posts','controller'));
     }
     else{
       return redirect('/login');
@@ -50,6 +51,15 @@ class HomeController extends Controller{
     $post->save();
     //che bello ajax qui....
     return redirect('/');
+
+  }
+
+  //prendendo in ingresso un id, restituisce l'utente relativo
+  //es. da un post id_author--->id_user
+  public function ShowUser($param){
+    $user = User::where('id_user', $param)->first();
+    #$nome = $user->name;
+    return $user;
 
   }
 
