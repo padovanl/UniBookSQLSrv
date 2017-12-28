@@ -10,6 +10,8 @@ $factory->define(App\CommentP::class, function (Faker $faker) {
       return [
             'content' => $faker->sentence(10),
             'id_author' => $faker->randomElement($pageIDs),
-            'id_post' => $faker->randomElement($postIDs)
+            'id_post' => $faker->randomElement($postIDs),
+            'created_at' =>now(),
+            'updated_at' =>now()
         ];
 });
