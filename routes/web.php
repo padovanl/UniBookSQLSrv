@@ -20,3 +20,8 @@ Route::post('/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
 Route::resource('/register', 'RegisterController');
 Route::get('/logout', 'LoginController@logout');
+
+
+//Admin Routes
+Route::get('/admin', 'AdminController@dashboard');
+Route::get('/admin/dashboard', 'AdminController@dashboard');
