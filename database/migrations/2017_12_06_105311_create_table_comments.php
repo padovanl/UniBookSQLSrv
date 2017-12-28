@@ -22,7 +22,8 @@ class CreateTableComments extends Migration
             $table->integer('id_post')->unsigned();
 
             //foreign key
-            $table->foreign('id_author')->references('id_user')->on('users');
+            //se fa riferimento solo agli utenti, allora le pagine non possono creare post e commenti
+            //$table->foreign('id_author')->references('id_user')->on('users');
             $table->foreign('id_post')->references('id_post')->on('posts');
          });
     }

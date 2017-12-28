@@ -22,7 +22,8 @@ class CreateTablePosts extends Migration
             $table->uuid('id_author');
 
             //foreign key
-            $table->foreign('id_author')->references('id_user')->on('users');
+            //se fa riferimento solo agli utenti, allora le pagine non possono creare post e commenti
+            //$table->foreign('id_author')->references('id_user')->on('users');
          });
     }
 
