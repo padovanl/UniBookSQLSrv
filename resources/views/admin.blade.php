@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
 
 <head>
   <meta charset="utf-8">
@@ -58,25 +58,25 @@
             <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle"
               alt="Generic placeholder thumbnail">
             <h4>Utenti totali</h4>
-            <div class="text-muted">1914</div>
+            <div class="text-muted">{{$totUser}}</div>
           </div>
           <div class="col-6 col-sm-3 placeholder">
             <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle"
               alt="Generic placeholder thumbnail">
             <h4>Post totali</h4>
-            <span class="text-muted">20189</span>
+            <span class="text-muted">{{$totPost}}</span>
           </div>
           <div class="col-6 col-sm-3 placeholder">
             <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle"
               alt="Generic placeholder thumbnail">
             <h4>Commenti totali</h4>
-            <span class="text-muted">500050</span>
+            <span class="text-muted">{{$totComment}}</span>
           </div>
           <div class="col-6 col-sm-3 placeholder">
             <img src="data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle"
               alt="Generic placeholder thumbnail">
             <h4>Pagine totali</h4>
-            <span class="text-muted">2400</span>
+            <span class="text-muted">{{$totPage}}</span>
           </div>
         </section>
 
@@ -124,15 +124,19 @@
                   <tr>
                     <th>Id segnalazione</th>
                     <th>Data</th>
+                    <th>Descrizione</th>
                     <th>Tipo</th>
                     <th>Stato</th>
                     <th>Opzioni</th>
                   </tr>
                 </thead>
                 <tbody>
+
+                @foreach($reportList as $r)
                   <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
+                    <td>{{$r->id_report}}</td>
+                    <td>{{$r->created_at->format('M j, Y H:i')}}</td>
+                    <td>{{$r->description}}</td>
                     <td>
                       <span class="badge badge-danger">Pagina</span>
                     </td>
@@ -155,182 +159,9 @@
                       </div>
                     </td>
                   </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-danger">Pagina</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-success">Aperta</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-danger">Pagina</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-secondary">Chiusa</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                          disabled>
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-danger">Pagina</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-success">Aperta</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-warning">Commento</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-success">Aperta</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza commento</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-danger">Pagina</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-success">Aperta</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-danger">Pagina</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-success">Aperta</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <span class="badge badge-info">Post</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-success">Aperta</span>
-                    </td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza post</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                @endforeach
+
+                  
                 </tbody>
               </table>
             </div>
