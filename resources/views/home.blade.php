@@ -121,14 +121,7 @@
                                                   </ul>
                                               </li>
                                           </ul> <h4>
-                                            <?php //check se è un post di una page o user
-                                                if ($u->name === null){
-                                                  echo $u->nome;
-                                                  }
-                                                else {
-                                                  echo $u->name.' '.$u->surname;
-                                                  }
-                                            ?>
+
                                           </h4>
                                         </div>
                                       <div class="panel-body">
@@ -148,6 +141,7 @@
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-container">
+                                                    @foreach ($friends as $friend)
                                                     <table class="table-users table" border="0">
                                                         <tbody>
                                                         <tr>
@@ -157,6 +151,7 @@
                                                             <td>
                                                                 <br><i class="fa fa-envelope"></i>
                                                             </td>
+                                                            {{$friend -> name}}
                                                             <td>
                                                             </td>
                                                             <td align="center">
@@ -165,6 +160,7 @@
                                                         </tr>
                                                         </tbody>
                                                     </table>
+                                                  @endforeach
                                                 </div>
                                             </div>
                                         </div>

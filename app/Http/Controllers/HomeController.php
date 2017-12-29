@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
-use App\Page;
 use App\Users_make_friends;
 use Cookie;
 
 class HomeController extends Controller{
 
   public function verify_cookie(){
-    if (Cookie::has('session'))
-    {
+    if (Cookie::has('session')){
+      //conrollo che l'id presente nel cookie esista nel db
       return true;
     }
     else{
@@ -30,7 +29,12 @@ class HomeController extends Controller{
       $id = Cookie::get('session');
       $user = User::where('id_user', $id)->first();
 
-      //Caricamento della lista amici: stato=0->not friends, stato=1->pending, stato=2->ok
+      //ritorna un array con: [amici_richiesti, amici_accettati, amicizie_in_attesa_di_conferma, amicizie_richieste_in_attesa]
+      $friends = $user::friends($id);
+      $requests = $user::pendingfriends($id);
+
+      //return($friends);
+      //Caricamento della lista amici: stato=0->friends, stato=1->pending
       //$friends = Users_make_friends::where('id_request_user', $id)->where('status', 2)->get();
 
       //foreach ($friend as $friends){
@@ -43,7 +47,7 @@ class HomeController extends Controller{
       $posts = Post::all();
       //gli passo il controller stesso così posso richiamare le funzioni direttamente dalle views
       $controller = $this;
-      return view('home', compact('user', 'posts','controller'));
+      return view('home', compact('user', 'posts','controller','friends'));
 
     }
     else{
@@ -71,9 +75,6 @@ class HomeController extends Controller{
   //es. da un post id_author--->id_user
   public function ShowUser($param){
     $user = User::where('id_user', $param)->first();
-    if ($user === null){ //se id_author è di una pagina
-      $user = Page::where('id_page', $param)->first();
-    }
     #$nome = $user->name;
     return $user;
 
