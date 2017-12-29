@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
+use App\Page;
 use App\Users_make_friends;
 use Cookie;
 
@@ -43,7 +44,7 @@ class HomeController extends Controller{
       //gli passo il controller stesso così posso richiamare le funzioni direttamente dalle views
       $controller = $this;
       return view('home', compact('user', 'posts','controller'));
-      
+
     }
     else{
       return redirect('/login');
@@ -70,6 +71,9 @@ class HomeController extends Controller{
   //es. da un post id_author--->id_user
   public function ShowUser($param){
     $user = User::where('id_user', $param)->first();
+    if ($user === null){ //se id_author è di una pagina
+      $user = Page::where('id_page', $param)->first();
+    }
     #$nome = $user->name;
     return $user;
 

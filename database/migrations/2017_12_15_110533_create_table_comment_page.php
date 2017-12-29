@@ -19,7 +19,7 @@ class CreateTableCommentPage extends Migration
             $table->integer('id_page')->unsigned();
 
             //foreign key
-            $table->foreign('id_page')->references('id_page')->on('pages');
+            #$table->foreign('id_page')->references('id_page')->on('pages');
             $table->foreign('id_comment')->references('id_comment')->on('comments');
          });
     }

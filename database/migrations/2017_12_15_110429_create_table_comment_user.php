@@ -19,7 +19,7 @@ class CreateTableCommentUser extends Migration
             $table->uuid('id_user');
 
             //foreign key
-            $table->foreign('id_user')->references('id_user')->on('users');
+            #$table->foreign('id_user')->references('id_user')->on('users');
             $table->foreign('id_comment')->references('id_comment')->on('comments');
          });
     }

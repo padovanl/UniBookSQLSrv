@@ -19,7 +19,7 @@ class CreateTablePostPage extends Migration
             $table->integer('id_page')->unsigned();
 
             //foreign key
-            $table->foreign('id_page')->references('id_page')->on('pages');
+            #$table->foreign('id_page')->references('id_page')->on('pages');
             $table->foreign('id_post')->references('id_post')->on('posts');
          });
     }

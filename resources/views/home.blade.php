@@ -105,10 +105,13 @@
                                     </form>
                                 </div>
                                 @foreach ($posts as $post)
+                                <?php $u = $controller->ShowUser($post->id_author); ?>
                                   <div class="panel panel-default">
                                       <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
                                               <li class="dropdown">
-                                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+                                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="glyphicon glyphicon-user"></i>
+                                                  </a>
                                                   <ul class="dropdown-menu">
                                                       <li><a href="">More</a></li>
                                                       <li><a href="">More</a></li>
@@ -118,8 +121,14 @@
                                                   </ul>
                                               </li>
                                           </ul> <h4>
-                                            <?php $u = $controller->ShowUser($post->id_author); ?>
-                                            {{$u->name.' '.$u->surname}}
+                                            <?php //check se è un post di una page o user
+                                                if ($u->name === null){
+                                                  echo $u->nome;
+                                                  }
+                                                else {
+                                                  echo $u->name.' '.$u->surname;
+                                                  }
+                                            ?>
                                           </h4>
                                         </div>
                                       <div class="panel-body">
