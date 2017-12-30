@@ -29,11 +29,15 @@ class AdminController extends Controller
   {
     $id = $request->input('id_post');
     //errore!
-    //$report = ReportPost::find(intval($id));
-    $report = ReportPost::where('id_report', '=', $id)->first();
-    //$post = Post::find($report->id_post);
-    $post = Post::where('id_post', '=', $report->id_post)->first();
+    //$post = Post::find($id);
+    $post = Post::where('id_post', '=', $id)->first();
     return response()->json($post);
+  }
+
+  public function ignoreReportPost(Request $request){
+    $id = $request->input('id_report');
+    $report = ReportPost::where('id_report', '=', $id)->update(['status' => 'esaminata']);
+    return response()->json(['message' => 'Operazione completata']);
   }
 
     public function testfunction(Request $request)
@@ -46,5 +50,7 @@ class AdminController extends Controller
 
         return response()->json(['response' => 'This is get method', 'numero' => 5]);
     }
+
+
 
 }

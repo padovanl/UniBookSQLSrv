@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../assets/css/admin/grafici.css" />
   <link rel="stylesheet" href="../assets/css/admin/morris.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
   <title>Unibook - Dashboard</title>
 
   <!-- Bootstrap core CSS -->
@@ -57,8 +58,8 @@
         <h1>Dashboard</h1>
 
         <h2 id="statistiche">Statistiche</h2>
-         <input class="btn btn-secondary btn-sm" type="button" onclick="provaget()" value="provaget">
-         <input class="btn btn-secondary btn-sm" type="button" onclick="getPostDetails(4)" value="provapost">    
+         <!--<input class="btn btn-secondary btn-sm" type="button" onclick="provaget()" value="provaget">
+         <input class="btn btn-secondary btn-sm" type="button" onclick="getPostDetails(4)" value="provapost">-->    
         <section class="row text-center placeholders">
           <div class="col-6 col-sm-3 placeholder">
             <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle"
@@ -128,7 +129,6 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th>Id segnalazione</th>
                     <th>Data</th>
                     <th>Descrizione</th>
                     <th>Tipo</th>
@@ -140,14 +140,17 @@
 
                 @foreach($reportList as $r)
                   <tr>
-                    <td>{{$r->id_report}}</td>
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
                     <td class="{{$r->id_report}}">{{$r->description}}</td>
                     <td>
                       <span class="badge badge-danger">Post</span>
                     </td>
                     <td>
-                      <span class="badge badge-success">Aperta</span>
+                      @if($r->status == "aperta")
+                        <span class="badge badge-success" id="labelStatus{{$r->id_report}}">Aperta</span>
+                      @else
+                        <span class="badge badge-secondary">Esaminata</span>
+                      @endif
                     </td>
                     <td>
                       <div class="dropdown">
@@ -157,10 +160,12 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item edit-item" href="#" data-toggle="modal" data-target="#detailModal" data-whatever="{{$r->id_report}}">
                             <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
+                          @if($r->status == "aperta")
+                            <a class="dropdown-item" href="#">
+                              <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
+                            <a class="dropdown-item" href="#">
+                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
+                          @endif
                         </div>
                       </div>
                     </td>
@@ -305,9 +310,10 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger">Elimina post</button>
-        <button type="button" class="btn btn-danger">Elimina post e blocca utente</button>
-        <button type="button" class="btn btn-default">Ignora segnalazione</button>
+        <button type="button" class="btn btn-secondary" id="btnEliminaPost">Visualizza post</button>        
+        <button type="button" class="btn btn-danger" id="btnEliminaPost">Elimina post</button>
+        <button type="button" class="btn btn-danger" id="btnEliminaBanPost">Elimina post e blocca utente</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportPost">Ignora segnalazione</button>
       </div>
     </div>
   </div>
@@ -332,6 +338,8 @@
   <script src="../assets/js/admin/morris.min.js"></script>
   <script src="../assets/js/admin/raphael-min.js"></script>
   <script src="../assets/js/admin/grafici.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    
 
 
   <script>
@@ -354,10 +362,27 @@
       modal.find('.modal-body input').val(recipient);
       var td = $("td." + recipient).text();
       modal.find('.modal-body textarea').val(data.content);
+
+      $('#btnIgnoraReportPost').click(function(){
+        $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/ignoreReportPost',
+          data: { id_report: recipient }
+        }).done(function (data) {
+          console.log(data);
+          $('#labelStatus' + recipient).text('Esaminata');
+          $('#labelStatus' + recipient).removeClass('badge-success').addClass('badge-secondary');
+          toastr.success('La segnalazione è stata esaminata con successo.', 'Operazione completata!', { timeOut: 5000 });
+        });
+      });
     });
    
 	 
-	})
+	});
+
+  $('#btnIgnoraReportPost').on()
+
 
   function provaget(){
     $.get('/test', function(response){ 
