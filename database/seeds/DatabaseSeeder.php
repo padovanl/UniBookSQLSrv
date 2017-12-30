@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     { #creo utenti ENTITA' = users
-      $users = factory(App\User::class, 3)->create();
+      $users = factory(App\User::class, 10)->create();
 
       #creo pagine ENTITA' = pages
       $pages = factory(App\Page::class, 3)->create();
@@ -34,9 +34,9 @@ class DatabaseSeeder extends Seeder
       #$user_posts = factory(App\PostUser::class, 5)->create();
 
 
-      #creo amicizie
-      $friends = factory(App\Users_make_friends::class,5)->create();
-      
+      #creo amicizie, DEVONO SEMPRE essere < della metà del num di utenti, se no crea problemi ovviamente!!!!
+      $friends = factory(App\Users_make_friends::class,4)->create();
+
 
       $report_comments = factory(App\ReportComment::class, 10)->create();
       $report_posts = factory(App\ReportPost::class, 10)->create();
