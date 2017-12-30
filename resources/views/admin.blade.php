@@ -144,7 +144,7 @@
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
                     <td class="{{$r->id_report}}">{{$r->description}}</td>
                     <td>
-                      <span class="badge badge-danger">Pagina</span>
+                      <span class="badge badge-danger">Post</span>
                     </td>
                     <td>
                       <span class="badge badge-success">Aperta</span>
@@ -223,7 +223,7 @@
                   <tr>
                     <td>1001</td>
                     <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
+                    <td>emailinventata@gmail.com</td>
                     <td>20 Novembre 20017, 16:54</td>
                     <td>
                       <div class="dropdown">
