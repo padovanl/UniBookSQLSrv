@@ -25,4 +25,26 @@ class AdminController extends Controller
     $totPage = Page::count();
     return view('/admin', compact('reportList', 'totUser', 'totPost', 'totComment', 'totPage'));
   }
+  public function getPostDetails(Request $request)
+  {
+    $id = $request->input('id_post');
+    //errore!
+    //$report = ReportPost::find(intval($id));
+    $report = ReportPost::where('id_report', '=', $id)->first();
+    //$post = Post::find($report->id_post);
+    $post = Post::where('id_post', '=', $report->id_post)->first();
+    return response()->json($post);
+  }
+
+    public function testfunction(Request $request)
+    {
+        if ($request->isMethod('post')){    
+            $titolo = $request->input('title');
+            $descrizione = $request->input('description');
+            return response()->json(['titolo' => $titolo, 'descrizione' => $descrizione]); 
+    }
+
+        return response()->json(['response' => 'This is get method', 'numero' => 5]);
+    }
+
 }

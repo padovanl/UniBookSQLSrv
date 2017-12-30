@@ -25,3 +25,8 @@ Route::get('/logout', 'LoginController@logout');
 //Admin Routes
 Route::get('/admin', 'AdminController@dashboard');
 Route::get('/admin/dashboard', 'AdminController@dashboard');
+Route::post('/admin/dashboard/getPostDetails', 'AdminController@getPostDetails');
+
+//prova ajax
+Route::get('/test', 'AdminController@testfunction');
+Route::post('/test', 'AdminController@testfunction');

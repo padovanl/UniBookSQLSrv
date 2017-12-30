@@ -16,6 +16,10 @@
 
   <!-- Custom styles for this template -->
   <link href="../assets/css/admin/dashboard.css" rel="stylesheet">
+
+  <!--Token per ajax-->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 
 <body>
@@ -53,6 +57,8 @@
         <h1>Dashboard</h1>
 
         <h2 id="statistiche">Statistiche</h2>
+         <input class="btn btn-secondary btn-sm" type="button" onclick="provaget()" value="provaget">
+         <input class="btn btn-secondary btn-sm" type="button" onclick="getPostDetails(4)" value="provapost">    
         <section class="row text-center placeholders">
           <div class="col-6 col-sm-3 placeholder">
             <img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle"
@@ -136,7 +142,7 @@
                   <tr>
                     <td>{{$r->id_report}}</td>
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
-                    <td>{{$r->description}}</td>
+                    <td class="{{$r->id_report}}">{{$r->description}}</td>
                     <td>
                       <span class="badge badge-danger">Pagina</span>
                     </td>
@@ -149,8 +155,8 @@
                           <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza pagina</a>
+                          <a class="dropdown-item edit-item" href="#" data-toggle="modal" data-target="#detailModal" data-whatever="{{$r->id_report}}">
+                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
                           <a class="dropdown-item" href="#">
                             <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
                           <a class="dropdown-item" href="#">
@@ -161,7 +167,6 @@
                   </tr>
                 @endforeach
 
-                  
                 </tbody>
               </table>
             </div>
@@ -236,153 +241,6 @@
                       </div>
                     </td>
                   </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>padovan.93@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -421,11 +279,51 @@
     </div>
   </div>
 
+
+		<!-- Detail Modal -->
+
+<div class="modal fade bd-example-modal-lg" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Dettagli segnalzione</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="form-control-label">Id segnalazione:</label>
+            <input type="text" class="form-control" id="recipient-name" disabled>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Testo post:</label>
+            <textarea class="form-control" id="message-text" rows="10" disabled></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger">Elimina post</button>
+        <button type="button" class="btn btn-danger">Elimina post e blocca utente</button>
+        <button type="button" class="btn btn-default">Ignora segnalazione</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
+  <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>-->
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.js"
+        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+        crossorigin="anonymous"></script>
   <!--<script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
   <script src="../assets/js/admin/popper.min.js"></script>
   <script src="../assets/js/admin/bootstrap.min.js"></script>
@@ -435,7 +333,78 @@
   <script src="../assets/js/admin/raphael-min.js"></script>
   <script src="../assets/js/admin/grafici.js"></script>
 
+
   <script>
+
+	$('#detailModal').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget) // Button that triggered the modal
+	  var recipient = button.data('whatever') // Extract info from data-* attributes
+    var post;
+//ajax
+    $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: '/admin/dashboard/getPostDetails',
+        data: { id_post: recipient }
+    }).done(function (data) {
+      console.log(data);
+      //post = data;
+      var modal = $('#detailModal');
+      modal.find('.modal-title').text('Dettagli segnalazione ' + recipient);
+      modal.find('.modal-body input').val(recipient);
+      var td = $("td." + recipient).text();
+      modal.find('.modal-body textarea').val(data.content);
+    });
+   
+	 
+	})
+
+  function provaget(){
+    $.get('/test', function(response){ 
+        console.log(response); 
+    });
+  }
+
+
+  function getPostDetails(id){
+    $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: '/admin/dashboard/getPostDetails',
+        data: { id_post: id }
+    }).done(function (data) {
+      console.log(data);
+      return data;
+    });
+  }
+
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  function provapost(){
+    $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: '/test',
+        data: { title: 'titolo', description: 'descrizione' }
+    }).done(function (data) {
+        //console.log(data);
+
+
+        //questo fa una cosa per ogni campo json
+        //$.each(data, function(k, v){
+        //  console.log(v);
+        //});
+
+        //posso accedere ai dati ritornati come ad un semplice oggetto
+        console.log(data.titolo);
+        console.log(data.descrizione);
+    });
+
+  }
 
   </script>
 </body>
