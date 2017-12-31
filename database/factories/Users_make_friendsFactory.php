@@ -21,9 +21,10 @@ $factory->define(App\Users_make_friends::class, function (Faker $faker) {
         }
         else {//se i due valori non sono uguali
           //prendo i record
-          $id1 = DB::table('users_make_friends')->where([['id_user', '=', '$a'],['id_request_user', '=', '$b'],])->get();
-          $id2 = DB::table('users_make_friends')->where([['id_user', '=', '$b'],['id_request_user', '=', '$a'],])->get();
-          if ($id1->count()>0 || $id2->count()>0){
+          $id1 = DB::table('users_make_friends')->where([['id_user', '=', '$a'],['id_request_user', '=', '$b'],])->first();
+          $id2 = DB::table('users_make_friends')->where([['id_user', '=', '$b'],['id_request_user', '=', '$a'],])->first();
+
+          if ($id1 != null || $id2 != null){
             $bool = False;
           }
           else{

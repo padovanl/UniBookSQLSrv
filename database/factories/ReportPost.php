@@ -2,7 +2,6 @@
 
 use Faker\Generator as Faker;
 
-#crea commenti fatti da pagine
 
 $factory->define(App\ReportPost::class, function (Faker $faker) {
       $postIDs = DB::table('posts')->pluck('id_post')->all();
