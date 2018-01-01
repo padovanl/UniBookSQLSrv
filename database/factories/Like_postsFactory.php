@@ -15,7 +15,7 @@ $factory->define(App\Like_posts::class, function (Faker $faker) {
 
     if (DB::table('like_posts')->where([['id_user', '=', '$a'],['id_post', '=', '$b'],])->exists()){
       $bool = False;
-      $a = $faker->randomElement($userIDs);
+      #$a = $faker->randomElement($userIDs);
       $b = $faker->randomElement($postIDs);
     }
     else{

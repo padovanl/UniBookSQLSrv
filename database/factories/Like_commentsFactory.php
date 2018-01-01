@@ -16,7 +16,7 @@ $factory->define(App\Like_comments::class, function (Faker $faker) {
 
           if (DB::table('like_comments')->where([['id_user', '=', '$a'],['id_comment', '=', '$b'],])->exists()){
             $bool = False;
-            $a = $faker->randomElement($userIDs);
+            #$a = $faker->randomElement($userIDs);
             $b = $faker->randomElement($commentIDs);
           }
           else{

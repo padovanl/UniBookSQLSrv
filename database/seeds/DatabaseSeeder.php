@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
       #creo commenti fatti da utenti e da pagine ENTITA' = comments
       $commentsU = factory(App\CommentU::class, 10)->create();
       $commentsP = factory(App\CommentP::class, 10)->create();
+      #servono due classi CommentU e CommentP che malgrado siano uguali,
+      #si riferiscono a due factory diverse
+
 
       #creo relazioni tra commenti fatti da utenti e da pagine ENTITA' = comments_user "or" comments_page
       #$page_comments = factory(App\CommentPage::class)->create();

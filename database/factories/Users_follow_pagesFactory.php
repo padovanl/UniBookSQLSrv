@@ -17,7 +17,7 @@ $factory->define(App\Users_follow_pages::class, function (Faker $faker) {
         if (DB::table('users_follow_pages')->where([['id_user', '=', '$a'],['id_page', '=', '$b'],])->exists()){
           $bool = False;
           $a = $faker->randomElement($userIDs);
-          $b = $faker->randomElement($commentIDs);
+          #$b = $faker->randomElement($commentIDs);
         }
         else{
           $bool = True;

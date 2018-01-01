@@ -26,6 +26,7 @@ $factory->define(App\Users_make_friends::class, function (Faker $faker) {
 
           if ($id1 != null || $id2 != null){
             $bool = False;
+            $b = $faker->randomElement($userIDs);
           }
           else{
             $bool = True;
