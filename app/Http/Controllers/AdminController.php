@@ -17,6 +17,12 @@ use App\CommentP;
 use App\CommentPage;
 use App\CommentUser;
 use App\Page;
+use App\LikePost;
+use App\LikeComment;
+
+//viewModel
+use App\DetailsReportViewModel;
+
 
 class AdminController extends Controller
 {
@@ -34,14 +40,36 @@ class AdminController extends Controller
     $totPage = Page::count();
     return view('/admin', compact('reportList', 'totUser', 'totPost', 'totComment', 'totPage'));
   }
+
   public function getPostDetails(Request $request)
   {
     $id = $request->input('id_report');
     $report = ReportPost::where('id_report', '=', $id)->first();
-    //errore!
-    //$post = Post::find($id);
+
     $post = Post::where('id_post', '=', $report->id_post)->first();
-    return response()->json($post);
+
+
+    $viewModel = new DetailsReportViewModel();
+    $viewModel->content = $post->content;
+    $viewModel->id_report = $report->id_report;
+
+    $tmp = PostPage::where('id_post', '=', $post->id_post)->first();
+    if(!$tmp){
+        //devo cercare l'autore tra gli utenti
+        $tmp = PostUser::where('id_post', '=', $post->id_post)->first();
+        $author = User::where('id_user', '=', $tmp->id_user)->first();
+        $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
+        $viewModel->nomeAutore = $author->name . " " . $author->surname;
+        $viewModel->tipoAutore = 1;
+    }else{
+        $author = Page::where('id_page', '=', $tmp->id_page)->first();
+        $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+        $viewModel->nomeAutore = $author->nome;
+        $viewModel->tipoAutore = 2;
+    }
+    return response()->json($viewModel);
+
+
   }
 
   public function ignoreReportPost(Request $request){
@@ -60,14 +88,18 @@ class AdminController extends Controller
 
 
 
-        // CANCELLARE I RIFERIMENTI ALLA TABELLA DEI LIKE, SIA POST CHE COMMENTI!!!!!!!!!
+        $commentsParent = CommentU::where('id_post', '=', $id_post)->get();
 
+        foreach ($commentsParent as $comment) {
+            LikeComment::where('id_comment', '=', $comment->id_comment)->delete();
+        }
+        
 
        
 
         //elimino i commenti associati al post
          //$comments = CommentUser::where('id_post', '=', $id_post)->get();
-        $commentsParent = CommentU::where('id_post', '=', $id_post)->get();
+        
 
         foreach ($commentsParent as $comment) {
             CommentUser::where('id_comment', '=', $comment->id_comment)->delete();
@@ -94,23 +126,14 @@ class AdminController extends Controller
         //elimino la notifica
         ReportPost::where('id_post', '=', intval($id_post))->delete();
         
-        //o l'uno o l'altro
-        //$post = PostUser::where('id_post', '=', $id_post)->first();
-        //if(!$post){
-        //    $post->delete();
-        //}else{
-        //    $post = PostPage::where('id_post', '=', $id_post)->first();
-        //    $post->delete();
-        //}
+        LikePost::where('id_post', '=', $id_post)->delete();
 
         PostUser::where('id_post', '=', $id_post)->delete();
         PostPage::where('id_post', '=', $id_post)->delete();
 
 
-        ////
         Post::where('id_post', '=', $id_post)->delete();
-        //Post::where('id_post', '=', $id_post)->delete();
-        //$post->delete();
+
 
         return response()->json(['message' => 'Operazione completata!']);
 

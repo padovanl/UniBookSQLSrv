@@ -140,7 +140,7 @@
                 <tbody>
 
                 @foreach($reportList as $r)
-                  <tr>
+                  <tr id="reportRow{{$r->id_report}}">
                     <td>{{$r->id_report}}</td>
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
                     <td class="{{$r->id_report}}">{{$r->description}}</td>
@@ -304,9 +304,14 @@
             <label for="recipient-name" class="form-control-label">Id segnalazione:</label>
             <input type="text" class="form-control" id="recipient-name" disabled>
           </div>
+          <div>
           <div class="form-group">
             <label for="message-text" class="form-control-label">Testo post:</label>
             <textarea class="form-control" id="message-text" rows="10" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="form-control-label">Autore:</label>
+            <a href="#" id="linkProfilo"></a>
           </div>
         </form>
       </div>
@@ -370,6 +375,9 @@
       var td = $("td." + recipient).text();
       modal.find('.modal-body textarea').val(data.content);
 
+      $('#linkProfilo').attr("href", data.linkProfiloAutore);
+      $('#linkProfilo').text(data.nomeAutore)
+
       //aggiungo evento click al pulsante
       $('#btnIgnoraReportPost').click(function(){
         $.ajax({
@@ -396,6 +404,9 @@
         }).done(function (data) {
           console.log(data.message);
           $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+
+          //elimino la riga
+          $('#reportRow' + recipient).remove();
           //$('#labelStatus' + recipient)
           toastr.success('Il post è stato eliminato con successo.', data.message , { timeOut: 3000 });
           //$('#btnIgnoraReportPost').unbind();
