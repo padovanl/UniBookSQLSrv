@@ -129,6 +129,7 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
+                    <th>Id segnalazione</th>
                     <th>Data</th>
                     <th>Descrizione</th>
                     <th>Tipo</th>
@@ -140,6 +141,7 @@
 
                 @foreach($reportList as $r)
                   <tr>
+                    <td>{{$r->id_report}}</td>
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
                     <td class="{{$r->id_report}}">{{$r->description}}</td>
                     <td>
@@ -162,9 +164,9 @@
                             <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
                           @if($r->status == "aperta")
                             <a class="dropdown-item" href="#">
-                              <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta amminisratore pagina</a>
+                              <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
                             <a class="dropdown-item" href="#">
-                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca pagina</a>
+                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
                           @endif
                         </div>
                       </div>
@@ -309,11 +311,16 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-secondary" id="btnEliminaPost">Visualizza post</button>        
-        <button type="button" class="btn btn-danger" id="btnEliminaPost">Elimina post</button>
-        <button type="button" class="btn btn-danger" id="btnEliminaBanPost">Elimina post e blocca utente</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportPost">Ignora segnalazione</button>
+        <div class="row">
+          <div class="col-md-12">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-secondary" id="btnViewPost">Visualizza post</button>        
+           <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaPost">Elimina post</button>
+           <button type="button" class="btn btn-danger" id="btnEliminaBanPost">Elimina post e blocca utente</button>
+           <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportPost">Ignora segnalazione</button>    
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -353,7 +360,7 @@
         dataType: 'json',
         type: 'POST',
         url: '/admin/dashboard/getPostDetails',
-        data: { id_post: recipient }
+        data: { id_report: recipient }
     }).done(function (data) {
       console.log(data);
       //post = data;
@@ -363,6 +370,7 @@
       var td = $("td." + recipient).text();
       modal.find('.modal-body textarea').val(data.content);
 
+      //aggiungo evento click al pulsante
       $('#btnIgnoraReportPost').click(function(){
         $.ajax({
           dataType: 'json',
@@ -371,17 +379,37 @@
           data: { id_report: recipient }
         }).done(function (data) {
           console.log(data);
-          $('#labelStatus' + recipient).text('Esaminata');
-          $('#labelStatus' + recipient).removeClass('badge-success').addClass('badge-secondary');
-          toastr.success('La segnalazione è stata esaminata con successo.', 'Operazione completata!', { timeOut: 5000 });
+          $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+          //$('#labelStatus' + recipient)
+          toastr.success('La segnalazione è stata esaminata con successo.', 'Operazione completata!', { timeOut: 3000 });
+          //$('#btnIgnoraReportPost').unbind();
+        });
+      });
+
+      //evento rimuovi post
+      $('#btnEliminaPost').click(function(){
+        $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/deletePost',
+          data: { id_report: recipient }
+        }).done(function (data) {
+          console.log(data.message);
+          $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+          //$('#labelStatus' + recipient)
+          toastr.success('Il post è stato eliminato con successo.', data.message , { timeOut: 3000 });
+          //$('#btnIgnoraReportPost').unbind();
         });
       });
     });
-   
-	 
+    
 	});
 
-  $('#btnIgnoraReportPost').on()
+  $('#detailModal').on('hide.bs.modal', function(event){
+    //rimuovo gli eventi una volta che chiudo il modal
+    $('#btnIgnoraReportPost').unbind();
+    $('#btnEliminaPost').unbind();
+  });
 
 
   function provaget(){
@@ -416,7 +444,7 @@
         url: '/test',
         data: { title: 'titolo', description: 'descrizione' }
     }).done(function (data) {
-        //console.log(data);
+        console.log(data);
 
 
         //questo fa una cosa per ogni campo json
