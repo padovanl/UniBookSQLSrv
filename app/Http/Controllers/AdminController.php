@@ -134,27 +134,8 @@ class AdminController extends Controller
     
   }
 
-  public function listReportPost(Request $request){
-    $status = $request->input('scelta');
-    if(!$status || $status == "Tutte"){
-        $reports = ReportPost::latest()->paginate(10);
-    }else{
-        $numReport = ReportPost::count();
-        if($status == "Aperte"){
-            $reports = ReportPost::where('status', '=', 'aperta')->latest()->paginate($numReport);
-        }else{
-            $reports = ReportPost::where('status', '=', 'esaminata')->latest()->paginate($numReport);
-        }
-    }
-    
-    if($request->ajax()){
-        //return view('admin.report.load', ['reports' => $reports])->render();
-        return response()->json($reports);
-    }
-    return view('admin.report.post', compact('reports'));
-  }
 
-  public function listReportPost2(Request $request){
+  public function listReportPost(Request $request){
     $page = $request->input('page');
     //$report = ReportPost::latest()->get();
 
@@ -179,7 +160,7 @@ class AdminController extends Controller
      $num_page_reportPost++;
     }
 
-    
+
     $reportList = $report->splice($page * 5 - 5, 5);    
 
 

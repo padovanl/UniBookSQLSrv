@@ -162,12 +162,6 @@
             </nav>
           </div>
         </div>
-        <hr>
-        <div class="row">
-          <div class="col-md-12">
-            <a href="/admin/report/post">Vedi tutte...</a>
-          </div>
-        </div>
 
         <br>
         <hr>
@@ -354,7 +348,7 @@
 
     function getPage(page){
       $.ajax({
-          url : '/admin/report/post2',
+          url : '/admin/report/post',
           dataType: 'json',
           type: 'POST',
           data: { page: page, filter: scelta }

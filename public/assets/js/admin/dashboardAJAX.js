@@ -35,6 +35,7 @@ $('#detailModal').on('show.bs.modal', function (event) {
         }).done(function (data) {
           console.log(data);
           $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+          getPage(currentPage);
           toastr.success('La segnalazione è stata esaminata con successo.', 'Operazione completata!', { timeOut: 5000 });
         });
       });
