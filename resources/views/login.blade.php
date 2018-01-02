@@ -48,16 +48,25 @@
         <span class="bar"></span>
         <label>Password</label>
       </div>
+
+      <div id="rem-pwd">
+        <div class="md-checkbox">
+          <input id="rem" type="checkbox" name="ricordami" checked>
+          <label for="rem">Ricordami</label>
+        </div>
+        <div class="pwd_dimenticata">
+          <span>
+            <a>Password dimeticata?</a>
+          </span>
+        </div>
+      </div>
+
       <div class="lg-btn">
         <button type="submit" class="button">LOG IN</button>
       </div>
     </form>
 
-    <div class="pwd_dimenticata">
-    <span>
-      <a>Password dimeticata?</a>
-    </span>
-    </div>
+
 
 
     <div class="new_user">
