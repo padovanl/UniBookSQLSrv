@@ -81,7 +81,7 @@
 
 
         <br>
-        <hr>
+        <hr id="anchorSegnalazioni">
         <br>
 
 
@@ -139,6 +139,17 @@
             </div>
           </div>
         </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center" id="paginationPostUl">
+                
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <hr>
         <div class="row">
           <div class="col-md-12">
             <a href="/admin/report/post">Vedi tutte...</a>
@@ -289,5 +300,91 @@
 
   <script src="../assets/js/admin/dashboardAJAX.js"></script>
 
+  <script>
+    var currentPage = 1;
 
+    generatePagination({{$num_page_reportPost}}, currentPage);
+
+    function generatePagination(nPage, currentPage){
+        var html;
+        if(currentPage == 1){
+          html = '<li class="page-item disabled" id="previousPostPage">';
+          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>';
+          html = html + '</li>';
+        }else{
+          html = '<li class="page-item" id="previousPostPage">';
+          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1" onclick="getPage(' + (currentPage - 1) + ')"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>';
+          html = html + '</li>';          
+        }
+
+        var i;
+        for(i = 0; i < nPage; i++){
+          if((i + 1) == currentPage){
+            html = html + '<li class="page-item active"><a class="page-link" href="#anchorSegnalazioni" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</a></li>';
+          }else{
+            html = html + '<li class="page-item"><a class="page-link" href="#anchorSegnalazioni" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</a></li>';
+          }
+        }
+        if(currentPage == nPage){
+          html = html + '<li class="page-item disabled" id="previousPostPage">';
+          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>';
+          html = html + '</li>';
+        }else{
+          html = html + '<li class="page-item" id="previousPostPage">';
+          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1" onclick="getPage(' + (currentPage + 1) + ')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>';
+          html = html + '</li>';
+        }
+       
+        $('#paginationPostUl').html(html);
+    }
+
+    function getPage(page){
+      $.ajax({
+          url : '/admin/report/post2',
+          dataType: 'json',
+          type: 'POST',
+          data: { page: page }
+      }).done(function (data) {
+          manageRow(data);  
+          generatePagination({{$num_page_reportPost}}, page);
+      }).fail(function () {
+          alert('Reports could not be loaded.');
+      });
+    }
+
+    function manageRow(data) {
+      var rows = '';
+      $.each(data, function (key, value) {
+        rows = rows + '<tr>';
+        rows = rows + '<td>' + value.id_report + '</td>';
+        rows = rows + '<td>' + value.created_at + '</td>';
+        rows = rows + '<td>' + value.description + '</td>';
+        if(value.status == 'aperta'){
+          rows = rows + '<td><span class="badge badge-success" id="labelStatus' + value.id_report + '">Aperta</span></td>';
+        }else{
+          rows = rows + '<td><span class="badge badge-secondary">Esaminata</span></td>';
+        }
+        rows = rows + '<td>';
+        rows = rows + ' <div class="dropdown">';
+        rows = rows + '   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        rows = rows + '     <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni';
+        rows = rows + '     </button>';
+        rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+        rows = rows + '     <a class="dropdown-item edit-item" href="#" data-toggle="modal" data-target="#detailModal" data-whatever="' + value.id_report + '">';
+        rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
+        if(value.status == 'aperta'){
+          rows = rows + '   <a class="dropdown-item" href="#">';
+          rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
+          rows = rows + '        <a class="dropdown-item" href="#">';
+          rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
+        }
+              
+        rows = rows + '   </div>';
+        rows = rows + '  </div>';
+        rows = rows + '</td>';
+        rows = rows + '</tr>';
+      });
+      $("tbody").html(rows);
+    }
+  </script>
 @endsection

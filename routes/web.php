@@ -31,7 +31,7 @@ Route::post('/admin/dashboard/ignoreReportPost', 'AdminController@ignoreReportPo
 Route::post('/admin/dashboard/deletePost', 'AdminController@deletePost');
 
 Route::get('/admin/report/post', 'AdminController@listReportPost');
-
+Route::post('/admin/report/post2', 'AdminController@listReportPost2');
 
 //prova ajax
 Route::get('/test', 'AdminController@testfunction');

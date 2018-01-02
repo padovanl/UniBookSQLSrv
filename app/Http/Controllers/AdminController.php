@@ -27,9 +27,12 @@ use App\DetailsReportViewModel;
 class AdminController extends Controller
 {
   public function dashboard() {
-    //$reportList = ReportPost::orderBy('created_at')->get();
-    //ritorno le dieci piu' recenti
-    $reportList = ReportPost::latest()->paginate(10);
+    //ritorno le piu' recenti
+    $report = ReportPost::latest()->get();
+    $el_per_page = 5;
+    $current_page_post = 1;
+    $num_page_reportPost = ($report->count()/$el_per_page) + ($report->count() % $el_per_page);
+    $reportList = $report->splice($current_page_post * $el_per_page - 5, 5);
     //recupero numero utenti totali
     $totUser = User::where('confirmed', '=', 1)->count();
     //recupero numero post totali
@@ -38,11 +41,10 @@ class AdminController extends Controller
     $totComment = CommentP::count();
     //recupero numero pagine totali
     $totPage = Page::count();
-    return view('/admin', compact('reportList', 'totUser', 'totPost', 'totComment', 'totPage'));
+    return view('/admin', compact('reportList', 'totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost'));
   }
 
-  public function getPostDetails(Request $request)
-  {
+  public function getPostDetails(Request $request){
     $id = $request->input('id_report');
     $report = ReportPost::where('id_report', '=', $id)->first();
 
@@ -86,21 +88,12 @@ class AdminController extends Controller
         $report = ReportPost::where('id_report', '=', $id_report)->first();//update(['status' => 'esaminata']);
         $id_post = $report->id_post;
 
-
-
         $commentsParent = CommentU::where('id_post', '=', $id_post)->get();
 
         foreach ($commentsParent as $comment) {
             LikeComment::where('id_comment', '=', $comment->id_comment)->delete();
         }
         
-
-       
-
-        //elimino i commenti associati al post
-         //$comments = CommentUser::where('id_post', '=', $id_post)->get();
-        
-
         foreach ($commentsParent as $comment) {
             CommentUser::where('id_comment', '=', $comment->id_comment)->delete();
         }
@@ -109,18 +102,13 @@ class AdminController extends Controller
             CommentPage::where('id_comment', '=', $comment->id_comment)->delete();
         }
          
-
-         //$comments = CommentU::where('id_post', '=', $id_post)->get();
-         foreach($commentsParent as $comment) {
+        foreach($commentsParent as $comment) {
             ReportComment::where('id_comment', '=', $comment->id_comment)->delete();
          }
         foreach($commentsParent as $comment) {
             CommentU::where('id_comment', '=', $comment->id_comment)->delete();
             //CommentP::where('id_comment', '=', $comment->id_comment)->delete();
          }
-
-
-
 
 
         //elimino la notifica
@@ -161,6 +149,13 @@ class AdminController extends Controller
         return response()->json($reports);
     }
     return view('admin.report.post', compact('reports'));
+  }
+
+  public function listReportPost2(Request $request){
+    $page = $request->input('page');
+    $report = ReportPost::latest()->get();
+    $reportList = $report->splice($page * 5 - 5, 5);
+    return response()->json($reportList);
   }
 
     public function testfunction(Request $request){

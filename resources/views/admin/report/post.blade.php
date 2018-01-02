@@ -207,16 +207,16 @@ $('ul.pagination').find('li').addClass('page-item').children().addClass('page-li
 function manageRow(data) {
     var rows = '';
     $.each(data.data, function (key, value) {
-        rows = rows + '<tr>';
-        rows = rows + '<td>' + value.id_report + '</td>';
-        rows = rows + '<td>' + value.created_at + '</td>';
-        rows = rows + '<td>' + value.description + '</td>';
-        if(value.status == 'aperta'){
-        	rows = rows + '<td><span class="badge badge-success" id="labelStatus' + value.id_report + '">Aperta</span></td>';
-        }else{
-        	rows = rows + '<td><span class="badge badge-secondary">Esaminata</span></td>';
-        }
-        rows = rows + '<td>';
+      rows = rows + '<tr>';
+      rows = rows + '<td>' + value.id_report + '</td>';
+      rows = rows + '<td>' + value.created_at + '</td>';
+      rows = rows + '<td>' + value.description + '</td>';
+      if(value.status == 'aperta'){
+      	rows = rows + '<td><span class="badge badge-success" id="labelStatus' + value.id_report + '">Aperta</span></td>';
+      }else{
+      	rows = rows + '<td><span class="badge badge-secondary">Esaminata</span></td>';
+      }
+      rows = rows + '<td>';
 	    rows = rows + '	<div class="dropdown">';
 	    rows = rows + '		<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 	    rows = rows + '     <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni';
@@ -234,7 +234,7 @@ function manageRow(data) {
 	    rows = rows + '   </div>';
 	    rows = rows + '  </div>';
 	    rows = rows + '</td>';
-        rows = rows + '</tr>';
+      rows = rows + '</tr>';
     });
     $("tbody").html(rows);
 }
