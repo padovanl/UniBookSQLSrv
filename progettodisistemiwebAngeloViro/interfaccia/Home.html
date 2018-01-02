@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  <title></title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/w3.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="css/jquery-ui.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Javascript Libraries -->
+  <script src="js/jquery-1.12.4.js"></script>
+  <script src="js/jquery.dataTables.min.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  
+  <script src="js/md5.js"></script>
+
+  <!-- Javascript core -->
+  <script>
+    function go_to(view) {
+    $.get("../laravel/public/index.php/" + view, {}, function(result){
+        $("#view").html(result);
+      });
+  }
+
+  go_to('page/home');
+
+  </script>
+
+</head>
+<body contenteditable="false">
+
+<!-- Sidebar/menu -->
+<div id="menu">
+  <nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" id="mySidebar" style="z-index:3;width:250px;font-weight:bold;"><br>
+    <div class="w3-container">
+      <h3 class="w3-padding-64"><b>Company Name</b></h3>
+    </div>
+    <div class="w3-bar-block">
+      <a href="#"  onclick="go_to('page/home')" class="w3-bar-item w3-button w3-hover-white">Home</a>
+      <a href="#" onclick="go_to('page/pannello_utente')" class="w3-bar-item w3-button w3-hover-white" id="user-panel" style="display: none">Pannello utente</a>
+      <a href="#" onclick="go_to('page/accedi')" class="w3-bar-item w3-button w3-hover-white" id="accedi">Entra</a>
+      <a href="#" onclick="go_to('page/registrati')" class="w3-bar-item w3-button w3-hover-white" id="registrati">Registrati</a>
+      <a href="#" onclick="logout()" class="w3-bar-item w3-button w3-hover-white" id="logout" style="display: none">Logout</a>
+    </div>
+    <!-- W3.CSS Container -->
+<div class="w3-container w3-padding-32" id="footer"><p class="w3-right">Powered by Gruppo09</p></div>
+  </nav>
+</div>
+
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-main" style="margin-left:260px;margin-right:40px; overflow: auto">
+
+    <div id="view"></div>
+
+  <!-- End page content -->
+  </div>
+
+<script>
+
+// Gestione accesso utente
+if (localStorage.getItem("utente") != null && localStorage.getItem("utente") != "" && localStorage.getItem("utente") != "null") {
+  token = localStorage.getItem("token");
+  utente = JSON.parse(localStorage.getItem("utente"));
+  $("#accedi").hide();
+  $("#registrati").hide();
+  $("#user-panel").show();
+  $("#logout").show();
+
+  handle_menu(utente);
+}
+
+function registrazione() {
+  var nome = $("#nome").val();
+  var cognome = $("#cognome").val();
+  var citta = $("#citta").val();
+  var datepicker = $("#datepickerx").val();
+  var email = $("#e-mail").val();
+  var password = $("#password").val();
+  var tipo = 2;
+
+  $.ajax({
+   type:"GET",
+   url:"../laravel/public/index.php/registrazione?idcitta="+citta+"&tipo="+tipo+"&idusername="+email+"&idnome="+nome+"&idcognome="+cognome+"&iddatepicker="+datepicker+"&password="+MD5(password),
+   dataType:"html",
+   success: function(data) {
+    	go_to("page/accedi");
+    	alert("Registrazione effettuata!");
+   },
+   error: function() {
+     alert("Chiamata fallita!");
+   }
+  });
+}
+
+
+  function logout() {
+    localStorage.setItem("token", null);
+    localStorage.setItem("utente", null);
+    $("#accedi").show();
+    $("#registrati").show();
+    $("#user-panel").hide();
+    $("#logout").hide();
+    $("#menu_admin").hide();
+    $("#doc").hide();
+
+    go_to("page/accedi");
+  }
+
+  function login() {
+    $.post("../laravel/public/index.php/login", { email: $("#e-mail").val(), password: $("#password").val()}, function(result) {
+
+      localStorage.setItem("token", result.result);
+      token = result.result;
+
+      $.post("../laravel/public/index.php/get_user_details", { token: token}, function(result) {
+        localStorage.setItem("utente", JSON.stringify(result.result));
+        utente = result.result;
+
+        if (token == null || token == "" || utente == null) {
+          alert("Dati errati");
+          return;
+        }
+
+        $("#accedi").hide();
+        $("#registrati").hide();
+        $("#user-panel").show();
+        $("#logout").show();
+        go_to('page/home');
+        handle_menu(utente);
+      });
+
+    });
+  }
+
+  function handle_menu(user) {
+    $("#doc").show();
+    
+  }
+
+  function checkForm()
+  {
+    // Controlla che username e password non siano vuoti
+    if($("#e-mail").val() == '' && $("#password").val() == '')
+    {
+      alert('Inserire e-mail e password');
+      return false;
+    }
+    if($("#e-mail").val() == '')
+    {
+      alert('Inserire e-mail');
+      return false;
+    }
+
+      if( $("#password").val() == '')
+        {
+      alert('Inserire password');
+      return false;
+    }
+
+    // Se arriviamo qui, tutto ok
+    login();
+  }
+
+  // Script to open and close sidebar
+ 
+
+  
+</script>
+
+</body>
+</html>
