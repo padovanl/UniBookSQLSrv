@@ -89,6 +89,19 @@
 
         <h2 id="segnalazioni">Segnalazioni post</h2>
         <div class="row">
+            <div class="col-md-6">
+                <p>Seleziona stato notifica:</p>                    
+            </div>
+            <div class="col-md-6">
+                <select class="selectpicker" id="selectpickerPost">
+                  <option selected>Tutte</option>
+                  <option>Aperte</option>
+                  <option>Esaminate</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
               <table class="table table-striped">
@@ -101,7 +114,7 @@
                     <th>Opzioni</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbodyPost">
 
                 @foreach($reportList as $r)
                   <tr id="reportRow{{$r->id_report}}">
@@ -273,7 +286,7 @@
            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
            <button type="button" class="btn btn-secondary" id="btnViewPost">Visualizza post</button>        
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaPost">Elimina post</button>
-           <button type="button" class="btn btn-danger" id="btnEliminaBanPost">Elimina post e blocca utente</button>
+           <button type="button" class="btn btn-danger" id="btnEliminaBanPost">Elimina post e blocca autore</button>
            <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportPost">Ignora segnalazione</button>    
           </div>
         </div>
@@ -302,7 +315,7 @@
 
   <script>
     var currentPage = 1;
-
+    var scelta = 'Tutte';
     generatePagination({{$num_page_reportPost}}, currentPage);
 
     function generatePagination(nPage, currentPage){
@@ -321,6 +334,7 @@
         for(i = 0; i < nPage; i++){
           if((i + 1) == currentPage){
             html = html + '<li class="page-item active"><a class="page-link" href="#anchorSegnalazioni" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</a></li>';
+            currentPage = i + 1;
           }else{
             html = html + '<li class="page-item"><a class="page-link" href="#anchorSegnalazioni" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</a></li>';
           }
@@ -343,10 +357,11 @@
           url : '/admin/report/post2',
           dataType: 'json',
           type: 'POST',
-          data: { page: page }
+          data: { page: page, filter: scelta }
       }).done(function (data) {
+          currentPage = page;
           manageRow(data);  
-          generatePagination({{$num_page_reportPost}}, page);
+          generatePagination(data[0].totPage, page);
       }).fail(function () {
           alert('Reports could not be loaded.');
       });
@@ -358,7 +373,7 @@
         rows = rows + '<tr>';
         rows = rows + '<td>' + value.id_report + '</td>';
         rows = rows + '<td>' + value.created_at + '</td>';
-        rows = rows + '<td>' + value.description + '</td>';
+        rows = rows + '<td class="' + value.id_report + '">' + value.description + '</td>';
         if(value.status == 'aperta'){
           rows = rows + '<td><span class="badge badge-success" id="labelStatus' + value.id_report + '">Aperta</span></td>';
         }else{
@@ -384,7 +399,19 @@
         rows = rows + '</td>';
         rows = rows + '</tr>';
       });
-      $("tbody").html(rows);
+      $("#tbodyPost").html(rows);
     }
+
+    $('#selectpickerPost').change(function(){
+      var str = $( "select option:selected" ).text();
+      scelta = str;
+      currentPage = 1;
+      getPage(currentPage);
+      //alert(str);
+      //alert(str);
+    });
+
+
+
   </script>
 @endsection

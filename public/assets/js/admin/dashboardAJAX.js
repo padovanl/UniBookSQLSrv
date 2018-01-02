@@ -51,9 +51,11 @@ $('#detailModal').on('show.bs.modal', function (event) {
           $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
           //elimino la riga
           $('#reportRow' + recipient).remove();
+          getPage(currentPage);
           toastr.success('Il post è stato eliminato con successo.', data.message , { timeOut: 5000 });
         });
       });
+
     });
 
 

@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
       $pages = factory(App\Page::class, 6)->create();
 
       #creo post fatti da utenti e da pagine ENTITA' = posts
-      $postsU = factory(App\PostU::class, 10)->create();
-      $postsP = factory(App\PostP::class, 10)->create();
+      $postsU = factory(App\PostU::class, 20)->create();
+      $postsP = factory(App\PostP::class, 20)->create();
 
       #creo commenti fatti da utenti e da pagine ENTITA' = comments
-      $commentsU = factory(App\CommentU::class, 10)->create();
-      $commentsP = factory(App\CommentP::class, 10)->create();
+      $commentsU = factory(App\CommentU::class, 50)->create();
+      $commentsP = factory(App\CommentP::class, 50)->create();
       #servono due classi CommentU e CommentP che malgrado siano uguali,
       #si riferiscono a due factory diverse
 
@@ -49,6 +49,6 @@ class DatabaseSeeder extends Seeder
       $follow_page = factory(App\Users_follow_pages::class,4)->create();
 
       $report_comments = factory(App\ReportComment::class, 10)->create();
-      $report_posts = factory(App\ReportPost::class, 40)->create();
+      $report_posts = factory(App\ReportPost::class, 100)->create();
     }
 }

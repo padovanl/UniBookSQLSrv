@@ -31,7 +31,10 @@ class AdminController extends Controller
     $report = ReportPost::latest()->get();
     $el_per_page = 5;
     $current_page_post = 1;
-    $num_page_reportPost = ($report->count()/$el_per_page) + ($report->count() % $el_per_page);
+    $num_page_reportPost = intval(($report->count()/$el_per_page));
+    if(($report->count() % $el_per_page) != 0){
+     $num_page_reportPost++;
+    }
     $reportList = $report->splice($current_page_post * $el_per_page - 5, 5);
     //recupero numero utenti totali
     $totUser = User::where('confirmed', '=', 1)->count();
@@ -153,9 +156,75 @@ class AdminController extends Controller
 
   public function listReportPost2(Request $request){
     $page = $request->input('page');
-    $report = ReportPost::latest()->get();
-    $reportList = $report->splice($page * 5 - 5, 5);
-    return response()->json($reportList);
+    //$report = ReportPost::latest()->get();
+
+
+
+
+    $filter = $request->input('filter');
+    if(!$filter || $filter == "Tutte"){
+        $report = ReportPost::latest()->get();
+    }else{
+        if($filter == "Aperte"){
+            $report = ReportPost::where('status', '=', 'aperta')->latest()->get();
+        }else{
+            //esaminate
+            $report = ReportPost::where('status', '=', 'esaminata')->latest()->get();
+        }
+    }
+
+    $el_per_page = 5;
+    $num_page_reportPost = intval(($report->count()/$el_per_page));
+    if(($report->count() % $el_per_page) != 0){
+     $num_page_reportPost++;
+    }
+
+    
+    $reportList = $report->splice($page * 5 - 5, 5);    
+
+
+    $array = array();
+    //$length = count($reportList);
+    $x = 0;
+
+    $el_per_page = 5;
+    //$current_page_post = 1;
+
+    
+    foreach ($reportList as $report) {
+        $post = Post::where('id_post', '=', $report->id_post)->first();
+        $viewModel = new DetailsReportViewModel();
+        $viewModel->content = $post->content;
+        $viewModel->id_report = $report->id_report;
+
+        $viewModel->description = $report->description;
+        $viewModel->status = $report->status;
+
+        $date = $report->created_at;
+
+        $viewModel->created_at = $date->format('Y-m-d H:i:s');
+
+        $tmp = PostPage::where('id_post', '=', $post->id_post)->first();
+        if(!$tmp){
+            //devo cercare l'autore tra gli utenti
+            $tmp = PostUser::where('id_post', '=', $post->id_post)->first();
+            $author = User::where('id_user', '=', $tmp->id_user)->first();
+            $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
+            $viewModel->nomeAutore = $author->name . " " . $author->surname;
+            $viewModel->tipoAutore = 1;
+        }else{
+            $author = Page::where('id_page', '=', $tmp->id_page)->first();
+            $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+            $viewModel->nomeAutore = $author->nome;
+            $viewModel->tipoAutore = 2;
+        }
+        $viewModel->totPage = $num_page_reportPost;
+        $array[$x] = $viewModel;
+        $x++;
+    }
+
+    
+    return response()->json($array);
   }
 
     public function testfunction(Request $request){
