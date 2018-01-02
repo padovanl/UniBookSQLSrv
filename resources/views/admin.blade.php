@@ -1,41 +1,6 @@
-<!doctype html>
-<html lang="it">
+@extends('layouts.admin_layout')
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="stylesheet" href="../assets/css/admin/grafici.css" />
-  <link rel="stylesheet" href="../assets/css/admin/morris.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
-  <title>Unibook - Dashboard</title>
-
-  <!-- Bootstrap core CSS -->
-  <link href="../assets/css/admin/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  <link href="../assets/css/admin/dashboard.css" rel="stylesheet">
-
-  <!--Token per ajax-->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-
-</head>
-
-<body>
-  <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">Unibook Dashboard</a>
-      <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-
-    </nav>
-  </header>
-
+@section('content')
   <div class="container-fluid">
     <div class="row">
       <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
@@ -46,7 +11,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#segnalazioni" onclick="changeSelectedSection(2)" id="sezione2">Segnalazioni</a>
+            <a class="nav-link" href="#segnalazioni" onclick="changeSelectedSection(2)" id="sezione2">Segnalazioni Post</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#utenti" onclick="changeSelectedSection(3)" id="sezione3">Utenti</a>
@@ -122,7 +87,7 @@
 
 
 
-        <h2 id="segnalazioni">Segnalazioni</h2>
+        <h2 id="segnalazioni">Segnalazioni post</h2>
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
@@ -132,7 +97,6 @@
                     <th>Id segnalazione</th>
                     <th>Data</th>
                     <th>Descrizione</th>
-                    <th>Tipo</th>
                     <th>Stato</th>
                     <th>Opzioni</th>
                   </tr>
@@ -144,9 +108,6 @@
                     <td>{{$r->id_report}}</td>
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
                     <td class="{{$r->id_report}}">{{$r->description}}</td>
-                    <td>
-                      <span class="badge badge-danger">Post</span>
-                    </td>
                     <td>
                       @if($r->status == "aperta")
                         <span class="badge badge-success" id="labelStatus{{$r->id_report}}">Aperta</span>
@@ -173,38 +134,14 @@
                     </td>
                   </tr>
                 @endforeach
-
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <br>
         <div class="row">
-          <div class="col-sm-12">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <div class="col-md-12">
+            <a href="/admin/report/post">Vedi tutte...</a>
           </div>
         </div>
 
@@ -306,11 +243,15 @@
           </div>
           <div>
           <div class="form-group">
-            <label for="message-text" class="form-control-label">Testo post:</label>
-            <textarea class="form-control" id="message-text" rows="10" disabled></textarea>
+            <label for="testoPost" class="form-control-label">Testo post:</label>
+            <textarea class="form-control" id="testoPost" rows="7" disabled></textarea>
           </div>
           <div class="form-group">
-            <label for="recipient-name" class="form-control-label">Autore:</label>
+            <label for="motivoReport" class="form-control-label">Motivo segnalazione:</label>
+            <textarea class="form-control" id="motivoReport" rows="3" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <label for="linkProfilo" id="linkProfiloLabel" class="form-control-label">Autore:</label>
             <a href="#" id="linkProfilo"></a>
           </div>
         </form>
@@ -334,15 +275,8 @@
 
   <!-- Bootstrap core JavaScript
     ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-  <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>-->
 
-    <script
-        src="https://code.jquery.com/jquery-3.2.1.js"
-        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-        crossorigin="anonymous"></script>
-  <!--<script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
   <script src="../assets/js/admin/popper.min.js"></script>
   <script src="../assets/js/admin/bootstrap.min.js"></script>
 
@@ -353,124 +287,7 @@
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     
 
-
-  <script>
-
-	$('#detailModal').on('show.bs.modal', function (event) {
-	  var button = $(event.relatedTarget) // Button that triggered the modal
-	  var recipient = button.data('whatever') // Extract info from data-* attributes
-    var post;
-//ajax
-    $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: '/admin/dashboard/getPostDetails',
-        data: { id_report: recipient }
-    }).done(function (data) {
-      console.log(data);
-      //post = data;
-      var modal = $('#detailModal');
-      modal.find('.modal-title').text('Dettagli segnalazione ' + recipient);
-      modal.find('.modal-body input').val(recipient);
-      var td = $("td." + recipient).text();
-      modal.find('.modal-body textarea').val(data.content);
-
-      $('#linkProfilo').attr("href", data.linkProfiloAutore);
-      $('#linkProfilo').text(data.nomeAutore)
-
-      //aggiungo evento click al pulsante
-      $('#btnIgnoraReportPost').click(function(){
-        $.ajax({
-          dataType: 'json',
-          type: 'POST',
-          url: '/admin/dashboard/ignoreReportPost',
-          data: { id_report: recipient }
-        }).done(function (data) {
-          console.log(data);
-          $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
-          //$('#labelStatus' + recipient)
-          toastr.success('La segnalazione è stata esaminata con successo.', 'Operazione completata!', { timeOut: 3000 });
-          //$('#btnIgnoraReportPost').unbind();
-        });
-      });
-
-      //evento rimuovi post
-      $('#btnEliminaPost').click(function(){
-        $.ajax({
-          dataType: 'json',
-          type: 'POST',
-          url: '/admin/dashboard/deletePost',
-          data: { id_report: recipient }
-        }).done(function (data) {
-          console.log(data.message);
-          $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
-
-          //elimino la riga
-          $('#reportRow' + recipient).remove();
-          //$('#labelStatus' + recipient)
-          toastr.success('Il post è stato eliminato con successo.', data.message , { timeOut: 3000 });
-          //$('#btnIgnoraReportPost').unbind();
-        });
-      });
-    });
-    
-	});
-
-  $('#detailModal').on('hide.bs.modal', function(event){
-    //rimuovo gli eventi una volta che chiudo il modal
-    $('#btnIgnoraReportPost').unbind();
-    $('#btnEliminaPost').unbind();
-  });
+  <script src="../assets/js/admin/dashboardAJAX.js"></script>
 
 
-  function provaget(){
-    $.get('/test', function(response){ 
-        console.log(response); 
-    });
-  }
-
-
-  function getPostDetails(id){
-    $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: '/admin/dashboard/getPostDetails',
-        data: { id_post: id }
-    }).done(function (data) {
-      console.log(data);
-      return data;
-    });
-  }
-
-  $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
-  function provapost(){
-    $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: '/test',
-        data: { title: 'titolo', description: 'descrizione' }
-    }).done(function (data) {
-        console.log(data);
-
-
-        //questo fa una cosa per ogni campo json
-        //$.each(data, function(k, v){
-        //  console.log(v);
-        //});
-
-        //posso accedere ai dati ritornati come ad un semplice oggetto
-        console.log(data.titolo);
-        console.log(data.descrizione);
-    });
-
-  }
-
-  </script>
-</body>
-
-</html>
+@endsection

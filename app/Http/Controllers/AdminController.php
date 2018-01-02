@@ -143,6 +143,26 @@ class AdminController extends Controller
     
   }
 
+  public function listReportPost(Request $request){
+    $status = $request->input('scelta');
+    if(!$status || $status == "Tutte"){
+        $reports = ReportPost::latest()->paginate(10);
+    }else{
+        $numReport = ReportPost::count();
+        if($status == "Aperte"){
+            $reports = ReportPost::where('status', '=', 'aperta')->latest()->paginate($numReport);
+        }else{
+            $reports = ReportPost::where('status', '=', 'esaminata')->latest()->paginate($numReport);
+        }
+    }
+    
+    if($request->ajax()){
+        //return view('admin.report.load', ['reports' => $reports])->render();
+        return response()->json($reports);
+    }
+    return view('admin.report.post', compact('reports'));
+  }
+
     public function testfunction(Request $request){
         if ($request->isMethod('post')){    
             $titolo = $request->input('title');
