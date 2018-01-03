@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
       $follow_page = factory(App\Users_follow_pages::class,4)->create();
 
       $report_comments = factory(App\ReportComment::class, 10)->create();
-
+      $report_posts = factory(App\ReportPost::class, 100)->create();
 
       DB::table('users')->insert([
         'name' => 'Admin_Name',
