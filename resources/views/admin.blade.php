@@ -84,23 +84,32 @@
         <hr id="anchorSegnalazioni">
         <br>
 
-
-
-
         <h2 id="segnalazioni">Segnalazioni post</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <p>Seleziona stato notifica:</p>                    
-            </div>
-            <div class="col-md-6">
-                <select class="selectpicker" id="selectpickerPost">
+        <div class="alert alert-primary" role="alert">
+          <div class="row">
+            <div class="col-md-4">
+                <label for="selectpickerPost">Stato segnalazione:</label>           
+                 <select class="selectpicker" id="selectpickerPost">
                   <option selected>Tutte</option>
                   <option>Aperte</option>
                   <option>Esaminate</option>
-                </select>
+                </select> 
             </div>
+            <div class="col-md-4">
+               <label for="selectpickerPost">Motivo segnalazione:</label>           
+                 <select class="selectpicker" id="selectpickerMotivoPost">
+                  <option selected>Tutte</option>
+                  <option>Incita all'odio</option>
+                  <option>È una notizia falsa</option>
+                  <option>È una minaccia</option>
+                </select> 
+            </div>
+            <div class="col-md-4">
+               <label for="selectpickerPost">Id segnalazione:</label>           
+               <input type="text" name="textIdReportPost" id="textIdReportPost"> 
+            </div>
+          </div>
         </div>
-        <br>
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
@@ -109,7 +118,7 @@
                   <tr>
                     <th>Id segnalazione</th>
                     <th>Data</th>
-                    <th>Descrizione</th>
+                    <th>Motivo</th>
                     <th>Stato</th>
                     <th>Opzioni</th>
                   </tr>
@@ -310,6 +319,8 @@
   <script>
     var currentPage = 1;
     var scelta = 'Tutte';
+    var motivoReportPost = 'Tutte';
+
     generatePagination({{$num_page_reportPost}}, currentPage);
 
     function generatePagination(nPage, currentPage){
@@ -351,7 +362,7 @@
           url : '/admin/report/post',
           dataType: 'json',
           type: 'POST',
-          data: { page: page, filter: scelta }
+          data: { page: page, filter: scelta, motivo: motivoReportPost }
       }).done(function (data) {
           currentPage = page;
           manageRow(data);  
@@ -397,7 +408,7 @@
     }
 
     $('#selectpickerPost').change(function(){
-      var str = $( "select option:selected" ).text();
+      var str = $('#selectpickerPost option:selected').text();
       scelta = str;
       currentPage = 1;
       getPage(currentPage);
@@ -405,7 +416,14 @@
       //alert(str);
     }).change();
 
-
+    $('#selectpickerMotivoPost').change(function(){
+      var str = $('#selectpickerMotivoPost option:selected').text();
+      motivoReportPost = str;
+      currentPage = 1;
+      getPage(currentPage);
+      //alert(str);
+      //alert(str);
+    }).change();
 
   </script>
 @endsection

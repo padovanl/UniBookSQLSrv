@@ -170,6 +170,26 @@ class AdminController extends Controller
         }
     }
 
+    //esperimento
+    $motivo = $request->input('motivo');
+    if($motivo == "Incita all'odio"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'Incita all\'odio';
+        });
+    }
+    if($motivo == "È una notizia falsa"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'È una notizia falsa';
+        });
+    }
+    if($motivo == "È una minaccia"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'È una minaccia';
+        });
+    }
+    //
+
+
     $el_per_page = 5;
     $num_page_reportPost = intval(($report->count()/$el_per_page));
     if(($report->count() % $el_per_page) != 0){
