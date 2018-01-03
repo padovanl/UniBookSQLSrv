@@ -119,8 +119,24 @@ class AdminController extends Controller
         
         LikePost::where('id_post', '=', $id_post)->delete();
 
+        $ban = $request->input('ban');
+        if($ban == 1){
+            //recupero l'utente o la pagina per bannarlo
+            $postTmp = PostUser::where('id_post', '=', $id_post)->first();
+            if(!$postTmp){
+                $postTmp = PostPage::where('id_post', '=', $id_post)->first();
+                $page = Page::where('id_page', '=', $postTmp->id_page)->update(['ban' => true]);
+            }else{
+                $user = User::where('id_user', '=', $postTmp->id_user)->update(['ban' => true]);
+            }
+        }
+
+       
+
         PostUser::where('id_post', '=', $id_post)->delete();
         PostPage::where('id_post', '=', $id_post)->delete();
+
+
 
 
         Post::where('id_post', '=', $id_post)->delete();

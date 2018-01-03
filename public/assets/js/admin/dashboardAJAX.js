@@ -46,17 +46,33 @@ $('#detailModal').on('show.bs.modal', function (event) {
           dataType: 'json',
           type: 'POST',
           url: '/admin/dashboard/deletePost',
-          data: { id_report: recipient }
+          data: { id_report: recipient, ban: 0 }
         }).done(function (data) {
           console.log(data.message);
           $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
           //elimino la riga
           $('#reportRow' + recipient).remove();
           getPage(currentPage);
-          toastr.success('Il post è stato eliminato con successo.', data.message , { timeOut: 5000 });
+          toastr.success('Il post è stato eliminato con successo. Sono state eliminate anche le altre segnalazioni relative a questo post.', data.message , { timeOut: 5000 });
         });
       });
 
+      //evento rimuovi e ban 
+      $('#btnEliminaBanPost').click(function(){
+        $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/deletePost',
+          data: { id_report: recipient, ban : 1 }
+        }).done(function (data) {
+          console.log(data.message);
+          $('#labelStatus' + recipient).text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+          //elimino la riga
+          $('#reportRow' + recipient).remove();
+          getPage(currentPage);
+          toastr.success('Il post è stato eliminato con successo e l\'autore è stato bannato e non potrà scrivere su UniBook. Sono state eliminate anche le altre segnalazioni relative a questo post.', data.message , { timeOut: 5000 });
+        });
+      });
     });
 
 
@@ -67,6 +83,7 @@ $('#detailModal').on('show.bs.modal', function (event) {
     //rimuovo gli eventi una volta che chiudo il modal
     $('#btnIgnoraReportPost').unbind();
     $('#btnEliminaPost').unbind();
+    $('#btnEliminaBanPost').unbind();
   });
 
 

@@ -280,7 +280,7 @@
            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
            <button type="button" class="btn btn-secondary" id="btnViewPost">Visualizza post</button>        
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaPost">Elimina post</button>
-           <button type="button" class="btn btn-danger" id="btnEliminaBanPost">Elimina post e blocca autore</button>
+           <button type="button" class="btn btn-danger" id="btnEliminaBanPost" data-dismiss="modal">Elimina post e blocca autore</button>
            <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportPost">Ignora segnalazione</button>    
           </div>
         </div>
@@ -403,7 +403,7 @@
       getPage(currentPage);
       //alert(str);
       //alert(str);
-    });
+    }).change();
 
 
 
