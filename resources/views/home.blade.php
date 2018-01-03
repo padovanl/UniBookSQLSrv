@@ -54,7 +54,9 @@
                             <div class="input-group input-group-sm" style="max-width:360px;">
                                 <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    <button class="btn btn-default" type="submit">
+                                      <i class="glyphicon glyphicon-search"></i>
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -71,7 +73,7 @@
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src = "{{$user->pic_path}}" class="glyphicon glyphicon-user" /></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="">Report..</a></li>
                                     <li><a href="">Activity Log</a></li>
@@ -111,6 +113,7 @@
                                               <li class="dropdown">
                                                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                                     <i class="glyphicon glyphicon-user"></i>
+                                                    <img src = "{{$user->pic_path}}" class="glyphicon glyphicon-user" />
                                                   </a>
                                                   <ul class="dropdown-menu">
                                                       <li><a href="">More</a></li>
@@ -120,8 +123,9 @@
                                                       <li><a href="">More</a></li>
                                                   </ul>
                                               </li>
-                                          </ul> <h4>
-
+                                          </ul>
+                                          <h4>
+                                            
                                           </h4>
                                         </div>
                                       <div class="panel-body">

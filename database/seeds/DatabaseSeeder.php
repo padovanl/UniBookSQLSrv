@@ -49,5 +49,22 @@ class DatabaseSeeder extends Seeder
       $follow_page = factory(App\Users_follow_pages::class,4)->create();
 
       $report_comments = factory(App\ReportComment::class, 10)->create();
+
+
+      DB::table('users')->insert([
+        'name' => 'Admin_Name',
+        'surname' => 'Admin_Sur',
+        'birth_date' => now(),
+        'email' => 'gruppo09@gruppo09.com',
+        'roles'=> 1,
+        'pwd_hash' => 'gruppo09',
+        'gender' => '1',
+        'citta' => 'Ferrara',
+        'ban' => 0,
+        'id_user' => uniqid(),
+        'pic_path' => 'assets/images/facebook1.jpg',
+        'confirmed' => 1
+      ]);
+
     }
 }

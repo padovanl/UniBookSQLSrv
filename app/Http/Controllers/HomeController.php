@@ -74,9 +74,9 @@ class HomeController extends Controller{
   //prendendo in ingresso un id, restituisce l'utente relativo
   //es. da un post id_author--->id_user
   public function ShowUser($param){
-    $user = User::where('id_user', $param)->first();
+    $u = User::where('id_user', $param)->first();
     #$nome = $user->name;
-    return $user;
+    return $u;
 
   }
 
