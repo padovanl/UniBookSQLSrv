@@ -24,7 +24,7 @@ class RegisterController extends Controller
       $user -> pwd_hash = bcrypt("pwd_hash");
       $user -> citta = request("citta");
       $user -> gender = request("gender");
-      $user -> pic_path = request("pic_path");
+      $user -> pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
       $user -> save();
 
       #sarebbe da fare la redirect con l'utente già loggato

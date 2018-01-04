@@ -61,21 +61,28 @@
 
         <p>Data di nascità</p>
         <div class="form-row">
-            <input class="form-control" type="date" name="birth_day">
+            <input class="form-control" type="date" name="birth_date" required>
         </div></br>
 
 
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
-          <label class="form-check-label" for="inlineRadio1">Donna</label>
+          <input class="form-check-input" type="radio" name="gender" id="gender" value="0" checked>
+          <label class="form-check-label" for="gender">Donna</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
-          <label class="form-check-label" for="inlineRadio2">Uomo</label>
+          <input class="form-check-input" type="radio" name="gender" id="gender" value="1">
+          <label class="form-check-label" for="gender">Uomo</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
-          <label class="form-check-label" for="inlineRadio2">Other</label>
+          <input class="form-check-input" type="radio" name="gender" id="gender" value="3">
+          <label class="form-check-label" for="gender">Other</label>
+        </div></br>
+
+        <div class="group">
+          <input type="text" name="pic_path" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Picture Path (type something)</label>
         </div>
 
         <div class="lg-btn">
