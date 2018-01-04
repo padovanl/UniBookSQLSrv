@@ -35,9 +35,10 @@ Route::post('/admin/dashboard/getPostDetails', 'AdminController@getPostDetails')
 Route::post('/admin/dashboard/ignoreReportPost', 'AdminController@ignoreReportPost');
 Route::post('/admin/dashboard/deletePost', 'AdminController@deletePost');
 
-Route::post('/admin/report/post', 'AdminController@listReportPost');
+Route::post('/admin/dashboard/getCommentDetails', 'AdminController@getCommentDetails');
 
-Route::get('/admin2', 'AdminController@dash2');
+Route::post('/admin/report/post', 'AdminController@listReportPost');
+Route::post('/admin/report/comment', 'AdminController@listReportComment');
 
 //prova ajax
 Route::get('/test', 'AdminController@testfunction');

@@ -22,7 +22,7 @@ use App\LikeComment;
 
 //viewModel
 use App\DetailsReportViewModel;
-
+use App\DetailsReportCommentViewModel;
 
 class AdminController extends Controller
 {
@@ -55,7 +55,7 @@ class AdminController extends Controller
     $totComment = CommentP::count();
     //recupero numero pagine totali
     $totPage = Page::count();
-    return view('/admin', compact('reportList', 'reportListComment','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost'));
+    return view('/admin', compact('reportList', 'reportListComment','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment'));
   }
 
   public function getPostDetails(Request $request){
@@ -166,9 +166,6 @@ class AdminController extends Controller
     $page = $request->input('page');
     //$report = ReportPost::latest()->get();
 
-
-
-
     $filter = $request->input('filter');
     if(!$filter || $filter == "Tutte"){
         $report = ReportPost::latest()->get();
@@ -199,13 +196,6 @@ class AdminController extends Controller
         });
     }
 
-    //errore!!!!!!
-    //$id_report = intval($request->input('idReportPost'));
-    //if($id_report != -1){
-    //    $report = $report->filter(function ($value, $id_report) {
-    //        return strpos($value->id_report, $id_report);
-    //    });        
-    //}
 
     $id_report = intval($request->input('idReportPost'));
     if($id_report != -1){
@@ -257,6 +247,139 @@ class AdminController extends Controller
             //devo cercare l'autore tra gli utenti
             $tmp = PostUser::where('id_post', '=', $post->id_post)->first();
             $author = User::where('id_user', '=', $tmp->id_user)->first();
+            $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
+            $viewModel->nomeAutore = $author->name . " " . $author->surname;
+            $viewModel->tipoAutore = 1;
+        }else{
+            $author = Page::where('id_page', '=', $tmp->id_page)->first();
+            $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
+            $viewModel->nomeAutore = $author->nome;
+            $viewModel->tipoAutore = 2;
+        }
+        $viewModel->totPage = $num_page_reportPost;
+        $array[$x] = $viewModel;
+        $x++;
+    }
+
+    
+    return response()->json($array);
+  }
+
+  public function getCommentDetails(Request $request){
+    $id = $request->input('id_report');
+    $report = ReportComment::where('id_report', '=', $id)->first();
+
+    $comment = CommentU::where('id_comment', '=', $report->id_comment)->first();
+
+
+    $viewModel = new DetailsReportCommentViewModel();
+    $viewModel->content = $comment->content;
+    $viewModel->id_report = $report->id_report;
+
+    $tmp = CommentPage::where('id_comment', '=', $comment->id_comment)->first();
+    if(!$tmp){
+        //devo cercare l'autore tra gli utenti
+        $tmp = CommentUser::where('id_comment', '=', $comment->id_comment)->first();
+        $author = User::where('id_user', '=', $tmp->id_user)->first();
+        $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
+        $viewModel->nomeAutore = $author->name . " " . $author->surname;
+        $viewModel->tipoAutore = 1;
+    }else{
+        $author = Page::where('id_page', '=', $tmp->id_page)->first();
+        $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+        $viewModel->nomeAutore = $author->nome;
+        $viewModel->tipoAutore = 2;
+    }
+    return response()->json($viewModel);
+
+
+  }
+
+  public function listReportComment(Request $request){
+    $page = $request->input('page');
+    //$report = ReportPost::latest()->get();
+
+    $filter = $request->input('filter');
+    if(!$filter || $filter == "Tutte"){
+        $report = ReportComment::latest()->get();
+    }else{
+        if($filter == "Aperte"){
+            $report = ReportComment::where('status', '=', 'aperta')->latest()->get();
+        }else{
+            //esaminate
+            $report = ReportComment::where('status', '=', 'esaminata')->latest()->get();
+        }
+    }
+
+    
+    $motivo = $request->input('motivo');
+    if($motivo == "Incita all'odio"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'Incita all\'odio';
+        });
+    }
+    if($motivo == "È una notizia falsa"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'È una notizia falsa';
+        });
+    }
+    if($motivo == "È una minaccia"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'È una minaccia';
+        });
+    }
+
+
+    $id_report = intval($request->input('idReportPost'));
+    if($id_report != -1){
+        $c = collect();
+        foreach ($report as $r) {
+            if(strpos($r->id_report, (string)$id_report))
+                $c->push($r);
+        }
+        $report = $c;  
+    }
+
+    
+
+
+    $el_per_page = 5;
+    $num_page_reportPost = intval(($report->count()/$el_per_page));
+    if(($report->count() % $el_per_page) != 0){
+     $num_page_reportPost++;
+    }    $id_report = $request->input('id');
+    
+
+
+    $reportList = $report->splice($page * 5 - 5, 5);    
+
+
+    $array = array();
+    //$length = count($reportList);
+    $x = 0;
+
+    $el_per_page = 5;
+    //$current_page_post = 1;
+
+    
+    foreach ($reportList as $report) {
+        $comment = CommentU::where('id_comment', '=', $report->id_comment)->first();
+        $viewModel = new DetailsReportCommentViewModel();
+        $viewModel->content = $comment->content;
+        $viewModel->id_report = $report->id_report;
+
+        $viewModel->description = $report->description;
+        $viewModel->status = $report->status;
+
+        $date = $report->created_at;
+
+        $viewModel->created_at = $date->format('Y-m-d H:i:s');
+
+        $tmp = CommentPage::where('id_comment', '=', $comment->id_comment)->first();
+        if(!$tmp){
+            //devo cercare l'autore tra gli utenti
+            $tmp = CommentUser::where('id_comment', '=', $comment->id_comment)->first();
+            $author = User::where('id_user', '=', $tmp->id_user)->first();
             $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
             $viewModel->nomeAutore = $author->name . " " . $author->surname;
             $viewModel->tipoAutore = 1;
@@ -274,20 +397,6 @@ class AdminController extends Controller
     
     return response()->json($array);
   }
-
-    public function testfunction(Request $request){
-        if ($request->isMethod('post')){    
-            $titolo = $request->input('title');
-            $descrizione = $request->input('description');
-            return response()->json(['titolo' => $titolo, 'descrizione' => $descrizione]); 
-        }
-
-        return response()->json(['response' => 'This is get method', 'numero' => 5]);
-    }
-
-    public function dash2(){
-        return view('/admin2');
-    }
 
 
 

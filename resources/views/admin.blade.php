@@ -255,7 +255,7 @@
                           <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item edit-item" href="#myModal" data-toggle="modal" data-whatever="{{$r->id_report}}" id="openComment">
+                          <a class="dropdown-item edit-item" href="#commentModal" data-toggle="modal" data-whatever="{{$r->id_report}}" id="openComment">
                             <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
                           @if($r->status == "aperta")
                             <a class="dropdown-item" href="#">
@@ -376,7 +376,6 @@
             <label for="recipient-name" class="form-control-label">Id segnalazione:</label>
             <input type="text" class="form-control" id="recipient-name" disabled>
           </div>
-          <div>
           <div class="form-group">
             <label for="testoPost" class="form-control-label">Testo post:</label>
             <textarea class="form-control" id="testoPost" rows="7" disabled></textarea>
@@ -394,14 +393,13 @@
       <div class="modal-footer">
         <div class="row">
           <div class="col-md-12">
-           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
            <button type="button" class="btn btn-secondary" id="btnViewPost">Visualizza post</button>        
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaPost">Elimina post</button>
-           <button type="button" class="btn btn-danger" id="btnEliminaBanPost" data-dismiss="modal">Elimina post e blocca autore</button>
+           <button type="button" class="btn btn-danger" id="btnEliminaBanPost" data-dismiss="modal">Elimina e blocca autore</button>
            <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportPost">Ignora segnalazione</button>    
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -410,22 +408,46 @@
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="tmp" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<!-- Comment modal -->
+<div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tmp">Modal title</h5>
+        <h5 class="modal-title" id="titleReportComment">Dettagli segnalzione</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+         <form>
+          <div class="form-group">
+            <label for="idReportComment" class="form-control-label">Id segnalazione:</label>
+            <input type="text" class="form-control" id="idReportComment" disabled>
+          </div>
+          <div class="form-group">
+            <label for="testoCommento" class="form-control-label">Testo commento:</label>
+            <textarea class="form-control" id="testoCommento" rows="7" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <label for="motivoReportComment" class="form-control-label">Motivo segnalazione:</label>
+            <textarea class="form-control" id="motivoReportComment" rows="1" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <label for="linkProfiloComment" id="linkProfiloCommentLabel" class="form-control-label">Autore:</label>
+            <a href="#" id="linkProfiloComment"></a>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+         <div class="row">
+          <div class="col-md-12">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+           <button type="button" class="btn btn-secondary" id="btnViewComment">Visualizza commento</button>        
+           <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaComment">Elimina commento</button>
+           <button type="button" class="btn btn-danger" id="btnEliminaBanComment" data-dismiss="modal">Elimina e blocca autore</button>
+           <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportComment">Ignora segnalazione</button>    
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -593,6 +615,171 @@
 
     //GESTIONE SEGNALAZIONI COMMENTI
 
+    var currentPageComment = 1;
+    var sceltaComment = 'Tutte';
+    var motivoReportComment = 'Tutte';
+    var idReportComment = -1;
 
+    $('#commentModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      var post;
+      $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/getCommentDetails',
+          data: { id_report: recipient }
+      }).done(function (data) {
+        console.log(data);
+        //post = data;
+        var modal = $('#commentModal');
+        modal.find('.modal-title').text('Dettagli segnalazione ' + recipient);
+        modal.find('.modal-body input').val(recipient);
+        var td = $("td." + recipient + "Comment").text();
+        modal.find('#testoCommento').val(data.content);
+        $('#linkProfiloComment').attr("href", data.linkProfiloAutore);
+        $('#linkProfiloComment').text(data.nomeAutore)
+        if(data.tipoAutore == 1)
+          $('#linkProfiloCommentLabel').text('Autore:');
+        else
+          $('#linkProfiloCommentLabel').text('Pagina:');
+
+        $('#motivoReportComment').val(td);
+      });
+    });
+
+
+    generatePaginationComment({{$num_page_reportComment}}, currentPageComment);
+
+    function generatePaginationComment(nPage, currentPage){
+        var html;
+        if(currentPage == 1){
+          html = '<li class="page-item disabled" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
+          html = html + '</li>';
+        }else{
+          html = '<li class="page-item" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1" onclick="getPageComment(' + (currentPage - 1) + ')"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
+          html = html + '</li>';          
+        }
+
+        var i;
+        for(i = 0; i < nPage; i++){
+          if((i + 1) == currentPage){
+            html = html + '<li class="page-item active"><button class="page-link" onclick="getPageComment(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
+            currentPage = i + 1;
+          }else{
+            html = html + '<li class="page-item"><button class="page-link" onclick="getPageComment(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
+          }
+        }
+        if(currentPage == nPage){
+          html = html + '<li class="page-item disabled" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
+          html = html + '</li>';
+        }else{
+          html = html + '<li class="page-item" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1" onclick="getPageComment(' + (currentPage + 1) + ')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
+          html = html + '</li>';
+        }
+       
+        $('#paginationCommentUl').html(html);
+    }
+
+    function getPageComment(page){
+      $.ajax({
+          url : '/admin/report/comment',
+          dataType: 'json',
+          type: 'POST',
+          data: { page: page, filter: sceltaComment, motivo: motivoReportComment, idReportPost: idReportComment }
+      }).done(function (data) {
+          currentPageComment = page;
+          manageRowComment(data);  
+          generatePaginationComment(data[0].totPage, page);
+      }).fail(function () {
+          alert('Reports could not be loaded.');
+      });
+    }
+
+    function manageRowComment(data) {
+      var rows = '';
+      $.each(data, function (key, value) {
+        rows = rows + '<tr>';
+        rows = rows + '<td>' + value.id_report + '</td>';
+        rows = rows + '<td>' + value.created_at + '</td>';
+        rows = rows + '<td class="' + value.id_report + 'Comment">' + value.description + '</td>';
+        if(value.status == 'aperta'){
+          rows = rows + '<td><span class="badge badge-success" id="labelStatus' + value.id_report + 'Comment">Aperta</span></td>';
+        }else{
+          rows = rows + '<td><span class="badge badge-secondary">Esaminata</span></td>';
+        }
+        rows = rows + '<td>';
+        rows = rows + ' <div class="dropdown">';
+        rows = rows + '   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        rows = rows + '     <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni';
+        rows = rows + '     </button>';
+        rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+        rows = rows + '     <a class="dropdown-item edit-item" href="#commentModal" data-toggle="modal" data-whatever="' + value.id_report + '">';
+        rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
+        if(value.status == 'aperta'){
+          rows = rows + '   <a class="dropdown-item" href="#">';
+          rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
+          rows = rows + '        <a class="dropdown-item" href="#">';
+          rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
+        }
+        rows = rows + '   </div>';
+        rows = rows + '  </div>';
+        rows = rows + '</td>';
+        rows = rows + '</tr>';
+      });
+      $("#tbodyComment").html(rows);
+    }
+
+
+    $('#selectpickerComment').change(function(){
+      var str = $('#selectpickerComment option:selected').text();
+      sceltaComment = str;
+      currentPageComment = 1;
+      getPageComment(currentPageComment);
+    }).change();
+
+    $('#selectpickerMotivoComment').change(function(){
+      var str = $('#selectpickerMotivoComment option:selected').text();
+      motivoReportComment = str;
+      currentPageComment = 1;
+      getPageComment(currentPageComment);
+    }).change();
+
+    $('#textIdReportComment').keyup(function(){
+      var str = $('#textIdReportComment').val();
+      if(str == "")
+        idReportComment = -1;
+      else
+        idReportComment = str;
+      currentPageComment = 1;
+      getPageComment(currentPageComment);
+    });
+
+    $('#btnClearFilterComment').click(function(){
+      var change = false;
+      if(sceltaComment != 'Tutte'){
+        sceltaComment = 'Tutte';
+        change = true;
+      }
+      if(motivoReportComment != 'Tutte'){
+        motivoReportComment = 'Tutte';
+        change = true;
+      }
+      if(idReportComment != -1){
+        idReportComment = -1;
+        change = true;
+      }
+      if(change){
+        currentPageComment = 1;
+        $('#textIdReportComment').val("");
+         $('#selectpickerMotivoComment').val('Tutte');
+          $('#selectpickerComment').val('Tutte');
+        getPageComment(currentPageComment);
+      }
+    });
   </script>
 @endsection
