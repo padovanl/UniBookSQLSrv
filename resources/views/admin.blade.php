@@ -87,7 +87,7 @@
         <h2 id="segnalazioni">Segnalazioni post</h2>
         <div class="alert alert-primary" role="alert">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="selectpickerPostlabel">Stato segnalazione:</label>           
                  <select class="selectpicker" id="selectpickerPost">
                   <option selected>Tutte</option>
@@ -95,7 +95,7 @@
                   <option>Esaminate</option>
                 </select> 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                <label for="selectpickerMotivoPostlabel">Motivo segnalazione:</label>           
                  <select class="selectpicker" id="selectpickerMotivoPost">
                   <option selected>Tutte</option>
@@ -104,9 +104,15 @@
                   <option>È una minaccia</option>
                 </select> 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                <label for="textIdReportPostlabel">Id segnalazione:</label>           
                <input type="text" id="textIdReportPost"> 
+            </div>
+            <div class="col-md-1">
+              
+            </div>
+            <div class="col-md-2">
+               <button type="button" class="btn btn-danger" id="btnClearFilterPost"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;&nbsp;Pulisci filtri</button>
             </div>
           </div>
         </div>
@@ -328,30 +334,30 @@
         var html;
         if(currentPage == 1){
           html = '<li class="page-item disabled" id="previousPostPage">';
-          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>';
+          html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
           html = html + '</li>';
         }else{
           html = '<li class="page-item" id="previousPostPage">';
-          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1" onclick="getPage(' + (currentPage - 1) + ')"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>';
+          html = html + ' <button class="page-link" tabindex="-1" onclick="getPage(' + (currentPage - 1) + ')"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
           html = html + '</li>';          
         }
 
         var i;
         for(i = 0; i < nPage; i++){
           if((i + 1) == currentPage){
-            html = html + '<li class="page-item active"><a class="page-link" href="#anchorSegnalazioni" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</a></li>';
+            html = html + '<li class="page-item active"><button class="page-link" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
             currentPage = i + 1;
           }else{
-            html = html + '<li class="page-item"><a class="page-link" href="#anchorSegnalazioni" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</a></li>';
+            html = html + '<li class="page-item"><button class="page-link" onclick="getPage(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
           }
         }
         if(currentPage == nPage){
           html = html + '<li class="page-item disabled" id="previousPostPage">';
-          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>';
+          html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
           html = html + '</li>';
         }else{
           html = html + '<li class="page-item" id="previousPostPage">';
-          html = html + ' <a class="page-link" href="#anchorSegnalazioni" tabindex="-1" onclick="getPage(' + (currentPage + 1) + ')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>';
+          html = html + ' <button class="page-link" tabindex="-1" onclick="getPage(' + (currentPage + 1) + ')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
           html = html + '</li>';
         }
        
@@ -436,6 +442,31 @@
       getPage(currentPage);
       //alert(str);
       //alert(str);
+    });
+
+    $('#btnClearFilterPost').click(function(){
+      var change = false;
+      if(scelta != 'Tutte'){
+        scelta = 'Tutte';
+        change = true;
+      }
+      if(motivoReportPost != 'Tutte'){
+        motivoReportPost = 'Tutte';
+        change = true;
+      }
+      if(idReportPost != -1){
+        idReportPost = -1;
+        change = true;
+
+      }
+
+      if(change){
+        currentPage = 1;
+        $('#textIdReportPost').val("");
+         $('#selectpickerMotivoPost').val('Tutte');
+          $('#selectpickerPost').val('Tutte');
+        getPage(currentPage);
+      }
     });
   </script>
 @endsection
