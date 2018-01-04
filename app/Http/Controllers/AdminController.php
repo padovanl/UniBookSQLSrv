@@ -170,11 +170,51 @@ class AdminController extends Controller
         }
     }
 
+    
+    $motivo = $request->input('motivo');
+    if($motivo == "Incita all'odio"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'Incita all\'odio';
+        });
+    }
+    if($motivo == "È una notizia falsa"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'È una notizia falsa';
+        });
+    }
+    if($motivo == "È una minaccia"){
+        $report = $report->filter(function ($value, $key) {
+            return $value->description == 'È una minaccia';
+        });
+    }
+
+    //errore!!!!!!
+    //$id_report = intval($request->input('idReportPost'));
+    //if($id_report != -1){
+    //    $report = $report->filter(function ($value, $id_report) {
+    //        return strpos($value->id_report, $id_report);
+    //    });        
+    //}
+
+    $id_report = intval($request->input('idReportPost'));
+    if($id_report != -1){
+        $c = collect();
+        foreach ($report as $r) {
+            if(strpos($r->id_report, (string)$id_report))
+                $c->push($r);
+        }
+        $report = $c;  
+    }
+
+    
+
+
     $el_per_page = 5;
     $num_page_reportPost = intval(($report->count()/$el_per_page));
     if(($report->count() % $el_per_page) != 0){
      $num_page_reportPost++;
-    }
+    }    $id_report = $request->input('id');
+    
 
 
     $reportList = $report->splice($page * 5 - 5, 5);    

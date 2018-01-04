@@ -21,6 +21,16 @@
   <script src="js/jquery-ui.js"></script>
   
   <script src="js/md5.js"></script>
+  <script>
+    function go_to(view) {
+    $.get("../laravel/public/index.php/" + view, {}, function(result){
+        $("#view").html(result);
+      });
+  }
+
+ // go_to('page/home');
+
+  </script>
   </head>
 <body contenteditable="false">
   <div class="w3-container1" id="contact" style="margin-top:75px">
