@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Post;
 use App\Users_make_friends;
+use App\PostUser;
+use App\CommentUser;
+use App\CommentU;
+use App\LikePost;
+
 use Cookie;
 
 class HomeController extends Controller{
@@ -29,25 +34,33 @@ class HomeController extends Controller{
       $id = Cookie::get('session');
       $user = User::where('id_user', $id)->first();
 
-      //ritorna un array con: [amici_richiesti, amici_accettati, amicizie_in_attesa_di_conferma, amicizie_richieste_in_attesa]
-      $friends = $user::friends($id);
-      $requests = $user::pendingfriends($id);
+      $friends = $user::friends($id);     //Torna un array con gli amici
+      $requests = $user::pendingfriends($id);   //Torna un array con le richieste
 
-      //return($friends);
-      //Caricamento della lista amici: stato=0->friends, stato=1->pending
-      //$friends = Users_make_friends::where('id_request_user', $id)->where('status', 2)->get();
+      //Caricamento dei post degli amici e delle pagine
+      $posts = array();
+      $list_comments = array();
+      $likes = array();
 
-      //foreach ($friend as $friends){
-
-      //}
-
-      //Caricamento dei post degli amici
       //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
+      foreach ($friends as $friend){
+        $id_posts = PostUser::where('id_user', $friend['id_user'])->get();
+        foreach ($id_posts as $post){
+          //post
+          array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
+          //commenti
+          array_push($list_comments, CommentU::where('id_post', $post['id_post'])->orderBy('updated_at', 'asc')->get());
+          //likes
+          array_push($likes, LikePost::where('id_post', $post['id_post'])->get());
+        }
+      }
 
-      $posts = Post::all();
+
+      //TODO: caricamento post pagine
+
       //gli passo il controller stesso così posso richiamare le funzioni direttamente dalle views
       $controller = $this;
-      return view('home', compact('user', 'posts','controller','friends'));
+      return view('home', compact('user', 'posts', 'list_comments','controller','friends'));
 
     }
     else{
@@ -74,9 +87,9 @@ class HomeController extends Controller{
   //prendendo in ingresso un id, restituisce l'utente relativo
   //es. da un post id_author--->id_user
   public function ShowUser($param){
-    $u = User::where('id_user', $param)->first();
+    $user = User::where('id_user', $param)->first();
     #$nome = $user->name;
-    return $u;
+    return $user;
 
   }
 

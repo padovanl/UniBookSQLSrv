@@ -35,3 +35,19 @@ Route::post('/admin/report/post', 'AdminController@listReportPost');
 //prova ajax
 Route::get('/test', 'AdminController@testfunction');
 Route::post('/test', 'AdminController@testfunction');
+//Authentication
+Route::post('register', 'authController@register');
+Route::post('login',    'authController@login');
+Route::group(['middleware' => 'jwt-auth'], function () {
+  Route::post('get_user_details', 'authController@get_user_details');
+});
+
+// Route::post('/login',           'loginController@login');
+Route::get('/page/{view}', 		 	 'pageController@page');
+Route::get('/registrazione', 		 'utentiController@registrazione');
+
+Route::group(['middleware' => 'jwt-auth'], function () {
+
+  Route::get('/modifica', 			   'utentiController@modifica');
+  Route::get('/cancella_utente',   'utentiController@cancella_utente');
+});

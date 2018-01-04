@@ -54,9 +54,7 @@
                             <div class="input-group input-group-sm" style="max-width:360px;">
                                 <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">
-                                      <i class="glyphicon glyphicon-search"></i>
-                                    </button>
+                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                                 </div>
                             </div>
                         </form>
@@ -73,7 +71,7 @@
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src = "{{$user->pic_path}}" class="glyphicon glyphicon-user" /></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="">Report..</a></li>
                                     <li><a href="">Activity Log</a></li>
@@ -107,13 +105,12 @@
                                     </form>
                                 </div>
                                 @foreach ($posts as $post)
-                                <?php $u = $controller->ShowUser($post->id_author); ?>
+                                <?php $u = $controller->ShowUser($post[0] -> id_author); ?>
                                   <div class="panel panel-default">
                                       <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
                                               <li class="dropdown">
                                                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                                     <i class="glyphicon glyphicon-user"></i>
-                                                    <img src = "{{$user->pic_path}}" class="glyphicon glyphicon-user" />
                                                   </a>
                                                   <ul class="dropdown-menu">
                                                       <li><a href="">More</a></li>
@@ -123,16 +120,28 @@
                                                       <li><a href="">More</a></li>
                                                   </ul>
                                               </li>
-                                          </ul>
-                                          <h4>
-                                            
+                                          </ul> <h4>
+
                                           </h4>
                                         </div>
                                       <div class="panel-body">
                                           <div class="clearfix"></div>
                                           <hr>
-                                          {{$post -> content}}
+                                          {{$post[0] -> content}}
+                                        </hr>
                                       </div>
+                                      @foreach ($list_comments as $post_comments)
+                                        @foreach ($post_comments as $comment)
+                                          @if ($comment['id_post'] === $post[0] -> id_post)
+                                      <div class="panel-comment">
+                                        <div class="clearfix"></div>
+                                        <hr>
+                                          {{$comment -> content}}
+                                      </hr>
+                                      </div>
+                                        @endif
+                                      @endforeach
+                                    @endforeach
                                   </div>
                                 @endforeach
                             </div>
