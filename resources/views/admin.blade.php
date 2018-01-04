@@ -14,7 +14,10 @@
             <a class="nav-link" href="#segnalazioni" onclick="changeSelectedSection(2)" id="sezione2">Segnalazioni Post</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#utenti" onclick="changeSelectedSection(3)" id="sezione3">Utenti</a>
+            <a class="nav-link" href="#segnalazioniComment" onclick="changeSelectedSection(3)" id="sezione3">Segnalazioni Commenti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#utenti" onclick="changeSelectedSection(4)" id="sezione4">Utenti</a>
           </li>
         </ul>
       </nav>
@@ -182,6 +185,107 @@
         <hr>
         <br>
 
+
+        <br>
+        <hr id="segnalazioniComment">
+        <br>
+
+        <h2 id="segnalazioniCommenti">Segnalazioni commenti</h2>
+        <div class="alert alert-primary" role="alert">
+          <div class="row">
+            <div class="col-md-3">
+                <label for="selectpickerCommentlabel">Stato segnalazione:</label>           
+                 <select class="selectpicker" id="selectpickerComment">
+                  <option selected>Tutte</option>
+                  <option>Aperte</option>
+                  <option>Esaminate</option>
+                </select> 
+            </div>
+            <div class="col-md-3">
+               <label for="selectpickerMotivoCommentlabel">Motivo segnalazione:</label>           
+                 <select class="selectpicker" id="selectpickerMotivoComment">
+                  <option selected>Tutte</option>
+                  <option>Incita all'odio</option>
+                  <option>È una notizia falsa</option>
+                  <option>È una minaccia</option>
+                </select> 
+            </div>
+            <div class="col-md-3">
+               <label for="textIdReportCommentlabel">Id segnalazione:</label>           
+               <input type="text" id="textIdReportComment"> 
+            </div>
+            <div class="col-md-1">
+              
+            </div>
+            <div class="col-md-2">
+               <button type="button" class="btn btn-danger" id="btnClearFilterComment"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;&nbsp;Pulisci filtri</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Id segnalazione</th>
+                    <th>Data</th>
+                    <th>Motivo</th>
+                    <th>Stato</th>
+                    <th>Opzioni</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyComment">
+
+                @foreach($reportListComment as $r)
+                  <tr id="reportRowComment{{$r->id_report}}">
+                    <td>{{$r->id_report}}</td>
+                    <td>{{$r->created_at->format('M j, Y H:i')}}</td>
+                    <td class="{{$r->id_report}}Comment">{{$r->description}}</td>
+                    <td>
+                      @if($r->status == "aperta")
+                        <span class="badge badge-success" id="labelStatus{{$r->id_report}}Comment">Aperta</span>
+                      @else
+                        <span class="badge badge-secondary">Esaminata</span>
+                      @endif
+                    </td>
+                    <td>
+                      <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item edit-item" href="#myModal" data-toggle="modal" data-whatever="{{$r->id_report}}" id="openComment">
+                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
+                          @if($r->status == "aperta")
+                            <a class="dropdown-item" href="#">
+                              <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
+                            <a class="dropdown-item" href="#">
+                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
+                          @endif
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center" id="paginationCommentUl">
+                
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+
+
         <h2 id="utenti">Utenti</h2>
         <div class="row">
           <div class="col-sm-12">
@@ -256,10 +360,8 @@
     </div>
   </div>
 
-
-		<!-- Detail Modal -->
-
-<div class="modal fade bd-example-modal-lg" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<!-- Detail Modal -->
+<div class="modal fade bd-modal-lg" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -281,7 +383,7 @@
           </div>
           <div class="form-group">
             <label for="motivoReport" class="form-control-label">Motivo segnalazione:</label>
-            <textarea class="form-control" id="motivoReport" rows="3" disabled></textarea>
+            <textarea class="form-control" id="motivoReport" rows="1" disabled></textarea>
           </div>
           <div class="form-group">
             <label for="linkProfilo" id="linkProfiloLabel" class="form-control-label">Autore:</label>
@@ -306,6 +408,30 @@
 </div>
 
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="tmp" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tmp">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <!-- Bootstrap core JavaScript
     ================================================== -->
 
@@ -322,7 +448,10 @@
 
   <script src="../assets/js/admin/dashboardAJAX.js"></script>
 
+
   <script>
+
+    //GESTIONE TABELLA SEGNALAZIONI POST
     var currentPage = 1;
     var scelta = 'Tutte';
     var motivoReportPost = 'Tutte';
@@ -397,7 +526,7 @@
         rows = rows + '     <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni';
         rows = rows + '     </button>';
         rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-        rows = rows + '     <a class="dropdown-item edit-item" href="#" data-toggle="modal" data-target="#detailModal" data-whatever="' + value.id_report + '">';
+        rows = rows + '     <a class="dropdown-item edit-item" href="#detailModal" data-toggle="modal" data-whatever="' + value.id_report + '">';
         rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
         if(value.status == 'aperta'){
           rows = rows + '   <a class="dropdown-item" href="#">';
@@ -419,8 +548,6 @@
       scelta = str;
       currentPage = 1;
       getPage(currentPage);
-      //alert(str);
-      //alert(str);
     }).change();
 
     $('#selectpickerMotivoPost').change(function(){
@@ -428,8 +555,6 @@
       motivoReportPost = str;
       currentPage = 1;
       getPage(currentPage);
-      //alert(str);
-      //alert(str);
     }).change();
 
     $('#textIdReportPost').keyup(function(){
@@ -440,8 +565,6 @@
         idReportPost = str;
       currentPage = 1;
       getPage(currentPage);
-      //alert(str);
-      //alert(str);
     });
 
     $('#btnClearFilterPost').click(function(){
@@ -457,9 +580,7 @@
       if(idReportPost != -1){
         idReportPost = -1;
         change = true;
-
       }
-
       if(change){
         currentPage = 1;
         $('#textIdReportPost').val("");
@@ -468,5 +589,10 @@
         getPage(currentPage);
       }
     });
+    //FINE GESTIONE TABELLA SEGNALAZIONI POST
+
+    //GESTIONE SEGNALAZIONI COMMENTI
+
+
   </script>
 @endsection

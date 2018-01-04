@@ -32,6 +32,8 @@ Route::post('/admin/dashboard/deletePost', 'AdminController@deletePost');
 
 Route::post('/admin/report/post', 'AdminController@listReportPost');
 
+Route::get('/admin2', 'AdminController@dash2');
+
 //prova ajax
 Route::get('/test', 'AdminController@testfunction');
 Route::post('/test', 'AdminController@testfunction');

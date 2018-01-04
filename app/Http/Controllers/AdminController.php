@@ -36,6 +36,17 @@ class AdminController extends Controller
      $num_page_reportPost++;
     }
     $reportList = $report->splice($current_page_post * $el_per_page - 5, 5);
+
+    //segnalazioni commenti
+    $reportComment = ReportComment::latest()->get();
+    $el_per_page_comment = 5;
+    $current_page_comment = 1;
+    $num_page_reportComment = intval(($reportComment->count()/$el_per_page_comment));
+    if(($reportComment->count() % $el_per_page_comment) != 0){
+     $num_page_reportComment++;
+    }
+    $reportListComment = $reportComment->splice($current_page_comment * $el_per_page - 5, 5);
+
     //recupero numero utenti totali
     $totUser = User::where('confirmed', '=', 1)->count();
     //recupero numero post totali
@@ -44,7 +55,7 @@ class AdminController extends Controller
     $totComment = CommentP::count();
     //recupero numero pagine totali
     $totPage = Page::count();
-    return view('/admin', compact('reportList', 'totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost'));
+    return view('/admin', compact('reportList', 'reportListComment','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost'));
   }
 
   public function getPostDetails(Request $request){
@@ -272,6 +283,10 @@ class AdminController extends Controller
         }
 
         return response()->json(['response' => 'This is get method', 'numero' => 5]);
+    }
+
+    public function dash2(){
+        return view('/admin2');
     }
 
 
