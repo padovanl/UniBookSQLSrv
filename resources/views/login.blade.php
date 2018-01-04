@@ -34,7 +34,8 @@
     </div>
 
     <form method="POST" action="/login/submit">
-      <input name="_token" type="hidden" value="{{ csrf_token() }}">
+      {{csrf_field()}}
+
       <div class="group">
         <input type="text" name="email" required>
         <span class="highlight"></span>
@@ -70,7 +71,7 @@
 
 
     <div class="new_user">
-      <p>Nuovo utente? <a href="/register">Registrati!</a></p>
+      <p>Nuovo utente? <a href="{{ url('register') }}">Registrati!</a></p>
     </div>
 
   </div>

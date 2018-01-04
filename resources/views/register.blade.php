@@ -1,33 +1,86 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Unibook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="assets/css/registrazione.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'></style>
+    <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
+    <script src="https://use.fontawesome.com/1e803d693b.js"></script>
+</head>
+<body>
 
-@section('content')
-    <h1>Registration</h1>
+  <div class="wrapper">
+    <div class="register">
+      <h1>Registrazione</h1></br>
 
 
-    <form action="/register" method="post">
-      {{csrf_field()}}
+      <form action="/register" method="post">
+        {{csrf_field()}}
+
+        <div class="group">
+          <input type="text" name="name" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Nome</label>
+        </div>
+        <div class="group">
+          <input type="text" name="surname" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Cognome</label>
+        </div>
+        <div class="group">
+          <input type="text" name="email" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Email</label>
+        </div>
+
+        <div class="group">
+          <input type="password" name="pwd_hash" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Password</label>
+        </div>
+
+        <div class="group">
+          <input type="text" name="citta" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Città</label>
+        </div>
 
 
 
-      Name: <input type="text" name="name" required><br>
+        <p>Data di nascità</p>
+        <div class="form-row">
+            <input class="form-control" type="date" name="bday">
+        </div></br>
 
-      Surname: <input type="text" name="surname" required><br>
 
-      Email: <input type="text" name="email" required><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
+          <label class="form-check-label" for="inlineRadio1">Donna</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
+          <label class="form-check-label" for="inlineRadio2">Uomo</label>
+        </div>
 
-      Password: <input type="text" name="pwd_hash" required><br>
+        <div class="lg-btn">
+          <button type="submit" class="button" value="Register">Registrati</button>
+        </div>
 
-      Birthdate :<input type="date" name="birth_date" required><br>
+      </form>
+    </div>
+  </div>
 
-      City: <input type="text" name="citta" required><br>
-
-      Gender: <input type="radio" name="gender" value="1" checked> Male
-              <input type="radio" name="gender" value="0"> Female
-              <input type="radio" name="gender" value="2"> Other<br>
-
-      Picture: <input type="text" name="pic_path" required><br>
-
-      <input type="submit" value="Register">
-    </form>
-
-@endsection
+</body>
+</html>
