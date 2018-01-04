@@ -34,11 +34,12 @@ Route::get('/admin/dashboard', 'AdminController@dashboard');
 Route::post('/admin/dashboard/getPostDetails', 'AdminController@getPostDetails');
 Route::post('/admin/dashboard/ignoreReportPost', 'AdminController@ignoreReportPost');
 Route::post('/admin/dashboard/deletePost', 'AdminController@deletePost');
-
 Route::post('/admin/dashboard/getCommentDetails', 'AdminController@getCommentDetails');
-
 Route::post('/admin/report/post', 'AdminController@listReportPost');
 Route::post('/admin/report/comment', 'AdminController@listReportComment');
+Route::post('/admin/dashboard/ignoreReportComment', 'AdminController@ignoreReportComment');
+Route::post('/admin/dashboard/deleteComment', 'AdminController@deleteComment');
+
 
 //prova ajax
 Route::get('/test', 'AdminController@testfunction');

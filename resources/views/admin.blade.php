@@ -238,7 +238,7 @@
                 <tbody id="tbodyComment">
 
                 @foreach($reportListComment as $r)
-                  <tr id="reportRowComment{{$r->id_report}}">
+                  <tr id="reportRow{{$r->id_report}}Comment">
                     <td>{{$r->id_report}}</td>
                     <td>{{$r->created_at->format('M j, Y H:i')}}</td>
                     <td class="{{$r->id_report}}Comment">{{$r->description}}</td>
@@ -645,7 +645,65 @@
           $('#linkProfiloCommentLabel').text('Pagina:');
 
         $('#motivoReportComment').val(td);
+
+        //aggiungo evento click al pulsante ignora
+        $('#btnIgnoraReportComment').click(function(){
+          $.ajax({
+            dataType: 'json',
+            type: 'POST',
+            url: '/admin/dashboard/ignoreReportComment',
+            data: { id_report: recipient }
+          }).done(function (data) {
+            console.log(data);
+            $('#labelStatus' + recipient + 'Comment').text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+            getPageComment(currentPageComment);
+            toastr.success('La segnalazione è stata esaminata con successo.', 'Operazione completata!', { timeOut: 5000 });
+          });
+        });
+
+        //evento rimuovi post
+        $('#btnEliminaComment').click(function(){
+          $.ajax({
+            dataType: 'json',
+            type: 'POST',
+            url: '/admin/dashboard/deleteComment',
+            data: { id_report: recipient, ban: 0 }
+          }).done(function (data) {
+            console.log(data.message);
+            $('#labelStatus' + recipient + 'Comment').text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+            //elimino la riga
+            $('#reportRow' + recipient + 'Comment').remove();
+            getPageComment(currentPageComment);
+            toastr.success('Il commento è stato eliminato con successo. Sono state eliminate anche le altre segnalazioni relative a questo commento.', data.message , { timeOut: 5000 });
+          });
+        });
+
+          $('#btnEliminaBanComment').click(function(){
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/deleteComment',
+              data: { id_report: recipient, ban : 1 }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatus' + recipient + 'Comment').text('Esaminata').removeClass('badge-success').addClass('badge-secondary');
+              //elimino la riga
+              $('#reportRow' + recipient + 'Comment').remove();
+              getPageComment(currentPageComment);
+              toastr.success('Il commento è stato eliminato con successo e l\'autore è stato bannato e non potrà scrivere su UniBook. Sono state eliminate anche le altre segnalazioni relative a questo commento.', data.message , { timeOut: 5000 });
+            });
+          });
+
+
       });
+    });
+
+
+    $('#commentModal').on('hide.bs.modal', function(event){
+      //rimuovo gli eventi una volta che chiudo il modal
+      $('#btnIgnoraReportComment').unbind();
+      $('#btnEliminaComment').unbind();
+      $('#btnEliminaBanComment').unbind();
     });
 
 

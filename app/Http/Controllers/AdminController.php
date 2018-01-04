@@ -398,6 +398,56 @@ class AdminController extends Controller
     return response()->json($array);
   }
 
+  public function ignoreReportComment(Request $request){
+    $id = $request->input('id_report');
+    $report = ReportComment::where('id_report', '=', $id)->update(['status' => 'esaminata']);
+    return response()->json(['message' => 'Operazione completata!']);
+  }
+
+
+  public function deleteComment(Request $request){
+    try{
+        //recupero la notifica e la rendo esaminata
+        $id_report = $request->input('id_report');
+        $report = ReportComment::where('id_report', '=', $id_report)->first();//update(['status' => 'esaminata']);
+        $id_comment = $report->id_comment;
+
+        $comment = CommentU::where('id_comment', '=', $id_comment)->first();
+        LikeComment::where('id_comment', '=', $comment->id_comment)->delete();
+        
+        
+
+        //elimino la notifica
+        ReportComment::where('id_comment', '=', intval($id_comment))->delete();
+        
+
+        $ban = $request->input('ban');
+        if($ban == 1){
+            //recupero l'utente o la pagina per bannarlo
+            $postTmp = CommentUser::where('id_comment', '=', $id_comment)->first();
+            if(!$postTmp){
+                $postTmp = CommentPage::where('id_comment', '=', $id_comment)->first();
+                $page = Page::where('id_page', '=', $postTmp->id_page)->update(['ban' => true]);
+            }else{
+                $user = User::where('id_user', '=', $postTmp->id_user)->update(['ban' => true]);
+            }
+        }
+
+        CommentUser::where('id_comment', '=', $comment->id_comment)->delete();
+
+        CommentPage::where('id_comment', '=', $comment->id_comment)->delete();
+
+        $comment = CommentU::where('id_comment', '=', $id_comment)->delete();
+
+
+        return response()->json(['message' => 'Operazione completata!']);
+
+    }catch(Exception $e){
+        return response()->json(['message' => $e->getMessage()]);
+    }
+    
+  }
+
 
 
 }
