@@ -41,7 +41,7 @@ Route::post('/admin/report/post', 'AdminController@listReportPost');
 Route::get('/test', 'AdminController@testfunction');
 Route::post('/test', 'AdminController@testfunction');
 //Authentication
-Route::post('register', 'authController@register');
+#Route::post('register', 'authController@register');
 Route::post('login',    'authController@login');
 Route::group(['middleware' => 'jwt-auth'], function () {
   Route::post('get_user_details', 'authController@get_user_details');
@@ -49,7 +49,7 @@ Route::group(['middleware' => 'jwt-auth'], function () {
 
 // Route::post('/login',           'loginController@login');
 Route::get('/page/{view}', 		 	 'pageController@page');
-Route::get('/registrazione', 		 'utentiController@registrazione');
+#Route::get('/registrazione', 		 'utentiController@registrazione');
 
 Route::group(['middleware' => 'jwt-auth'], function () {
 

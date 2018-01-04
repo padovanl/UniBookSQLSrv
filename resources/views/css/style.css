@@ -1,0 +1,50 @@
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+.Carica {
+	background-color: #43A047;
+	color: white;
+
+	font-size: 25px;
+	border-radius: 2em;
+
+	transition: 0.5s all;
+}
+.Carica:hover{
+	background-color: #F44336;
+	cursor: pointer;
+	transition: 0.5s all;
+}
+.immagine{
+	background-color: #F44336;
+	color: white;
+}
+.immagine:focus{
+	background-color: pink;
+}
+#tabledoc tr,#tabledoc th{
+border-color: green;}
+#tabledoc nth-child(even){
+	background-color: green;
+}
+.registrati:focus{
+background-color: pink;
+}
+
+.registrazione{
+	background-color: #F44336;
+	color: white;
+}
+.w3-round{
+width:50px; border: 5px solid red;
+}
+.registrazione1{
+	background-color: #F5F5F5;
+}
+.w3-input1{
+	background-color: #FFF9C4;
+}
+.pannello{
+	background-color: #F5F5F5;
+}

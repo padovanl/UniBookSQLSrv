@@ -7,7 +7,7 @@
     <form action="/register" method="post">
       {{csrf_field()}}
 
-      
+
 
       Name: <input type="text" name="name" required><br>
 
@@ -17,7 +17,7 @@
 
       Password: <input type="text" name="pwd_hash" required><br>
 
-      Birthdate :<input type="text" name="birth_date" required><br>
+      Birthdate :<input type="date" name="birth_date" required><br>
 
       City: <input type="text" name="citta" required><br>
 
