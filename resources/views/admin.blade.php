@@ -88,7 +88,7 @@
         <div class="alert alert-primary" role="alert">
           <div class="row">
             <div class="col-md-4">
-                <label for="selectpickerPost">Stato segnalazione:</label>           
+                <label for="selectpickerPostlabel">Stato segnalazione:</label>           
                  <select class="selectpicker" id="selectpickerPost">
                   <option selected>Tutte</option>
                   <option>Aperte</option>
@@ -96,7 +96,7 @@
                 </select> 
             </div>
             <div class="col-md-4">
-               <label for="selectpickerPost">Motivo segnalazione:</label>           
+               <label for="selectpickerMotivoPostlabel">Motivo segnalazione:</label>           
                  <select class="selectpicker" id="selectpickerMotivoPost">
                   <option selected>Tutte</option>
                   <option>Incita all'odio</option>
@@ -105,8 +105,8 @@
                 </select> 
             </div>
             <div class="col-md-4">
-               <label for="selectpickerPost">Id segnalazione:</label>           
-               <input type="text" name="textIdReportPost" id="textIdReportPost"> 
+               <label for="textIdReportPostlabel">Id segnalazione:</label>           
+               <input type="text" id="textIdReportPost"> 
             </div>
           </div>
         </div>
@@ -320,6 +320,7 @@
     var currentPage = 1;
     var scelta = 'Tutte';
     var motivoReportPost = 'Tutte';
+    var idReportPost = -1;
 
     generatePagination({{$num_page_reportPost}}, currentPage);
 
@@ -362,7 +363,7 @@
           url : '/admin/report/post',
           dataType: 'json',
           type: 'POST',
-          data: { page: page, filter: scelta, motivo: motivoReportPost }
+          data: { page: page, filter: scelta, motivo: motivoReportPost, idReportPost: idReportPost }
       }).done(function (data) {
           currentPage = page;
           manageRow(data);  
@@ -425,5 +426,16 @@
       //alert(str);
     }).change();
 
+    $('#textIdReportPost').keyup(function(){
+      var str = $('#textIdReportPost').val();
+      if(str == "")
+        idReportPost = -1;
+      else
+        idReportPost = str;
+      currentPage = 1;
+      getPage(currentPage);
+      //alert(str);
+      //alert(str);
+    });
   </script>
 @endsection
