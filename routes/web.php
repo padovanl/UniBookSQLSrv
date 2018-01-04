@@ -21,6 +21,11 @@ Route::resource('/comment', 'CommentController');
 Route::resource('/register', 'RegisterController');
 Route::get('/logout', 'LoginController@logout');
 
+//Ricerca
+Route::get('/search/{search_term}', 'SearchController@search');
+
+//Profiles
+Route::get('/profile/user/{id}', 'ProfileController@show');
 
 //Admin Routes
 Route::get('/admin', 'AdminController@dashboard');
