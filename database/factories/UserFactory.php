@@ -10,7 +10,7 @@ $factory->define(App\User::class, function (Faker $faker) {
       'surname' => $faker->lastName,
       'birth_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
       'email' => $faker->safeEmail,
-      'roles'=> 0,
+      'admin'=> 0,
       'pwd_hash' => bcrypt('secret'),
       'gender' => $faker->randomElement(['0', '1']),
       'citta' => $faker->randomElement(['Ferrara','Bologna','Firenze','Roma','Milano','Venezia','Londra','Parigi','Berlino','Torino']),

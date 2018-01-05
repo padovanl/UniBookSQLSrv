@@ -236,7 +236,6 @@
                   </tr>
                 </thead>
                 <tbody id="tbodyComment">
-
                 @foreach($reportListComment as $r)
                   <tr id="reportRow{{$r->id_report}}Comment">
                     <td>{{$r->id_report}}</td>
@@ -297,65 +296,61 @@
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Data iscrizione</th>
+                    <th>Stato</th>
                     <th>Opzioni</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1001</td>
-                    <td>Luca Padovan</td>
-                    <td>emailinventata@gmail.com</td>
-                    <td>20 Novembre 20017, 16:54</td>
-                    <td>
-                      <div class="dropdown">
+                <tbody id="tbodyUser">
+                  @foreach($userList as $u)
+                    <tr id="userRow{{$r->id_report}}">
+                      <td>{{$u->id_user}}</td>
+                      <td>{{$u->name}}&nbsp;{{$u->surname}}</td>
+                      <td>{{$u->email}}</td>
+                      <td>{{$u->created_at->format('M j, Y H:i')}}</td>
+                      <td>
+                        @if($u->ban == 1)
+                          <span class="badge badge-danger">Bloccato</span>
+                        @else
+                          <span></span>
+                        @endif
+                      </td>
+                      <td>
+                       <div class="dropdown">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza profilo</a>
+                          <a class="dropdown-item" href="#userModal" data-toggle="modal" data-whatever="{{$u->id_user}}" id="openUser">
+                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
                           <a class="dropdown-item" href="#">
                             <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>
-                          <a class="dropdown-item" href="#">
-                            <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
+                          @if($u->ban == 1)
+                            <a class="dropdown-item" href="#">
+                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
+                          @else
+                            <a class="dropdown-item" href="#">
+                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sblocca utente</a>
+                          @endif
                         </div>
                       </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <br>
+        <hr>
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-md-12">
             <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                  </a>
-                </li>
+              <ul class="pagination justify-content-center" id="paginationUserUl">
+                
               </ul>
             </nav>
           </div>
         </div>
-        <hr>
       </main>
     </div>
   </div>
@@ -446,6 +441,48 @@
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaComment">Elimina commento</button>
            <button type="button" class="btn btn-danger" id="btnEliminaBanComment" data-dismiss="modal">Elimina e blocca autore</button>
            <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportComment">Ignora segnalazione</button>    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Comment modal -->
+<div class="modal fade bd-example1-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title">Dettagli utente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-4">
+            <img src="../assets/images/facebook4.jpeg" class="rounded-circle pull-left">
+          </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-4">
+            <h4>Luca Padovan</h4>
+            <h5>Email: luca.padovan@gmail.com</h5>
+            <h5>Data di iscrizione: 25/12/2008</h5>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+         <div class="row">
+          <div class="col-md-12">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+           <button type="button" class="btn btn-secondary" id="btnViewProfile">Visualizza profilo</button>      
+            <button type="button" class="btn btn-primary" id="btnAdmin">Promuovi a amministratore</button>    
+           <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnBan">Blocca utente</button>
           </div>
         </div>
       </div>
@@ -839,5 +876,108 @@
         getPageComment(currentPageComment);
       }
     });
+
+    //FINE GESTIONE SEGNALAZIONI COMMENTI
+
+    //GESTIONE UTENTI
+    var currentPageUser = 1;
+    var sceltaUser = 'Tutti'; //bloccati, admin, tutti
+    var idUser = -1;
+
+    generatePaginationUser({{$num_page_user}}, currentPageUser);
+
+    function generatePaginationUser(nPage, currentPage){
+        var html;
+        if(currentPage == 1){
+          html = '<li class="page-item disabled" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
+          html = html + '</li>';
+        }else{
+          html = '<li class="page-item" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1" onclick="getPageUser(' + (currentPage - 1) + ')"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
+          html = html + '</li>';          
+        }
+
+        var i;
+        for(i = 0; i < nPage; i++){
+          if((i + 1) == currentPage){
+            html = html + '<li class="page-item active"><button class="page-link" onclick="getPageUser(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
+            currentPage = i + 1;
+          }else{
+            html = html + '<li class="page-item"><button class="page-link" onclick="getPageUser(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
+          }
+        }
+        if(currentPage == nPage){
+          html = html + '<li class="page-item disabled" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
+          html = html + '</li>';
+        }else{
+          html = html + '<li class="page-item" id="previousPostPage">';
+          html = html + ' <button class="page-link" tabindex="-1" onclick="getPageUser(' + (currentPage + 1) + ')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
+          html = html + '</li>';
+        }
+       
+        $('#paginationUserUl').html(html);
+    }
+
+    function getPageUser(page){
+      $.ajax({
+          url : '/admin/dashboard/user',
+          dataType: 'json',
+          type: 'POST',
+          data: { page: page, filter: sceltaUser, idUser: idUser }
+      }).done(function (data) {
+          currentPageUser = page;
+          manageRowUser(data);  
+          generatePaginationUser(data[0].totPage, page);
+      }).fail(function () {
+          alert('Users could not be loaded.');
+      });
+    }
+
+    function manageRowUser(data) {
+      var rows = '';
+      $.each(data, function (key, value) {
+        rows = rows + '<tr>';
+        rows = rows + '<td>' + value.id_user + '</td>';
+        rows = rows + '<td>' + value.name + ' ' + value.surname + '</td>';
+        rows = rows + '<td>' + value.email + '</td>';
+        rows = rows + '<td>' + value.created_at + '</td>';
+        if(value.ban == 1){
+          rows = rows + '<td><span class="badge badge-danger" id="labelStatusUser' + value.id_user + '">Bloccato</span></td>';
+        }else{
+          if(value.admin == 1){
+            rows = rows + '<td><span class="badge badge-primary" id="labelStatusUser' + value.id_user + '">Admin</span></td>';
+          }else{
+            rows = rows + '<td><span id="labelStatusUser"></span></td>';
+          }
+        }
+        rows = rows + '<td>';
+        rows = rows + ' <div class="dropdown">';
+        rows = rows + '   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        rows = rows + '     <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni';
+        rows = rows + '     </button>';
+        rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+        rows = rows + '     <a class="dropdown-item edit-item" href="#userModal" data-toggle="modal" data-whatever="' + value.id_user + '">';
+        rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
+        rows = rows + '   <a class="dropdown-item" href="#">';
+        rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
+        if(value.ban == 0){
+          rows = rows + '        <a class="dropdown-item" href="#">';
+          rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
+        }else{
+          rows = rows + '   <a class="dropdown-item" href="#">';
+          rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Sblocca utente</a>';
+        }
+        rows = rows + '   </div>';
+        rows = rows + '  </div>';
+        rows = rows + '</td>';
+        rows = rows + '</tr>';
+      });
+      $("#tbodyUser").html(rows);
+    }
+
+
+    //FINE GESTIONE UTENTI
   </script>
 @endsection

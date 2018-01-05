@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         'surname' => 'Admin_Sur',
         'birth_date' => now(),
         'email' => 'gruppo09@gruppo09.com',
-        'roles'=> 1,
+        'admin'=> 1,
         'pwd_hash' => 'gruppo09',
         'gender' => '1',
         'citta' => 'Ferrara',

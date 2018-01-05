@@ -23,6 +23,7 @@ use App\LikeComment;
 //viewModel
 use App\DetailsReportViewModel;
 use App\DetailsReportCommentViewModel;
+use App\DetailsUserAdminViewModel;
 
 class AdminController extends Controller
 {
@@ -47,6 +48,15 @@ class AdminController extends Controller
     }
     $reportListComment = $reportComment->splice($current_page_comment * $el_per_page - 5, 5);
 
+    //lista utenti
+    $userList = User::latest()->get();
+    $el_per_page_user = 5;
+    $current_page_user = 1;
+    $num_page_user = intval(($userList->count()/$el_per_page_user));
+    if(($userList->count() % $el_per_page_comment) != 0){
+     $num_page_user++;
+    }
+    $userList = $userList->splice($current_page_comment * $el_per_page - 5, 5);
     //recupero numero utenti totali
     $totUser = User::where('confirmed', '=', 1)->count();
     //recupero numero post totali
@@ -55,7 +65,7 @@ class AdminController extends Controller
     $totComment = CommentP::count();
     //recupero numero pagine totali
     $totPage = Page::count();
-    return view('/admin', compact('reportList', 'reportListComment','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment'));
+    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user'));
   }
 
   public function getPostDetails(Request $request){
@@ -446,6 +456,74 @@ class AdminController extends Controller
         return response()->json(['message' => $e->getMessage()]);
     }
     
+  }
+
+
+
+  public function listUser(Request $request){
+    $page = $request->input('page');
+    //$report = ReportPost::latest()->get();
+
+    $filter = $request->input('filter');
+    if(!$filter || $filter == "Tutte"){
+        $users = User::latest()->get();
+    }else{
+        if($filter == "Bloccati"){
+            $users = User::where('ban', '=', 1)->latest()->get();
+        }else{
+            //esaminate
+            $users = User::where('admin', '=', 1)->latest()->get();
+        }
+    }
+
+
+    $id_user = intval($request->input('idUser'));
+    if($id_user != -1){
+        $c = collect();
+        foreach ($users as $u) {
+            if(strpos($u->id_user, (string)$id_user))
+                $c->push($u);
+        }
+        $users = $c;  
+    }
+
+    
+
+
+    $el_per_page = 5;
+    $num_page_user = intval(($users->count()/$el_per_page));
+    if(($users->count() % $el_per_page) != 0){
+     $num_page_user++;
+    }  
+    
+
+
+    $userList = $users->splice($page * 5 - 5, 5);    
+
+
+    $array = array();
+    //$length = count($reportList);
+    $x = 0;
+
+    $el_per_page = 5;
+    //$current_page_post = 1;
+
+    
+    foreach ($userList as $user) {
+        $viewModel = new DetailsUserAdminViewModel();
+        $viewModel->id_user = $users->id_user;
+        $viewModel->nome = $user->name + ' ' + $users->surname;
+        $viewModel->ban = $user->ban;
+        $viewModel->email = $user->email;
+        $viewModel->created_at = $user->created_at;
+        $viewModel->admin = $user->admin;
+        $viewModel->totPage = $num_page_reportPost;
+        $array[$x] = $viewModel;
+        $x++;
+    }
+
+    
+    return response()->json($array); 
   }
 
 

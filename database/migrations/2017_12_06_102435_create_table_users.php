@@ -20,7 +20,7 @@ class CreateTableUsers extends Migration
            $table->date('birth_date');
            $table->string('email')->unique();
            //0 =  normale 1 = admin
-           $table->integer('roles')->default(0);
+           $table->integer('admin')->default(0);
            $table->boolean('confirmed')->default(false);
            $table->string('pwd_hash');
            $table->string('pic_path');
