@@ -20,6 +20,7 @@ Route::post('/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
 Route::resource('/register', 'RegisterController');
 Route::get('/logout', 'LoginController@logout');
+Route::get('/home/loadmore', 'HomeController@loadMore');
 
 //Ricerca
 Route::get('/search/{search_term}', 'SearchController@search');
