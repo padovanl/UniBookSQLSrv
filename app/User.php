@@ -9,7 +9,7 @@ use App\Users_make_friends;
 class User extends Authenticatable
 {
   protected $table = 'users';
-  public $timestamps = false;
+  public $timestamps = true;
 
 
   public function scopeFriends($query, $id){

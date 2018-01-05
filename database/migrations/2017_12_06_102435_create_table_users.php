@@ -25,6 +25,7 @@ class CreateTableUsers extends Migration
            $table->string('pwd_hash');
            $table->string('pic_path');
            $table->boolean('ban')->default(false);
+           $table->timestamps();
            //true = male, false = female
 	         $table->boolean('gender');
            $table->string('citta');
