@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     { #creo utenti ENTITA' = users
-      $users = factory(App\User::class, 6)->create();
+      $users = factory(App\User::class, 20)->create();
 
       #creo pagine ENTITA' = pages
       $pages = factory(App\Page::class, 6)->create();
@@ -63,7 +63,9 @@ class DatabaseSeeder extends Seeder
         'ban' => 0,
         'id_user' => uniqid(),
         'pic_path' => 'assets/images/facebook1.jpg',
-        'confirmed' => 1
+        'confirmed' => 1,
+	'created_at' => now(),
+	'updated_at' => now(),
       ]);
 
     }

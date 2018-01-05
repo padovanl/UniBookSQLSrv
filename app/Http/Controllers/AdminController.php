@@ -211,7 +211,7 @@ class AdminController extends Controller
     if($id_report != -1){
         $c = collect();
         foreach ($report as $r) {
-            if(strpos($r->id_report, (string)$id_report))
+            if(strpos($r->id_report, (string)$id_report) || ($r->id_report == $id_report))
                 $c->push($r);
         }
         $report = $c;  
@@ -250,7 +250,7 @@ class AdminController extends Controller
 
         $date = $report->created_at;
 
-        $viewModel->created_at = $date->format('Y-m-d H:i:s');
+        $viewModel->created_at = $date->format('M j, Y H:i');
 
         $tmp = PostPage::where('id_post', '=', $post->id_post)->first();
         if(!$tmp){
@@ -344,7 +344,7 @@ class AdminController extends Controller
     if($id_report != -1){
         $c = collect();
         foreach ($report as $r) {
-            if(strpos($r->id_report, (string)$id_report))
+            if(strpos($r->id_report, (string)$id_report) || ($r->id_report == $id_report))
                 $c->push($r);
         }
         $report = $c;  
@@ -383,7 +383,7 @@ class AdminController extends Controller
 
         $date = $report->created_at;
 
-        $viewModel->created_at = $date->format('Y-m-d H:i:s');
+        $viewModel->created_at = $date->format('M j, Y H:i');
 
         $tmp = CommentPage::where('id_comment', '=', $comment->id_comment)->first();
         if(!$tmp){
@@ -461,17 +461,17 @@ class AdminController extends Controller
 
 
   public function listUser(Request $request){
+
     $page = $request->input('page');
     //$report = ReportPost::latest()->get();
 
     $filter = $request->input('filter');
-    if(!$filter || $filter == "Tutte"){
+    if(!$filter || $filter == "Tutti"){
         $users = User::latest()->get();
     }else{
         if($filter == "Bloccati"){
             $users = User::where('ban', '=', 1)->latest()->get();
         }else{
-            //esaminate
             $users = User::where('admin', '=', 1)->latest()->get();
         }
     }
@@ -481,13 +481,11 @@ class AdminController extends Controller
     if($id_user != -1){
         $c = collect();
         foreach ($users as $u) {
-            if(strpos($u->id_user, (string)$id_user))
+            if(strpos($u->id_user, (string)$id_user) || ($u->id_user == $id_user))
                 $c->push($u);
         }
         $users = $c;  
     }
-
-    
 
 
     $el_per_page = 5;
@@ -505,19 +503,18 @@ class AdminController extends Controller
     //$length = count($reportList);
     $x = 0;
 
-    $el_per_page = 5;
     //$current_page_post = 1;
 
     
-    foreach ($userList as $user) {
+    foreach ($userList as $u) {
         $viewModel = new DetailsUserAdminViewModel();
-        $viewModel->id_user = $users->id_user;
-        $viewModel->nome = $user->name + ' ' + $users->surname;
-        $viewModel->ban = $user->ban;
-        $viewModel->email = $user->email;
-        $viewModel->created_at = $user->created_at;
-        $viewModel->admin = $user->admin;
-        $viewModel->totPage = $num_page_reportPost;
+        $viewModel->id_user = $u->id_user;
+        $viewModel->nome = $u->name . ' ' . $u->surname;
+        $viewModel->ban = $u->ban;
+        $viewModel->email = $u->email;
+        $viewModel->created_at = $u->created_at->format('M j, Y H:i');
+        $viewModel->admin = $u->admin;
+        $viewModel->totPage = $num_page_user;
         $array[$x] = $viewModel;
         $x++;
     }

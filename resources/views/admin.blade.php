@@ -286,6 +286,28 @@
 
 
         <h2 id="utenti">Utenti</h2>
+        <div class="alert alert-primary" role="alert">
+          <div class="row">
+            <div class="col-md-3">
+                <label for="selectpickerUserlabel">Stato utente:</label>           
+                 <select class="selectpicker" id="selectpickerUser">
+                  <option selected>Tutti</option>
+                  <option>Bloccati</option>
+                  <option>Admin</option>
+                </select> 
+            </div>
+            <div class="col-md-6">
+               <label for="textIdUserlabel">Id utente:</label>           
+               <input type="text" id="textIdUser"> 
+            </div>
+            <div class="col-md-1">
+              
+            </div>
+            <div class="col-md-2">
+               <button type="button" class="btn btn-danger" id="btnClearFilterUser"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;&nbsp;Pulisci filtri</button>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
@@ -940,7 +962,7 @@
       $.each(data, function (key, value) {
         rows = rows + '<tr>';
         rows = rows + '<td>' + value.id_user + '</td>';
-        rows = rows + '<td>' + value.name + ' ' + value.surname + '</td>';
+        rows = rows + '<td>' + value.nome + '</td>';
         rows = rows + '<td>' + value.email + '</td>';
         rows = rows + '<td>' + value.created_at + '</td>';
         if(value.ban == 1){
@@ -977,6 +999,40 @@
       $("#tbodyUser").html(rows);
     }
 
+    $('#selectpickerUser').change(function(){
+      var str = $('#selectpickerUser option:selected').text();
+      sceltaUser = str;
+      currentPageUser = 1;
+      getPageUser(currentPageUser);
+    }).change();
+
+    $('#textIdUser').keyup(function(){
+      var str = $('#textIdUser').val();
+      if(str == "")
+        idUser = -1;
+      else
+        idUser = str;
+      currentPageUser = 1;
+      getPageUser(currentPageUser);
+    });
+
+    $('#btnClearFilterUser').click(function(){
+      var change = false;
+      if(sceltaUser != 'Tutti'){
+        sceltaUser = 'Tutti';
+        change = true;
+      }
+      if(idUser != -1){
+        idUser = -1;
+        change = true;
+      }
+      if(change){
+        currentPageUser = 1;
+        $('#textIdUser').val("");
+          $('#selectpickerUser').val('Tutti');
+        getPageUser(currentPageUser);
+      }
+    });
 
     //FINE GESTIONE UTENTI
   </script>
