@@ -122,7 +122,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>Id segnalazione</th>
@@ -181,14 +181,12 @@
           </div>
         </div>
 
-        <br>
-        <hr>
-        <br>
+        
 
 
-        <br>
-        <hr id="segnalazioniComment">
-        <br>
+        
+        <br id="segnalazioniComment">
+        
 
         <h2 id="segnalazioniCommenti">Segnalazioni commenti</h2>
         <div class="alert alert-primary" role="alert">
@@ -225,7 +223,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>Id segnalazione</th>
@@ -311,7 +309,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>Id utente</th>
@@ -351,7 +349,7 @@
                               <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>
                           @else
                             <a class="dropdown-item" href="#">
-                              <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sblocca utente</a>
+                              <i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sblocca utente</a>
                           @endif
                         </div>
                       </div>
@@ -471,7 +469,7 @@
 </div>
 
 
-<!-- Comment modal -->
+<!-- user modal -->
 <div class="modal fade bd-example1-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -486,14 +484,14 @@
           <div class="col-md-1">
           </div>
           <div class="col-md-4">
-            <img src="../assets/images/facebook4.jpeg" class="rounded-circle pull-left">
+            <img src="../assets/images/facebook4.jpeg" class="rounded-circle pull-left" id="imgUser">
           </div>
           <div class="col-md-1">
           </div>
-          <div class="col-md-4">
-            <h4>Luca Padovan</h4>
-            <h5>Email: luca.padovan@gmail.com</h5>
-            <h5>Data di iscrizione: 25/12/2008</h5>
+          <div class="col-md-6">
+            <h4 id="nomeUser"></h4>
+            <h5 id="emailUser"></h5>
+            <h5 id="dataIscrizioneUser"></h5>
           </div>
         </div>
 
@@ -502,7 +500,7 @@
          <div class="row">
           <div class="col-md-12">
            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-           <button type="button" class="btn btn-secondary" id="btnViewProfile">Visualizza profilo</button>      
+          <a type="button" class="btn btn-secondary" href="#" id="btnViewProfile">Visualizza profilo</a>      
             <button type="button" class="btn btn-primary" id="btnAdmin">Promuovi a amministratore</button>    
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnBan">Blocca utente</button>
           </div>
@@ -989,7 +987,7 @@
           rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
         }else{
           rows = rows + '   <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Sblocca utente</a>';
+          rows = rows + '          <i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Sblocca utente</a>';
         }
         rows = rows + '   </div>';
         rows = rows + '  </div>';
@@ -1033,6 +1031,32 @@
         getPageUser(currentPageUser);
       }
     });
+
+
+    $('#userModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      var post;
+      $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/getUserDetails',
+          data: { id_user: recipient }
+      }).done(function (data) {
+        console.log(data);
+        //post = data;
+        var modal = $('#userModal');
+        modal.find('.modal-title').text('Dettagli utente ' + recipient);
+        $('#nomeUser').text(data.nome);
+        $('#emailUser').text('Email: ' + data.email);
+        $('#dataIscrizioneUser').text('Data iscrizione: ' + data.created_at);
+        $('#imgUser').attr("src", data.picPath);
+        $('#btnViewProfile').attr('href', '/profile/user/' + recipient);
+      });
+    });
+
+
+
 
     //FINE GESTIONE UTENTI
   </script>

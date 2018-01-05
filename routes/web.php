@@ -40,6 +40,7 @@ Route::post('/admin/report/comment', 'AdminController@listReportComment');
 Route::post('/admin/dashboard/ignoreReportComment', 'AdminController@ignoreReportComment');
 Route::post('/admin/dashboard/deleteComment', 'AdminController@deleteComment');
 Route::post('/admin/dashboard/user', 'AdminController@listUser');
+Route::post('/admin/dashboard/getUserDetails', 'AdminController@getUserDetails');
 
 
 //prova ajax

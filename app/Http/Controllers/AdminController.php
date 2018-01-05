@@ -84,7 +84,7 @@ class AdminController extends Controller
         //devo cercare l'autore tra gli utenti
         $tmp = PostUser::where('id_post', '=', $post->id_post)->first();
         $author = User::where('id_user', '=', $tmp->id_user)->first();
-        $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
+        $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
         $viewModel->nomeAutore = $author->name . " " . $author->surname;
         $viewModel->tipoAutore = 1;
     }else{
@@ -291,7 +291,7 @@ class AdminController extends Controller
         //devo cercare l'autore tra gli utenti
         $tmp = CommentUser::where('id_comment', '=', $comment->id_comment)->first();
         $author = User::where('id_user', '=', $tmp->id_user)->first();
-        $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
+        $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
         $viewModel->nomeAutore = $author->name . " " . $author->surname;
         $viewModel->tipoAutore = 1;
     }else{
@@ -390,7 +390,7 @@ class AdminController extends Controller
             //devo cercare l'autore tra gli utenti
             $tmp = CommentUser::where('id_comment', '=', $comment->id_comment)->first();
             $author = User::where('id_user', '=', $tmp->id_user)->first();
-            $viewModel->linkProfiloAutore = "/profile/" . $author->id_user;
+            $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
             $viewModel->nomeAutore = $author->name . " " . $author->surname;
             $viewModel->tipoAutore = 1;
         }else{
@@ -514,6 +514,7 @@ class AdminController extends Controller
         $viewModel->email = $u->email;
         $viewModel->created_at = $u->created_at->format('M j, Y H:i');
         $viewModel->admin = $u->admin;
+        $viewModel->picPath = $u->pic_path;
         $viewModel->totPage = $num_page_user;
         $array[$x] = $viewModel;
         $x++;
@@ -521,6 +522,25 @@ class AdminController extends Controller
 
     
     return response()->json($array); 
+  }
+
+  public function getUserDetails(Request $request){
+    $id = $request->input('id_user');
+    $u = User::where('id_user', '=', $id)->first();
+
+     $viewModel = new DetailsUserAdminViewModel();
+     $viewModel->id_user = $u->id_user;
+     $viewModel->nome = $u->name . ' ' . $u->surname;
+     $viewModel->ban = $u->ban;
+     $viewModel->email = $u->email;
+     $viewModel->created_at = $u->created_at->format('M j, Y H:i');
+     $viewModel->admin = $u->admin;
+     $viewModel->picPath = '../' . $u->pic_path;
+     $viewModel->totPage = 1;
+
+    return response()->json($viewModel);
+
+
   }
 
 

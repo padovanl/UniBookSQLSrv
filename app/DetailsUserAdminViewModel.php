@@ -14,5 +14,7 @@ class DetailsUserAdminViewModel //extends Model
     public $totPage;
     public $created_at;
     public $admin;
+    public $picPath;
+    public $link;
 
 }
