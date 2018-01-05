@@ -49,6 +49,70 @@ class HomeController extends Controller{
     }
   }
 
+  //loading dei post
+  public function loadMore($id, $friends, $followed_pages_id){
+
+    //Caricamento dei post degli amici e delle pagine
+    $posts = array();
+    $list_comments = array();
+    $likes = array();
+
+    //inserisco anche i miei posts
+    array_push($posts, Post::where('id_author', $id)->orderBy('created_at', 'asc')->get());
+
+
+    //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
+    foreach ($friends as $friend){
+      $id_posts = PostUser::where('id_user', $friend['id_user'])->get();
+      foreach ($id_posts as $post){
+        //post
+        array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
+        //commenti
+        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->orderBy('updated_at', 'asc')->get());
+      }
+    }
+
+
+    foreach ($followed_pages_id as $id_page){
+      $id_page_post = PostPage::where('id_page', $id_page['id_page'])->get();
+      foreach ($id_page_post as $post_page){
+        array_push($posts, Post::where('id_post', $post_page['id_post'])->get());
+      }
+    }
+
+    $posts = array_flatten($posts);
+    $list_comments = array_flatten($list_comments);
+    foreach($posts as $post){
+      array_push($likes, LikePost::where('id_post', $post['id_post'])->get());
+    }
+    $likes = array_flatten($likes);
+
+    //ordino per data
+    usort($posts, array($this, 'cmp'));
+    usort($list_comments, array($this, 'cmp'));
+
+    $toreturn = array();
+
+    foreach($posts as $post){
+      $tmp_comm = array();
+      $tmp_like = array();
+      foreach($list_comments as $comment){
+        if($comment['id_post'] === $post['id_post']){
+          array_push($tmp_comm, $comment);
+        }
+      }
+      foreach($likes as $like){
+        if($like['id_post'] === $post['id_post']){
+          array_push($tmp_like, $like);
+        }
+      }
+      array_push($toreturn, array($post, $tmp_comm, $tmp_like));
+    }
+
+    return(json_encode($toreturn));
+  }
+
+
   //funzione richiamata quando viene richiesta la root del nostro sito
   public function landing()
   {
@@ -60,11 +124,13 @@ class HomeController extends Controller{
 
       $friends = $logged_user::friends($id);     //Torna un array con gli amici
       $requests = $logged_user::pendingfriends($id);   //Torna un array con le richieste
-      $suggested_friends = User::where('citta', $logged_user['citta'])->where('roles', 0)->get();
+      $suggested_friends = User::where('citta', $logged_user['citta'])->where('admin', 0)->get();
 
       //pagine seguite
       $followed_pages_id = Users_follow_pages::where('id_user', $id)->get();
 
+      //gli passo il controller stesso così posso richiamare le funzioni direttamente dalle views
+      $controller = $this;
       //Caricamento dei post degli amici e delle pagine
       $posts = array();
       $list_comments = array();
@@ -82,10 +148,9 @@ class HomeController extends Controller{
           array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
           //commenti
           array_push($list_comments, CommentU::where('id_post', $post['id_post'])->orderBy('updated_at', 'asc')->get());
-          //likes
-          array_push($likes, LikePost::where('id_post', $post['id_post'])->get());
         }
       }
+
 
       foreach ($followed_pages_id as $id_page){
         $id_page_post = PostPage::where('id_page', $id_page['id_page'])->get();
@@ -94,23 +159,25 @@ class HomeController extends Controller{
         }
       }
 
-      //gli passo il controller stesso così posso richiamare le funzioni direttamente dalle views
-      $controller = $this;
-
-      //ordino per data
       $posts = array_flatten($posts);
       $list_comments = array_flatten($list_comments);
+      foreach($posts as $post){
+        array_push($likes, LikePost::where('id_post', $post['id_post'])->get());
+      }
+      $likes = array_flatten($likes);
 
+      //ordino per data
       usort($posts, array($this, 'cmp'));
       usort($list_comments, array($this, 'cmp'));
-
-      return view('home', compact('logged_user', 'posts', 'list_comments','controller','friends', 'suggested_friends'));
+      return view('home', compact('posts', 'list_comments','logged_user','controller','friends', 'suggested_friends'));
 
     }
     else{
       return redirect('/login');
     }
   }
+
+
 
   public function newPost(Request $request){
     //verifica dei campi

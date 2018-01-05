@@ -1,6 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+<script>
+  $(document).ready(function() {
+      $('#submit').on('submit', function (e) {
+          e.preventDefault();
+
+          $.ajax({
+              type: "GET",
+              url: '/home/loadmore',
+              datatype: 'json',
+              data: {title: title, body: body, published_at: published_at},
+              success: function( msg ) {
+                  alert('ok');
+              }
+          });
+      });
+  });
+</script>
+
   <div class="padding">
       <div class="full col-sm-12">
           <!-- content -->
@@ -65,7 +85,7 @@
                     </div>
                  </div>
                 @endforeach
-
+                <button type="button"/>Load More..
               </div>
               <div class="col-sm-5">
                   <div class="container">
@@ -91,6 +111,7 @@
                                           </tbody>
                                       </table>
                                     @endforeach
+
                                   </div>
                               </div>
                           </div>
@@ -158,3 +179,31 @@
     });
 </script>
 @endsection
+
+
+<script>
+$(document).ready(function(){
+   $(document).on('click','#btn-more',function(){
+       var id = $(this).data('id');
+       $("#btn-more").html("Loading....");
+       $.ajax({
+           url : 'home/loadmore',
+           method : "POST",
+           data : {id:id, _token:"{{csrf_token()}}"},
+           dataType : "json",
+           success : function (data)
+           {
+              if(data != '')
+              {
+                  $('#remove-row').remove();
+                  $('#load-data').append(data);
+              }
+              else
+              {
+                  $('#btn-more').html("No Data");
+              }
+           }
+       });
+   });
+});
+</script>
