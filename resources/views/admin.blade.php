@@ -502,7 +502,7 @@
            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
           <a type="button" class="btn btn-secondary" href="#" id="btnViewProfile">Visualizza profilo</a>      
             <button type="button" class="btn btn-primary" id="btnToggleAdmin" data-dismiss="modal">Promuovi a amministratore</button>    
-           <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnBan">Blocca utente</button>
+           <button type="button" class="btn btn-danger" data-dismiss="modal" id="toggleBan">Blocca utente</button>
           </div>
         </div>
       </div>
@@ -610,8 +610,6 @@
         if(value.status == 'aperta'){
           rows = rows + '   <a class="dropdown-item" href="#">';
           rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
-          rows = rows + '        <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
         }
               
         rows = rows + '   </div>';
@@ -838,8 +836,6 @@
         if(value.status == 'aperta'){
           rows = rows + '   <a class="dropdown-item" href="#">';
           rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
-          rows = rows + '        <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
         }
         rows = rows + '   </div>';
         rows = rows + '  </div>';
@@ -982,17 +978,28 @@
         rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
         rows = rows + '   <a class="dropdown-item" href="#">';
         rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
-        if(value.ban == 0){
-          rows = rows + '        <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
-        }else{
-          rows = rows + '   <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Sblocca utente</a>';
-        }
+        //if(value.ban == 0){
+        //  var tmp = '"' + value.id_user + '"';
+        //  rows = rows + '        <a class="dropdown-item" href="#" id="toggleBanUser' + value.id_user + '">';
+        //  rows = rows + '          <i class="fa fa-ban" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;Blocca utente</a>';
+        //}else{
+        //  rows = rows + '   <a class="dropdown-item" href="#" id="toggleBanUser' + value.id_user + '">';
+        //  rows = rows + '          <i class="fa fa-unlock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Sblocca utente</a>';
+        //}
         rows = rows + '   </div>';
         rows = rows + '  </div>';
         rows = rows + '</td>';
         rows = rows + '</tr>';
+
+        $('#toggleBanUser' + value.id_user).click(function(){
+          if(value.ban == 1){
+            sbloccaUtente(value.id_user);
+          }else{
+            bloccaUtente(value.id_user);
+          }
+        });
+
+
       });
       $("#tbodyUser").html(rows);
     }
@@ -1087,7 +1094,43 @@
           });
 
         }
-       
+
+
+        //evento toggle ban
+        if(data.ban == false){
+          $('#toggleBan').removeClass('btn-primary').addClass('btn-danger').text('Blocca utente');
+          $('#toggleBan').click(function(){
+            //rimuovi admin
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/bloccaUser',
+              data: { id_user: recipient }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatusUser' + recipient).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+              getPageUser(currentPageUser);
+              toastr.success(data.body, data.message , { timeOut: 5000 });
+            });
+          });
+        }else{
+          $('#toggleBan').addClass('btn-primary').removeClass('btn-danger').text('Sblocca utente');
+          $('#toggleBan').click(function(){
+            //rendi admin
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/sbloccaUser',
+              data: { id_user: recipient }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatusUser' + recipient).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+              getPageUser(currentPageUser);
+              toastr.success(data.body, data.message , { timeOut: 5000 });
+            });
+          });
+
+        }
 
 
       });
@@ -1096,9 +1139,38 @@
     $('#userModal').on('hide.bs.modal', function(event){
       //rimuovo gli eventi una volta che chiudo il modal
       $('#btnToggleAdmin').unbind();
+      $('#toggleBan').unbind();
     });
-
-
     //FINE GESTIONE UTENTI
+  </script>
+
+  <script>
+    function bloccaUtente(id_user){
+       $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: '/admin/dashboard/bloccaUser',
+        data: { id_user: id_user }
+      }).done(function (data) {
+        console.log(data.message);
+        $('#labelStatusUser' + id_user).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+        getPageUser(currentPageUser);
+        toastr.success(data.body, data.message , { timeOut: 5000 });
+      });
+    }
+
+    function sbloccaUtente(id_user){
+      $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: '/admin/dashboard/sbloccaUser',
+        data: { id_user: id_user }
+      }).done(function (data) {
+        console.log(data.message);
+        $('#labelStatusUser' + id_user).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+        getPageUser(currentPageUser);
+        toastr.success(data.body, data.message , { timeOut: 5000 });
+      });
+    }
   </script>
 @endsection

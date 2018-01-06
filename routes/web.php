@@ -44,6 +44,8 @@ Route::post('/admin/dashboard/user', 'AdminController@listUser');
 Route::post('/admin/dashboard/getUserDetails', 'AdminController@getUserDetails');
 Route::post('/admin/dashboard/promuoviUser', 'AdminController@promuoviUser');
 Route::post('/admin/dashboard/retrocediUser', 'AdminController@retrocediUser');
+Route::post('/admin/dashboard/bloccaUser', 'AdminController@bloccaUser');
+Route::post('/admin/dashboard/sbloccaUser', 'AdminController@sbloccaUser');
 //Route::post('/admin/dashboard/user', 'AdminController@getUserDetails');
 
 //prova ajax

@@ -560,5 +560,22 @@ class AdminController extends Controller
   }
 
 
+  public function bloccaUser(Request $request){
+    $id = $request->input('id_user');
+
+    User::where([['id_user', '=', $id], ['ban', '=', false]])->update(['ban' => true]);
+
+    return response()->json(['message' => 'Operazione completata!', 'body' => 'L\'utente è stato bloccato. Non potrà scrivere post e commentare su UniBook.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
+  }
+
+  public function sbloccaUser(Request $request){
+    $id = $request->input('id_user');
+
+    User::where([['id_user', '=', $id], ['ban', '=', true]])->update(['ban' => false]);
+
+    return response()->json(['message' => 'Operazione completata!', 'body' => 'L\'utente è stato sbloccato.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
+  }
+
+
 
 }
