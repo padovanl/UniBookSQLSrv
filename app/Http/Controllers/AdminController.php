@@ -24,6 +24,7 @@ use App\LikeComment;
 use App\DetailsReportViewModel;
 use App\DetailsReportCommentViewModel;
 use App\DetailsUserAdminViewModel;
+use App\AdminDonutChartViewModel;
 
 class AdminController extends Controller
 {
@@ -65,7 +66,33 @@ class AdminController extends Controller
     $totComment = CommentP::count();
     //recupero numero pagine totali
     $totPage = Page::count();
-    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user'));
+
+    //dati per i grafici
+    //donut chart
+    $users = User::all();
+    $donutChart = array();
+    $cnt = 0;
+    foreach ($users as $u){
+        $find = false;
+        for($cnt = 0; $cnt < count($donutChart) && !$find; $cnt++) {
+            if($donutChart[$cnt]->citta == $u->citta){
+                $find = true;
+            }
+        }
+        if(!$find){
+            $tmp2 = new AdminDonutChartViewModel();
+            $tmp2->citta = $u->citta;
+            $tmp2->count = 1;
+            array_push($donutChart, $tmp2);
+        }else{
+            for($cnt = 0; $cnt < count($donutChart); $cnt++){
+                if($donutChart[$cnt]->citta == $u->citta){
+                    $donutChart[$cnt]->count += 1;
+                }
+            }
+        }
+    }
+    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user', 'donutChart'));
   }
 
   public function getPostDetails(Request $request){

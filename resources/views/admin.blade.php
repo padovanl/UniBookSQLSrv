@@ -55,9 +55,9 @@
           </div>
         </section>
 
-        <!--Prova-->
+        <!--grafici-->
         <section class="container-fluid">
-          <div class="row">
+          <!--<div class="row">
             <div class="col-md-6">
               <div id="bar-chart"></div>
             </div>
@@ -65,19 +65,18 @@
             <div class="col-md-6">
               <div id="line-chart"></div>
             </div>
-          </div>
+          </div>-->
           <div class="row">
             <div class="col-md-8">
+              <label for="area-chart">Qualcos'altro degli utenti:</label>
               <div id="area-chart"></div>
             </div>
 
             <div class="col-md-4">
+              <label for="donut-chart">Città degli utenti:</label>
               <div id="donut-chart"></div>
             </div>
 
-            <div class="col-md-8">
-              <div id="pie-chart"></div>
-            </div>
           </div>
         </section>
 
@@ -521,7 +520,7 @@
 
   <script src="../assets/js/admin/morris.min.js"></script>
   <script src="../assets/js/admin/raphael-min.js"></script>
-  <script src="../assets/js/admin/grafici.js"></script>
+
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     
 
@@ -1144,33 +1143,117 @@
     //FINE GESTIONE UTENTI
   </script>
 
+  //grafici
   <script>
-    function bloccaUtente(id_user){
-       $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: '/admin/dashboard/bloccaUser',
-        data: { id_user: id_user }
-      }).done(function (data) {
-        console.log(data.message);
-        $('#labelStatusUser' + id_user).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
-        getPageUser(currentPageUser);
-        toastr.success(data.body, data.message , { timeOut: 5000 });
+    $(document).ready(function() {
+      //barChart();
+      //lineChart();
+      areaChart();
+      donutChart();
+
+      $(window).resize(function() {
+        //window.barChart.redraw();
+        //window.lineChart.redraw();
+        window.areaChart.redraw();
+        window.donutChart.redraw();
+      });
+    });
+
+    function barChart() {
+      window.barChart = Morris.Bar({
+        element: 'bar-chart',
+        data: [
+          { y: '2006', a: 100, b: 90 },
+          { y: '2007', a: 75,  b: 65 },
+          { y: '2008', a: 50,  b: 40 },
+          { y: '2009', a: 75,  b: 65 },
+          { y: '2010', a: 50,  b: 40 },
+          { y: '2011', a: 75,  b: 65 },
+          { y: '2012', a: 100, b: 90 }
+        ],
+        xkey: 'y',
+        ykeys: ['a', 'b'],
+        labels: ['Series A', 'Series B'],
+        lineColors: ['#1e88e5','#ff3321'],
+        lineWidth: '3px',
+        resize: true,
+        redraw: true
       });
     }
 
-    function sbloccaUtente(id_user){
-      $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: '/admin/dashboard/sbloccaUser',
-        data: { id_user: id_user }
-      }).done(function (data) {
-        console.log(data.message);
-        $('#labelStatusUser' + id_user).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
-        getPageUser(currentPageUser);
-        toastr.success(data.body, data.message , { timeOut: 5000 });
+    function lineChart() {
+      window.lineChart = Morris.Line({
+        element: 'line-chart',
+        data: [
+          { y: '2006', a: 100, b: 90 },
+          { y: '2007', a: 75,  b: 65 },
+          { y: '2008', a: 50,  b: 40 },
+          { y: '2009', a: 75,  b: 65 },
+          { y: '2010', a: 50,  b: 40 },
+          { y: '2011', a: 75,  b: 65 },
+          { y: '2012', a: 100, b: 90 }
+        ],
+        xkey: 'y',
+        ykeys: ['a', 'b'],
+        labels: ['Series A', 'Series B'],
+        lineColors: ['#1e88e5','#ff3321'],
+        lineWidth: '3px',
+        resize: true,
+        redraw: true
       });
     }
+
+    function areaChart() {
+      window.areaChart = Morris.Area({
+        element: 'area-chart',
+        data: [
+          { y: '2006', a: 100, b: 90 },
+          { y: '2007', a: 75,  b: 65 },
+          { y: '2008', a: 50,  b: 40 },
+          { y: '2009', a: 75,  b: 65 },
+          { y: '2010', a: 50,  b: 40 },
+          { y: '2011', a: 75,  b: 65 },
+          { y: '2012', a: 100, b: 90 }
+        ],
+        xkey: 'y',
+        ykeys: ['a', 'b'],
+        labels: ['Series A', 'Series B'],
+        lineColors: ['#1e88e5','#ff3321'],
+        lineWidth: '3px',
+        resize: true,
+        redraw: true
+      });
+    }
+
+    function donutChart(){
+      window.donutChart = Morris.Donut({
+        element: 'donut-chart',
+        data: [
+          @foreach($donutChart as $dc)
+            {label: "{{$dc->citta}}", value: {{$dc->count}} },
+          @endforeach
+        ],
+        resize: true,
+        redraw: true
+      });
+    }
+
   </script>
+
+  <script>
+    function changeSelectedSection(id) {
+      var idA;
+      for (var i = 1; i < 5; i++) {
+        if (i == id) {
+          idA = "sezione" + id;
+          document.getElementById(idA).classList.add('active');
+        } else {
+          idA = "sezione" + i;
+          document.getElementById(idA).classList.remove('active');
+        }
+      }
+
+    }
+  </script>
+
 @endsection
