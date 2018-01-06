@@ -543,6 +543,22 @@ class AdminController extends Controller
 
   }
 
+  public function promuoviUser(Request $request){
+    $id = $request->input('id_user');
+
+    User::where([['id_user', '=', $id], ['admin', '=', false]])->update(['admin' => true]);
+
+    return response()->json(['message' => 'Operazione completata!', 'body' => 'L\'utente è stato promosso a amministratore di UniBook.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
+  }
+
+  public function retrocediUser(Request $request){
+    $id = $request->input('id_user');
+
+    User::where([['id_user', '=', $id], ['admin', '=', true]])->update(['admin' => false]);
+
+    return response()->json(['message' => 'Operazione completata!', 'body' => 'L\'utente è stato retrocesso.', 'classLabelAdd' => '', 'classLabelRemove' => 'badge badge-primary']);
+  }
+
 
 
 }

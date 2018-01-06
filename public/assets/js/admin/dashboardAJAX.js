@@ -85,21 +85,8 @@ $('#detailModal').on('hide.bs.modal', function(event){
   $('#btnEliminaBanPost').unbind();
 });
 
-
-
-
-//function getPostDetails(id){
-//  $.ajax({
-//      dataType: 'json',
-//      type: 'POST',
-//     url: '/admin/dashboard/getPostDetails',
-//      data: { id_post: id }
-//  }).done(function (data) {
-//    console.log(data);
-//    return data;
-//  });
-//}
 //FINE SEGNALAZIONI POST
+
 
 $.ajaxSetup({
   headers: {

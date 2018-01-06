@@ -42,7 +42,9 @@ Route::post('/admin/dashboard/ignoreReportComment', 'AdminController@ignoreRepor
 Route::post('/admin/dashboard/deleteComment', 'AdminController@deleteComment');
 Route::post('/admin/dashboard/user', 'AdminController@listUser');
 Route::post('/admin/dashboard/getUserDetails', 'AdminController@getUserDetails');
-
+Route::post('/admin/dashboard/promuoviUser', 'AdminController@promuoviUser');
+Route::post('/admin/dashboard/retrocediUser', 'AdminController@retrocediUser');
+//Route::post('/admin/dashboard/user', 'AdminController@getUserDetails');
 
 //prova ajax
 Route::get('/test', 'AdminController@testfunction');

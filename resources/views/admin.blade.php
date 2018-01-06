@@ -501,7 +501,7 @@
           <div class="col-md-12">
            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
           <a type="button" class="btn btn-secondary" href="#" id="btnViewProfile">Visualizza profilo</a>      
-            <button type="button" class="btn btn-primary" id="btnAdmin">Promuovi a amministratore</button>    
+            <button type="button" class="btn btn-primary" id="btnToggleAdmin" data-dismiss="modal">Promuovi a amministratore</button>    
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnBan">Blocca utente</button>
           </div>
         </div>
@@ -1052,10 +1052,51 @@
         $('#dataIscrizioneUser').text('Data iscrizione: ' + data.created_at);
         $('#imgUser').attr("src", data.picPath);
         $('#btnViewProfile').attr('href', '/profile/user/' + recipient);
+         //evento toggle admin
+        if(data.admin == true){
+          $('#btnToggleAdmin').removeClass('btn-primary').addClass('btn-danger').text('Retrocedi utente');
+          $('#btnToggleAdmin').click(function(){
+            //rimuovi admin
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/retrocediUser',
+              data: { id_user: recipient }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatusUser' + recipient).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+              getPageUser(currentPageUser);
+              toastr.success(data.body, data.message , { timeOut: 5000 });
+            });
+          });
+        }else{
+          $('#btnToggleAdmin').addClass('btn-primary').removeClass('btn-danger').text('Promuovi a amministratore');
+          $('#btnToggleAdmin').click(function(){
+            //rendi admin
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/promuoviUser',
+              data: { id_user: recipient }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatusUser' + recipient).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+              getPageUser(currentPageUser);
+              toastr.success(data.body, data.message , { timeOut: 5000 });
+            });
+          });
+
+        }
+       
+
+
       });
     });
 
-
+    $('#userModal').on('hide.bs.modal', function(event){
+      //rimuovo gli eventi una volta che chiudo il modal
+      $('#btnToggleAdmin').unbind();
+    });
 
 
     //FINE GESTIONE UTENTI
