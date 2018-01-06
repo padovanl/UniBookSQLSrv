@@ -20,43 +20,47 @@
 
       <header class="main-head">
         <div class="name">
-          <span class="marcato">UNI</span>
-          <span class="fino">BOOK</span>
+          <div class="marcato">UNI</div>
+          <div class="fino">BOOK</div>
         </div>
 
-        <ul id="growing-search-freebie">
-          <li>
-            <!-- Start Freebie Markup -->
-            <div class="growing-search">
-              <div class="input">
-                <input type="text" name="search"/>
-              </div><!-- Space hack -->
-              <div class="submit">
-                <button type="submit" id="search" name="go_search">
-                  <span class="fa fa-search"></span>
-                </button>
-              </div>
+
+
+        <div class="middle-nav">
+          <div class="growing-search">
+            <div class="input">
+              <input type="text" name="search"/>
+            </div><!-- Space hack -->
+            <div class="submit">
+              <button type="submit" id="search" name="go_search">
+                <span class="fa fa-search"></span>
+              </button>
             </div>
-            <!-- End Freebie Markup -->
-          </li>
+          </div>
 
+          <div id="notifiche">
+            <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+            <i class="fa fa-bell fa-lg" aria-hidden="true"></i>
+            <i class="fa fa-commenting fa-lg" aria-hidden="true"></i>
+          </div>
+        </div>
 
-          <li id="notifiche"><i class="fa fa-bell fa-lg" aria-hidden="true"></i></li>
-
-          <li id="avatar">Igor <img src="assets/img/igor_avatar.png" alt="Avatar"></li>
-
-        </ul>
+        <div id="avatar"><div id="name-nav">Igor</div><img src="assets/img/igor_avatar.png" alt="Avatar"></div>
 
       </header>
 
 
       <nav class="main-nav">
+        <div class="side-sec">
           <img id="main_avatar" src="assets/img/igor_avatar.png" alt="Avatar">
-          <ul>
-              <li><a href="">Nav 1</a></li>
-              <li><a href="">Nav 2</a></li>
-              <li><a href="">Nav 3</a></li>
+          <span id="side-name">Igor Igor</span>
+          <hr>
+          <ul class="nav-links">
+              <li><button class="btn btn-round color-1 material-design" data-color="#ffffff"><span class="fa fa-home" aria-hidden="true"></span> Timeline</button></li>
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5"><span class="fa fa-commenting" aria-hidden="true"></span> Messaggi</button></li>
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5"><span class="fa fa-book" aria-hidden="true"></span> Pagine</button></li>
           </ul>
+        </div>
       </nav>
 
       <article class="content">
