@@ -614,7 +614,7 @@ class AdminController extends Controller
         $id_receiver = $request->input('id_user');
         $text = $request->input('message');
         $newMessage = new Message();
-        $newMessage->sender = "5a52297491598";
+        $newMessage->sender = $id_sender;
         $newMessage->receiver = $id_receiver;
         $newMessage->content = $text;
         $newMessage->letta = false;
