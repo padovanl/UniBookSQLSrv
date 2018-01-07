@@ -641,7 +641,7 @@ class AdminController extends Controller
         $newMessage->sender = $id_sender;
         $newMessage->receiver = $id_receiver;
         $newMessage->content = $text;
-        $newMessage->letta = false;
+        $newMessage->letto = false;
         $newMessage->save();
         return response()->json(['message' => 'Operazione completata!', 'body' => 'Il messaggio è stato inviato con successo.']);
     }else{
