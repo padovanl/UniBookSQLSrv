@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use Cookie;
 
 
 use App\ReportPost;
@@ -19,6 +20,7 @@ use App\CommentUser;
 use App\Page;
 use App\LikePost;
 use App\LikeComment;
+use App\Message;
 
 //viewModel
 use App\DetailsReportViewModel;
@@ -601,6 +603,26 @@ class AdminController extends Controller
     User::where([['id_user', '=', $id], ['ban', '=', true]])->update(['ban' => false]);
 
     return response()->json(['message' => 'Operazione completata!', 'body' => 'L\'utente è stato sbloccato.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
+  }
+
+
+
+
+  public function sendMessageUser(Request $request){
+    if(Cookie::has('session')){
+        $id_sender = Cookie::get('session');
+        $id_receiver = $request->input('id_user');
+        $text = $request->input('message');
+        $newMessage = new Message();
+        $newMessage->sender = "5a52297491598";
+        $newMessage->receiver = $id_receiver;
+        $newMessage->content = $text;
+        $newMessage->letta = false;
+        $newMessage->save();
+        return response()->json(['message' => 'Operazione completata!', 'body' => 'Il messaggio è stato inviato con successo.']);
+    }else{
+        return response()->json(['message' => 'Errore!', 'body' => 'Non hai i permessi necessari.']);
+    }
   }
 
 

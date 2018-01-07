@@ -510,6 +510,38 @@
 </div>
 
 
+<!-- Message user modal -->
+<div class="modal fade bd-example-modal-lg" id="messageUserModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleReportComment">Nuovo messaggio</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form>
+          <div class="form-group">
+            <label for="messageUser" class="form-control-label">Messaggio:</label>
+            <textarea class="form-control" id="messageUser" rows="7"></textarea>
+            <h5 id="errorMessage"></h5>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+         <div class="row">
+          <div class="col-md-12">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+           <button type="button" class="btn btn-primary" data-dismiss="modal" id="bthSendMessageUser" disabled="true">Invia messaggio</button>    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <!-- Bootstrap core JavaScript
     ================================================== -->
 
@@ -606,10 +638,10 @@
         rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
         rows = rows + '     <a class="dropdown-item edit-item" href="#detailModal" data-toggle="modal" data-whatever="' + value.id_report + '">';
         rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
-        if(value.status == 'aperta'){
-          rows = rows + '   <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
-        }
+        //if(value.status == 'aperta'){
+        //  rows = rows + '   <a class="dropdown-item" href="#">';
+        //  rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
+        //}
               
         rows = rows + '   </div>';
         rows = rows + '  </div>';
@@ -832,10 +864,10 @@
         rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
         rows = rows + '     <a class="dropdown-item edit-item" href="#commentModal" data-toggle="modal" data-whatever="' + value.id_report + '">';
         rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
-        if(value.status == 'aperta'){
-          rows = rows + '   <a class="dropdown-item" href="#">';
-          rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
-        }
+        //if(value.status == 'aperta'){
+        //  rows = rows + '   <a class="dropdown-item" href="#">';
+        //  rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
+        //}
         rows = rows + '   </div>';
         rows = rows + '  </div>';
         rows = rows + '</td>';
@@ -975,7 +1007,7 @@
         rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
         rows = rows + '     <a class="dropdown-item edit-item" href="#userModal" data-toggle="modal" data-whatever="' + value.id_user + '">';
         rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
-        rows = rows + '   <a class="dropdown-item" href="#">';
+        rows = rows + '   <a class="dropdown-item" href="#messageUserModal" data-toggle="modal" data-whatever="' + value.id_user + '">';
         rows = rows + '          <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Contatta utente</a>';
         //if(value.ban == 0){
         //  var tmp = '"' + value.id_user + '"';
@@ -1135,11 +1167,54 @@
       });
     });
 
+
     $('#userModal').on('hide.bs.modal', function(event){
       //rimuovo gli eventi una volta che chiudo il modal
       $('#btnToggleAdmin').unbind();
       $('#toggleBan').unbind();
     });
+
+
+
+
+    $('#messageUserModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      var post;
+
+      $('#bthSendMessageUser').click(function(){
+        var message = $('#messageUser').val();
+        $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/sendMessageUser',
+          data: { id_user: recipient, message: message }
+        }).done(function (data) {
+          $('#messageUser').val('');
+          toastr.success(data.body, data.message , { timeOut: 5000 });
+        });
+      });
+
+      $('#messageUser').keyup(function(event){
+        var text = $('#messageUser').val();
+        if(text == ''){
+          $('#bthSendMessageUser').attr('disabled', true);
+        }else{
+          $('#bthSendMessageUser').attr('disabled', false);
+        }
+      });
+
+
+
+    });
+
+    $('#messageUserModal').on('hide.bs.modal', function(event){
+      //rimuovo gli eventi una volta che chiudo il modal
+      $('#bthSendMessageUser').unbind();
+      $('#messageUser').unbind();
+    });
+
+
     //FINE GESTIONE UTENTI
   </script>
 
