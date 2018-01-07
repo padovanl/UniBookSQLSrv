@@ -51,6 +51,8 @@ class DatabaseSeeder extends Seeder
       $report_comments = factory(App\ReportComment::class, 100)->create();
       $report_posts = factory(App\ReportPost::class, 100)->create();
 
+      $message = factory(App\Message::class, 100)->create();
+
       DB::table('users')->insert([
         'name' => 'Admin_Name',
         'surname' => 'Admin_Sur',
