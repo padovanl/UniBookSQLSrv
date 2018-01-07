@@ -30,7 +30,31 @@ use App\AdminDonutChartViewModel;
 
 class AdminController extends Controller
 {
+
+    protected function controllaAutorizzazione(){
+        if(Cookie::has('session')){
+            $id = Cookie::get('session');
+            $user = User::where('id_user', '=', $id)->first();
+            if(!$user){
+                return false;
+            }else{
+                if($user->admin == 1){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }else{
+            return false;
+        }
+    }
+
   public function dashboard() {
+
+    //controllo autorizzazioni
+    if(!($this->controllaAutorizzazione()))
+        return redirect('login');
+
     //ritorno le piu' recenti
     $report = ReportPost::latest()->get();
     $el_per_page = 5;
