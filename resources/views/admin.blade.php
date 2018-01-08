@@ -483,7 +483,7 @@
           <div class="col-md-1">
           </div>
           <div class="col-md-4">
-            <img src="../assets/images/facebook4.jpeg" class="rounded-circle pull-left" id="imgUser">
+            <img src="../assets/images/facebook4.jpeg" class="rounded-circle pull-left" id="imgUser" height="300" width="300">
           </div>
           <div class="col-md-1">
           </div>
