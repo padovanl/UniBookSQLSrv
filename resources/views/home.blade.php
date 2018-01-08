@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+  <article class="content">
   <div class="padding">
           <!-- content -->
           <div class="row">
@@ -63,13 +64,14 @@
           </div><!--/row-->
           <hr>
   </div><!-- /padding -->
+</article>
+<aside class="side">Sidebar</aside>
+</div>
 
   <script>
 
   //Caricamento dei post
   $(document).ready(function(){
-         //var id = $(this).data('id');
-         //$("#btn-more").html("Loading....");
          $.ajax({
              url : '/home/loadmore',
              method : "GET",
@@ -89,8 +91,6 @@
                  for(j = 0; j < data[i].comments.length; j++){
                    $panel = $("#commpanel").clone();
                    $panel.attr("id", "comm_panel_" + j);
-
-<<<<<<< HEAD
                    //controllare che sia pagina
                    if(isNaN(data[i].comments[j].id_user)){
                      $panel.find("#author").attr("href", "/profile/user/" + data[i].comments[j].id_author);
@@ -135,51 +135,3 @@
     </div>
 </div>
 @endsection --}}
-=======
-<script type="text/javascript" src="../assets/js/jquery.js"></script>
-<script type="text/javascript" src="../assets/js/bootstrap.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('[data-toggle=offcanvas]').click(function() {
-            $(this).toggleClass('visible-xs text-center');
-            $(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
-            $('.row-offcanvas').toggleClass('active');
-            $('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
-            $('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
-            $('#btnShow').toggle();
-        });
-    });
-</script>
-
-<script>
-$(document).ready(function(){
-   $(document).on('click','#btn-more',function(){
-       var id = $(this).data('id');
-       $("#btn-more").html("Loading....");
-       $.ajax({
-           url : 'home/loadmore',
-           method : "POST",
-           data : {id:id, _token:"{{csrf_token()}}"},
-           dataType : "json",
-           success : function (data)
-           {
-              if(data != '')
-              {
-                  $('#remove-row').remove();
-                  $('#load-data').append(data);
-              }
-              else
-              {
-                  $('#btn-more').html("No Data");
-              }
-           }
-       });
-   });
-});
-</script>
-
-@endsection
-
-
-
->>>>>>> 9e6fae337edba5e653811eba76748565b34a4bbd
