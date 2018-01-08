@@ -12,6 +12,7 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
+  <link href="../../assets/css/admin/bootstrap.min.css" rel="stylesheet">
 
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>

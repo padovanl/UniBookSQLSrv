@@ -50,6 +50,12 @@ class MessageController extends Controller
                 $viewModel->from = $users[$x]->name . ' ' . $users[$x]->surname;
                 $viewModel->to = $id;
                 $viewModel->listMessage = $tmp;
+                //guardo se ci sono nuovi messaggi
+                $viewModel->numNuovi = 0;
+                foreach ($tmp as $t){
+                    if(($t->receiver == $logged_user->id_user) && !$t->letto)
+                        $viewModel->numNuovi++;
+                }
                 $viewModel->picPath = $users[$x]->pic_path;
                 $viewModel->picPathReceiver = $logged_user->pic_path;
                 $viewModel->fromId = $users[$x]->id_user;
@@ -57,8 +63,12 @@ class MessageController extends Controller
                 $cnt++;
             }
         }
+        if(count($messages) > 0)
+            $idFirstUser = $messages[0]->fromId;
+        else
+            $idFirstUser = 0;
 
-    	return view('message', compact('logged_user', 'messages'));
+    	return view('message', compact('logged_user', 'messages', 'idFirstUser'));
     }
 
     public function changeChat(Request $request){
@@ -66,6 +76,7 @@ class MessageController extends Controller
         $logged_user = User::where('id_user', '=', $id)->first();
         $id_sender = $request->input('from');
         $tmp = Message::where([['receiver', '=', $id], ['sender', '=', $id_sender]])->orWhere([['receiver', '=', $id_sender], ['sender', '=', $id]])->orderBy('created_at', 'asc')->get();
+        Message::where([['receiver', '=', $id], ['sender', '=', $id_sender]])->update(['letto' => true]);
         $sender = User::where('id_user', '=', $id_sender)->first();
         $chat = array();
         foreach ($tmp as $t) {

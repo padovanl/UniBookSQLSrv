@@ -29,7 +29,7 @@
           <div class="form-group">
             <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
             <textarea class="form-control" id="messageUser" rows="4"></textarea>
-            <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true">Invia messaggio</button>    
+            <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage('{{$idFirstUser}}')">Invia messaggio</button>    
           </div>
         </form>
       </div>
@@ -50,7 +50,17 @@
                   <img src="{{$m->picPath}}" alt="Avatar" width="50" height="50">
               </div>
               <div class="col-md-10">
-                  <p>{{$m->from}}</p>
+                <div  class="row">
+                  <div class="col-md-10">
+                    <p>{{$m->from}}</p>
+                  </div>
+                  <div class="col-md-2">
+                    @if($m->numNuovi > 0)
+                      <span class="badge badge-danger" id="newMessage{{$m->fromId}}">{{$m->numNuovi}}</span>
+                    @endif
+                  </div>
+                </div>
+
                   <p>{{$m->listMessage[0]->content}}</p>
               </div>
           </div>
@@ -145,6 +155,7 @@
       //console.log(data);
       $('.listMessagesLink').removeClass('active');
       $('#messages' + from).addClass('active');
+      $('#newMessage' + from).remove();
       manageChatBox(data, from);
     });
   }
@@ -192,56 +203,6 @@
   }
 
 
-  function insertNewMessage(data, from, message){
-    var message = '';
-    $.each(data, function (key, value) {
-      if(value.tipo == 1){
-        message += '   <div class="container darker">';
-        message += '      <img src="' + value.picPath + '" alt="Avatar" class="right">';
-        message += '      <p>'+ value.content + '</p>';
-        message += '      <span class="time-left">' + value.time + '</span>';
-        message += '   </div>';
-      }else{
-        message += '   <div class="container">';
-        message += '      <img src="' + value.picPathReceiver + '" alt="Avatar">';
-        message += '      <p>'+ value.content + '</p>';
-        message += '      <span class="time-right">' + value.time + '</span>';
-        message += '   </div>';       
-      }
-    });
-
-    var date = new Date();
-    var message = '';
-    message += '   <div class="container darker">';
-    message += '      <img src="' +  + '" alt="Avatar" class="right">';
-    message += '      <p>'+ message + '</p>';
-    message += '      <span class="time-left">' + date.getHours() + ':' + date.getMinutes() + '</span>';
-    message += '   </div>';
-
-    message += '      <div class="container darker">';
-    message += '    <form>';
-    message += '      <div class="form-group">';
-    message += '        <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>';
-    message += '        <textarea class="form-control" id="messageUser" rows="4"></textarea>';
-    message += '        <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage(\'' + from + '\')">Invia messaggio</button> ';   
-    message += '      </div>';
-    message += '    </form>';
-    message += '  </div>';
-
-    $("#messaggi").html(message);
-
-
-    $('#messageUser').keyup(function(event){
-      var text = $('#messageUser').val();
-      if(text == ''){
-        $('#bthSendMessageUser').attr('disabled', true);
-      }else{
-        $('#bthSendMessageUser').attr('disabled', false);
-      }
-    });
-
-  }
-
   function addMessage(to){
     var newMessage = $('#messageUser').val();
     $.ajax({
@@ -250,7 +211,7 @@
       url: '/message/newMessage',
       data: { to: to, message: newMessage }
     }).done(function (data) {
-      insertNewMessage(data, to, newMessage);
+      ChangeChat(to);
     });
   }
 
