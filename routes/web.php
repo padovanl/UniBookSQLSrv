@@ -49,7 +49,8 @@ Route::post('/admin/dashboard/sbloccaUser', 'AdminController@sbloccaUser');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
 
 //Messaggi
-Route::get('/message', "MessageController@index");
+Route::get('/message', 'MessageController@index');
+Route::post('/message/changeChat', 'MessageController@changeChat');
 
 //Authentication
 #Route::post('register', 'authController@register');

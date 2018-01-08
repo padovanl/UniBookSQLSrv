@@ -5,51 +5,59 @@
 
 
 
-
-
  <div style="padding: 75px 30px" class="container-full ">
   <div class="row">
     <div class="col-md-4">
-      <div class="list-group">
-        <a href="#" class="list-group-item active">
+      <div class="pre-scrollable">
+        <div class="list-group">
+        @foreach($messages as $m)
+        <a href="#" onclick="ChangeChat('{{$m->fromId}}')" class="list-group-item" id="messages{{$m->from}}">
           <div class="row">
               <div class="col-md-2">
-                  <img src="../assets/images/facebook2.jpg" alt="Avatar" width="50" height="50">
+                  <img src="{{$m->picPath}}" alt="Avatar" width="50" height="50">
               </div>
               <div class="col-md-10">
-                  <p>Luca Padovan</p>
-                  <p>Questo e' l'ultimo messaggio di Luca</p>
+                  <p>{{$m->from}}</p>
+                  <p>{{$m->listMessage[0]->content}}</p>
               </div>
           </div>
         </a>
-        <a href="#" class="list-group-item">
-            <div class="row">
-              <div class="col-md-2">
-                  <img src="../assets/images/facebook2.jpg" alt="Avatar" width="50" height="50">
-              </div>
-              <div class="col-md-10">
-                  <p>Luca Padovan</p>
-                  <p>Questo e' l'ultimo messaggio di Luca</p>
-              </div>
-          </div>
-        </a>
-        <a href="#" class="list-group-item">
-          <div class="row">
-              <div class="col-md-2">
-                  <img src="../assets/images/facebook2.jpg" alt="Avatar" width="50" height="50">
-              </div>
-              <div class="col-md-10">
-                  <p>Luca Padovan</p>
-                  <p>Questo e' l'ultimo messaggio di Luca</p>
-              </div>
-          </div>
-          </a>
-      </div> 
+        @endforeach
+        </div> 
+      </div>
+
       
     </div>
     <div class="col-md-8">
-        <div class="pre-scrollable">
+      <div class="pre-scrollable" id="messaggi">
+      @foreach($messages[1]->listMessage as $m)
+        @if($m->sender == $logged_user->id_user)
+          <div class="container darker">
+            <img src="{{$messages[1]->picPathReceiver}}" alt="Avatar" class="right">
+            <p>{{$m->content}}</p>
+            <span class="time-left">11:01</span>
+          </div>
+        @else
           <div class="container">
+            <img src="{{$messages[1]->picPath}}" alt="Avatar">
+            <p>{{$m->content}}</p>
+            <span class="time-right">11:01</span>
+          </div>
+        @endif
+      @endforeach
+
+      <div class="container darker">
+        <form>
+          <div class="form-group">
+            <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
+            <textarea class="form-control" id="messageUser" rows="7"></textarea>
+            <h5 id="errorMessage"></h5>
+          </div>
+        </form>
+      </div>
+
+
+          <!--<div class="container">
             <img src="/w3images/bandmember.jpg" alt="Avatar">
             <p>Hello. How are you today?</p>
             <span class="time-right">11:00</span>
@@ -72,15 +80,7 @@
             <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
             <span class="time-left">11:05</span>
           </div> 
-          <div class="container darker">
-            <form>
-              <div class="form-group">
-                <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
-                <textarea class="form-control" id="messageUser" rows="7"></textarea>
-                <h5 id="errorMessage"></h5>
-              </div>
-            </form>
-          </div> 
+ -->
         </div>
           
       </div>
@@ -93,7 +93,7 @@
         border-radius: 50%;
       }
       .pre-scrollable {
-          max-height: 400px;
+          max-height: 800px;
           overflow-y: scroll;
           overflow-x: hidden; 
       }
@@ -151,8 +151,27 @@
       } 
     </style>
 
-<script type="text/javascript" src="../assets/js/jquery.js"></script>
-<script type="text/javascript" src="../assets/js/bootstrap.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="../assets/js/admin/popper.min.js"></script>
+  <script src="../assets/js/admin/bootstrap.min.js"></script>
 
+<script>
+  function ChangeChat(from){
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/message/changeChat',
+      data: { from: from }
+    }).done(function (data) {
+      console.log(data);
+    });
+  }
+
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+</script>
 
 @endsection
