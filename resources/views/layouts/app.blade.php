@@ -10,11 +10,14 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="../../assets/css/facebook.css" rel="stylesheet">
-    <script src="https://use.fontawesome.com/1e803d693b.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body>
+
+
+  
   <div class="wrapper">
       <div class="box">
           <div class="row row-offcanvas row-offcanvas-left">
@@ -53,6 +56,9 @@
                               </li>
                           </ul>
                           <ul class="nav navbar-nav navbar-right">
+                              <li>
+                                  <a href="/message"><span class="badge badge-success">2</span>&nbsp;&nbsp;Messaggi</a>
+                              </li>
                               <li class="dropdown">
                                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
                                   <ul class="dropdown-menu">
@@ -60,6 +66,11 @@
                                       <li><a href="">Activity Log</a></li>
                                       <li><a href="">Settings</a></li>
                                       <li><a href="">About UniBook</a></li>
+                        				      @if($logged_user->admin == 1)
+                          				      <li class="divider"></li>
+                          				      <li><a href="/admin"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Dashboard</a></li>
+                        				      @endif
+                        				      <li class="divider"></li>
                                       <li><a href="/logout">Logout</a></li>
                                   </ul>
                               </li>

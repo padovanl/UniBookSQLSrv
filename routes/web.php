@@ -48,6 +48,9 @@ Route::post('/admin/dashboard/bloccaUser', 'AdminController@bloccaUser');
 Route::post('/admin/dashboard/sbloccaUser', 'AdminController@sbloccaUser');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
 
+//Messaggi
+Route::get('/message', "MessageController@index");
+
 //Authentication
 #Route::post('register', 'authController@register');
 Route::post('login',    'authController@login');
