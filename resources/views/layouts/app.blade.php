@@ -57,9 +57,9 @@
           <span id="side-name">{{$logged_user -> name . " " . $logged_user -> surname}}</span>
           <hr>
           <ul class="nav-links">
-              <li><button class="btn btn-round color-1 material-design" data-color="#ffffff"><span class="fa fa-home" aria-hidden="true"></span> Timeline</button></li>
-              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5"><span class="fa fa-commenting" aria-hidden="true"></span> Messaggi</button></li>
-              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5"><span class="fa fa-book" aria-hidden="true"></span> Pagine</button></li>
+              <li><button class="btn btn-round color-1 material-design" data-color="#ffffff" id="btnTimeline"><span class="fa fa-home" aria-hidden="true"></span> Timeline</button></li>
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnMessage" onclick="window.location='/message'"><span class="fa fa-commenting" aria-hidden="true"></span> Messaggi</button></li>
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnPage"><span class="fa fa-book" aria-hidden="true"></span> Pagine</button></li>
           </ul>
         </div>
       </nav>

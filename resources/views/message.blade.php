@@ -11,13 +11,13 @@
       @foreach($messages[0]->listMessage as $m)
         @if($m->sender == $logged_user->id_user)
           <div class="container darker">
-            <img src="{{$messages[1]->picPathReceiver}}" alt="Avatar" class="right">
+            <img src="{{$messages[0]->picPathReceiver}}" alt="Avatar" class="right">
             <p>{{$m->content}}</p>
             <span class="time-left">11:01</span>
           </div>
         @else
           <div class="container">
-            <img src="{{$messages[1]->picPath}}" alt="Avatar">
+            <img src="{{$messages[0]->picPath}}" alt="Avatar">
             <p>{{$m->content}}</p>
             <span class="time-right">11:01</span>
           </div>
@@ -61,7 +61,7 @@
                   </div>
                 </div>
 
-                  <p>{{$m->listMessage[0]->content}}</p>
+                  <p>{{$m->listMessage[count($m->listMessage) - 1]->content}}</p>
               </div>
           </div>
         </a>
@@ -157,6 +157,8 @@
       $('#messages' + from).addClass('active');
       $('#newMessage' + from).remove();
       manageChatBox(data, from);
+      var elem = document.getElementById('messaggi');
+      elem.scrollTop = elem.scrollHeight;
     });
   }
 
@@ -231,6 +233,10 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+
+  $('#btnTimeline').addClass('btn-border');
+  $('#btnPage').addClass('btn-border');
+  $('#btnMessage').removeClass('btn-border');
 </script>
 
 @endsection
