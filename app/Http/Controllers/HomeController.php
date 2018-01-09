@@ -54,8 +54,7 @@ class HomeController extends Controller{
   }
 
   //loading dei post
-  public function loadMore(){
-
+  public function loadMore(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     $friends = $logged_user::friends($logged_user['id_user']);     //Torna un array con gli amici
     $followed_pages_id = Users_follow_pages::where('id_user', $logged_user['id_user'])->get();
@@ -154,7 +153,19 @@ class HomeController extends Controller{
                                       LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->get()));
       }
     }
-    return(json_encode($toreturn));
+    if($request->input('post_id') == '-1'){
+      $asd = array_slice($toreturn, 0, 5);
+    }
+    else{
+      for($i = 0; $i < count($toreturn); $i++){
+        if($toreturn[$i]->id_post == $request->input('post_id')){
+            $asd = array_slice($toreturn, $i + 1, $i + 3);
+            return(json_encode($asd));
+        }
+      }
+    }
+    return(json_encode($asd));
+
   }
 
 
