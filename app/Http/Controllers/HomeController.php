@@ -199,6 +199,22 @@ class HomeController extends Controller{
     return(json_encode($post));
   }
 
+  public function newComment(Request $request){
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    $comment = new CommentU();
+    $comment->created_at = now();
+    $comment->updated_at = now();
+    $comment->content = $request->input('content');
+    $comment->id_author = $logged_user['id_user'];
+    return($request->input('content') . $logged_user['id_user']);
+    $comment->save();
+    $comm_tmp = CommentU::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
+    DB::table('comments_user')->insert(['id_user' => $logged_user['id_user'], 'id_comment' => $comm_tmp['id_comment']]);
+    $comment = new CommentViewModel($comm_tmp['id_comment'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],$comm_tmp['content'], $comm_tmp['created_at'], $comm_tmp['updated_at'], $comm_tmp['id_post'], NULL, [], [], NULL, $logged_user['id_user']);
+    return(json_encode($comment));
+
+  }
+
   //prendendo in ingresso un id, restituisce l'utente relativo
   //es. da un post id_author--->id_user
   public function ShowUser($id){
