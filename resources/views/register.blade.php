@@ -44,7 +44,7 @@
         </div>
 
         <div class="group">
-          <input type="password" name="pwd_hash" required>
+          <input type="password" name="pwd_hash" id="password" required>
           <span class="highlight"></span>
           <span class="bar"></span>
           <label>Password</label>
@@ -59,7 +59,7 @@
 
 
 
-        <p>Data di nascità</p>
+        <p>Data di nascita</p>
         <div class="form-row">
             <input class="form-control" type="date" name="birth_date" required>
         </div></br>
