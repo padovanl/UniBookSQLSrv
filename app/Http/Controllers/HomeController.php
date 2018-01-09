@@ -184,22 +184,19 @@ class HomeController extends Controller{
 
 
   public function newPost(Request $request){
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
     //verifica dei campi
-    $id_user = Cookie::get('session');
-    $post = new Post;
-    $post->id_author = $id_user;
+    $post = new Post();
+    $post->content =  $request->input('content');
     $post->created_at = now();
     $post->updated_at = now();
-    $post->content = request('content');
-    $post->fixed = 0;     //ovviamente da verificare
+    $post->fixed = $request->input('is_fixed');
+    $post->id_author = $logged_user['id_user'];
     $post->save();
-
-    $post_tmp = Post::where('id_author', $id_user)->where('content', request('content'))->first();
-
-    DB::table('posts_user')->insert(['id_user' => $id_user, 'id_post' => $post_tmp['id_post']]);
-
-    //che bello ajax qui....
-    return redirect('/');
+    $post_tmp = Post::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
+    DB::table('posts_user')->insert(['id_user' => $logged_user['id_user'], 'id_post' => $post_tmp['id_post']]);
+    $post = new PostViewModel($post_tmp['id_post'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'], $post_tmp['content'], $post_tmp['created_at'], $post_tmp['updated_at'], $post_tmp['fixed'], $post_tmp['id_author'], [], [], [], []);
+    return(json_encode($post));
   }
 
   //prendendo in ingresso un id, restituisce l'utente relativo
