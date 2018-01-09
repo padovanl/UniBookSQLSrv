@@ -9,9 +9,23 @@ use Illuminate\Support\Facades\Input;
 use App\User;
 use Cookie;
 
+
+
 class RegisterController extends Controller
 {
+
+  protected function verify_cookie(){
+    if (Cookie::has('session')){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   public function index() {
+    if($this->verify_cookie())
+      return redirect('/');
     $error = '';
     return view('/register', compact('error'));
   }
