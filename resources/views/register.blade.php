@@ -37,7 +37,7 @@
           <label>Cognome</label>
         </div>
         <div class="group">
-          <input type="text" name="email" required>
+          <input type="email" name="email" required>
           <span class="highlight"></span>
           <span class="bar"></span>
           <label>Email</label>

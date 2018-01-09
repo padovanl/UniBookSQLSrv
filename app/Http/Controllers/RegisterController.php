@@ -47,9 +47,10 @@ class RegisterController extends Controller
     $user -> surname = request("surname");
     $user -> birth_date = request("birth_date");
     $user -> email = request("email");
-    $user -> pwd_hash = bcrypt("pwd_hash");
+    $user -> pwd_hash = password_hash($request->input('password'), PASSWORD_DEFAULT);
     $user -> citta = request("citta");
     $user -> gender = request("gender");
+    $user->confirmed = false;
     //$user -> pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
     if(Input::hasFile('file')){
       $file = Input::file('file');
@@ -59,7 +60,7 @@ class RegisterController extends Controller
       $user->pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
     }
 
-    $user->confirmed = false;
+
     $user -> save();
 
     #sarebbe da fare la redirect con l'utente già loggato
