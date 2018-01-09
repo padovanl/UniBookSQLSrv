@@ -71,6 +71,8 @@ class LoginController extends Controller{
   }
 
 
+
+
   #semplice logout che rimuove i cookie, solo come prova!!!!
   public function logout(Request $request) {
     \Cookie::queue(\Cookie::forget('session'));
