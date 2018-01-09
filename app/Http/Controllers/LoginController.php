@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Cookie;
-
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Redirect;
+use Input;
 
 class LoginController extends Controller{
   //Funzione semplice che verifica la presenza del cookie di login
@@ -33,16 +35,24 @@ class LoginController extends Controller{
   public function doLogin(Request $request){
     //controlli sui campi username e Password
     $user = User::where('email', $request->input('email'))->first();
-
+    $errors = new MessageBag;
     //controllo se l'utente esiste
-    if(!$user)
-      return redirect('/login'); //e stampo un errore
+    if(!$user){
+      #return redirect('/login'); //e stampo un errore
+      $errors = new MessageBag(['password' => ['Email invalida.']]);
+      return Redirect::back()->withErrors($errors)->withInput(Input::except('email'));
+
+    }
+      #return redirect('/login'); //e stampo un errore
 
     $pwd = $request->input('password');
     //hashPwd = bcrypt($pwd);
 
+
     if(!password_verify($pwd, $user->pwd_hash)){
-      return redirect('/login'); //e stampo un errore
+      #return redirect('/login'); //e stampo un errore
+      $errors = new MessageBag(['password' => ['Password invalida.']]);
+      return Redirect::back()->withErrors($errors)->withInput(Input::except('password'));
     }
 
     if(!$user->confirmed)
