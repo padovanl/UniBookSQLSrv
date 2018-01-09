@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
         'birth_date' => now(),
         'email' => 'gruppo09@gruppo09.com',
         'admin'=> 1,
-        'pwd_hash' => 'gruppo09',
+        'pwd_hash' => password_hash('gruppo09', PASSWORD_DEFAULT),
         'gender' => '1',
         'citta' => 'Ferrara',
         'ban' => 0,

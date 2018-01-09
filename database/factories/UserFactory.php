@@ -11,7 +11,7 @@ $factory->define(App\User::class, function (Faker $faker) {
       'birth_date' => $faker->date($format = 'Y-m-d', $max = 'now'),
       'email' => $faker->safeEmail,
       'admin'=> 0,
-      'pwd_hash' => bcrypt('secret'),
+      'pwd_hash' => password_hash('secret', PASSWORD_DEFAULT),
       'gender' => $faker->randomElement(['0', '1']),
       'citta' => $faker->randomElement(['Ferrara','Bologna','Firenze','Roma','Milano','Venezia','Londra','Parigi','Berlino','Torino']),
       'ban' => 0,

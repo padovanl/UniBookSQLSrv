@@ -7,35 +7,35 @@
 <article>
  <div class="container-full">
 
-      <div class="pre-scrollable" id="messaggi">
-      @foreach($messages[0]->listMessage as $m)
-        @if($m->sender == $logged_user->id_user)
-          <div class="container darker">
-            <img src="{{$messages[0]->picPathReceiver}}" alt="Avatar" class="right">
-            <p>{{$m->content}}</p>
-            <span class="time-left">11:01</span>
-          </div>
-        @else
-          <div class="container">
-            <img src="{{$messages[0]->picPath}}" alt="Avatar">
-            <p>{{$m->content}}</p>
-            <span class="time-right">11:01</span>
-          </div>
-        @endif
-      @endforeach
+    <div class="pre-scrollable" id="messaggi">
+      @if(count($messages) > 0)
+        @foreach($messages[0]->listMessage as $m)
+          @if($m->sender == $logged_user->id_user)
+            <div class="container darker">
+              <img src="{{$messages[0]->picPathReceiver}}" alt="Avatar" class="right">
+              <p>{{$m->content}}</p>
+              <span class="time-left">11:01</span>
+            </div>
+          @else
+            <div class="container">
+              <img src="{{$messages[0]->picPath}}" alt="Avatar">
+              <p>{{$m->content}}</p>
+              <span class="time-right">11:01</span>
+            </div>
+          @endif
+        @endforeach
 
-      <div class="container darker">
-        <form>
-          <div class="form-group">
-            <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
-            <textarea class="form-control" id="messageUser" rows="4"></textarea>
-            <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage('{{$idFirstUser}}')">Invia messaggio</button>    
-          </div>
-        </form>
-      </div>
 
-          
-
+        <div class="container darker">
+          <form>
+            <div class="form-group">
+              <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
+              <textarea class="form-control" id="messageUser" rows="4"></textarea>
+              <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage('{{$idFirstUser}}')">Invia messaggio</button>    
+            </div>
+          </form>
+        </div>
+      @endif
     </div>
   </div>
 </article>

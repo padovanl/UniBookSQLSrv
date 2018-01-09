@@ -32,14 +32,35 @@ class LoginController extends Controller{
 
   public function doLogin(Request $request){
     //controlli sui campi username e Password
-    $user = User::where('email', request('email'))->first();
+    $user = User::where('email', $request->input('email'))->first();
 
-    //tutti i controlli del caso su password_hash e così via...
+    //controllo se l'utente esiste
+    if(!$user)
+      return redirect('/login'); //e stampo un errore
+
+    $pwd = $request->input('password');
+    //hashPwd = bcrypt($pwd);
+
+    if(!password_verify($pwd, $user->pwd_hash)){
+      return redirect('/login'); //e stampo un errore
+    }
+
+    if(!$user->confirmed)
+      return view('confirmEmail');
+
+    $rem = $request->input('rem');
+
     //imposto un cookie per la sessione con al suo interno l'id_user.
     //10000 è la validità espressa in minuti
-    Cookie::queue('session', $user->id_user, 10000);
+    if($rem)
+      Cookie::queue('session', $user->id_user, 10000);
+    else
+      Cookie::queue('session', $user->id_user);
+
     return redirect('/');
   }
+
+
 
   #semplice logout che rimuove i cookie, solo come prova!!!!
   public function logout(Request $request) {

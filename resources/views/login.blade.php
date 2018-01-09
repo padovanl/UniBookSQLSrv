@@ -37,14 +37,14 @@
       {{csrf_field()}}
 
       <div class="group">
-        <input type="text" name="email" required>
+        <input type="text" name="email" id="email" required>
         <span class="highlight"></span>
         <span class="bar"></span>
         <label>Email</label>
       </div>
 
       <div class="group">
-        <input type="password" name="password" required>
+        <input type="password" name="password" id="password" required>
         <span class="highlight"></span>
         <span class="bar"></span>
         <label>Password</label>
@@ -52,7 +52,7 @@
 
       <div id="rem-pwd">
         <div class="md-checkbox">
-          <input id="rem" type="checkbox" name="ricordami" checked>
+          <input id="rem" type="checkbox" name="rem" checked>
           <label for="rem">Ricordami</label>
         </div>
         <div class="pwd_dimenticata">
