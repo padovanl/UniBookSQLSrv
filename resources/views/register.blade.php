@@ -21,7 +21,7 @@
       <h1>Registrazione</h1></br>
 
 
-      <form action="/register" method="post">
+      <form action="/register" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
 
         <div class="group">
@@ -79,17 +79,28 @@
         </div></br>
 
         <div class="group">
-          <input type="text" name="pic_path" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Picture Path (type something)</label>
+          <div class="row">
+            <div class="col-md-2">
+                <label>Foto profilo</label>
+            </div>
+            <div class="col-md-10">
+              <input type="file" name="file" id="file" required>
+              <span class="highlight"></span>
+              <span class="bar"></span>
+            </div>
+          </div>
         </div>
+        
+        @if($error != '')
+          {{$error}}
+        @endif
 
         <div class="lg-btn">
           <button type="submit" class="button" value="Register">Registrati</button>
         </div>
 
       </form>
+
     </div>
   </div>
 

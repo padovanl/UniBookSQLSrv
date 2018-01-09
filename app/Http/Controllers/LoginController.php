@@ -46,7 +46,7 @@ class LoginController extends Controller{
     }
 
     if(!$user->confirmed)
-      return view('confirmEmail');
+      return view('confirmEmail'); ///DA METTERE A POSTO
 
     $rem = $request->input('rem');
 
@@ -59,7 +59,6 @@ class LoginController extends Controller{
 
     return redirect('/');
   }
-
 
 
   #semplice logout che rimuove i cookie, solo come prova!!!!
