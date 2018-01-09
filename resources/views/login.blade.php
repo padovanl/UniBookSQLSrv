@@ -33,6 +33,7 @@
         </svg>
     </div>
 
+
     <form method="POST" action="/login/submit">
       {{csrf_field()}}
 
@@ -42,14 +43,22 @@
         <span class="bar"></span>
         <label>Email</label>
       </div>
-
+      @if ($error = $errors->first('email'))
+        <div class="alert alert-danger">
+            {{ $error }}
+        </div>
+      @endif
       <div class="group">
         <input type="password" name="password" id="password" required>
         <span class="highlight"></span>
         <span class="bar"></span>
         <label>Password</label>
       </div>
-
+      @if ($error = $errors->first('password'))
+        <div class="alert alert-danger">
+            {{ $error }}
+        </div>
+      @endif
       <div id="rem-pwd">
         <div class="md-checkbox">
           <input id="rem" type="checkbox" name="rem" checked>
@@ -65,9 +74,8 @@
       <div class="lg-btn">
         <button type="submit" class="button">LOG IN</button>
       </div>
+
     </form>
-
-
 
 
     <div class="new_user">
