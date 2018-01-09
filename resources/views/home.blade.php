@@ -43,14 +43,12 @@
                     <!--Comment Panel-->
                     <hr>
                     <!--Comment Form-->
-                    <form>
                     <div class="input-group">
                       <div class="input-group-btn">
                       <button id="like_butt" class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
                       </div>
-                      <input class="form-control" placeholder="Add a comment.." type="text">
+                      <input onkeypress="newComment(event)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
                     </div>
-                    </form>
                     </div>
                  </div>
                 <button id="load" onclick="loadOlder()" type="button"/>Load More..
@@ -62,15 +60,35 @@
 
   <script>
 
+  function newComment(e){
+    if(e.keyCode === 13){
+            e.preventDefault(); // Ensure it is only this code that rusn
+            $.ajax({
+              method: "POST",
+              url: "/home/comment",
+              data: {content: $("#comment_insert").val()},
+              beforeSend: function (xhr) {
+                   var token = '{{csrf_token()}}';
+
+                   if (token) {
+                       return xhr.setRequestHeader('X-CSRF-TOKEN', token);
+                   }
+               },
+               success : function (data)
+               {
+                 console.log(data);
+               }
+            })
+        }
+    }
+
   function newPost(){
-    $content = $("#new_post_content").val();
     $.ajax({
             method: "POST",
             url: "/home/post",
-            data: {content: $content, is_fixed: 0},
+            data: {content: $("#new_post_content").val(), is_fixed: 0},
             dataType : "json",
             beforeSend: function (xhr) {
-                 // Function needed from Laravel because of the CSRF Middleware
                  var token = '{{csrf_token()}}';
 
                  if (token) {
@@ -107,7 +125,6 @@
     //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
     for(var i = data.length - 1; i >= 0; i--)
     {
-      console.log(data.length);
       $post_clone = $("#post").clone();
       $post_clone.attr("id", "post_" + data[i].id_post);
       $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
@@ -120,6 +137,7 @@
       }
       data.forEach(function(el) {
         //carico i commenti
+        console.log(el.comments);
         if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
           for(j = 0; j < el.comments.length; j++){
             $("<div id='commpanel" + el.comments[j].id_comment +
@@ -146,7 +164,6 @@
               {
                 for(var x = posts.length - 1; x >= 0 ; x--)
                 {
-                  console.log(x);
                   $post_clone = $("#post").clone();
                   $post_clone.attr("id", "post_" + posts[x].id_post);
                   $post_clone.find("#post_u_name").text(posts[x].auth_name + " " + posts[x].auth_surname);

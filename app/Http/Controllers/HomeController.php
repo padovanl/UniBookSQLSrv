@@ -66,7 +66,7 @@ class HomeController extends Controller{
 
     //inserisco anche i miei posts
     array_push($posts, Post::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
-
+    array_push($list_comments, CommentU::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
 
     //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
     foreach ($friends as $friend){
@@ -75,11 +75,9 @@ class HomeController extends Controller{
         //post
         array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
         //commenti
-        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->orderBy('updated_at', 'asc')->get());
+        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
       }
     }
-
-
     foreach ($followed_pages_id as $id_page){
       $id_page_post = PostPage::where('id_page', $id_page['id_page'])->get();
       foreach ($id_page_post as $post_page){
@@ -103,7 +101,6 @@ class HomeController extends Controller{
 
     foreach($posts as $post){
       $tmp_comm = array();
-
       foreach($list_comments as $comment){
         if($comment['id_post'] === $post['id_post']){
           if(!is_numeric($comment['id_author'])){
@@ -197,6 +194,22 @@ class HomeController extends Controller{
     DB::table('posts_user')->insert(['id_user' => $logged_user['id_user'], 'id_post' => $post_tmp['id_post']]);
     $post = new PostViewModel($post_tmp['id_post'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'], $post_tmp['content'], $post_tmp['created_at'], $post_tmp['updated_at'], $post_tmp['fixed'], $post_tmp['id_author'], [], [], [], []);
     return(json_encode($post));
+  }
+
+  public function newComment(Request $request){
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    $comment = new CommentU();
+    $comment->created_at = now();
+    $comment->updated_at = now();
+    $comment->content = $request->input('content');
+    $comment->id_author = $logged_user['id_user'];
+    return($request->input('content') . $logged_user['id_user']);
+    $comment->save();
+    $comm_tmp = CommentU::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
+    DB::table('comments_user')->insert(['id_user' => $logged_user['id_user'], 'id_comment' => $comm_tmp['id_comment']]);
+    $comment = new CommentViewModel($comm_tmp['id_comment'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],$comm_tmp['content'], $comm_tmp['created_at'], $comm_tmp['updated_at'], $comm_tmp['id_post'], NULL, [], [], NULL, $logged_user['id_user']);
+    return(json_encode($comment));
+
   }
 
   //prendendo in ingresso un id, restituisce l'utente relativo

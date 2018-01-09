@@ -20,7 +20,6 @@ Route::resource('/register', 'RegisterController');
 
 //Home Routes
 Route::get('/', 'HomeController@landing');
-Route::post('/home/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
 
 Route::get('/logout', 'LoginController@logout');
