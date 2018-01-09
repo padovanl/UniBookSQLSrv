@@ -137,6 +137,7 @@
       }
       data.forEach(function(el) {
         //carico i commenti
+        console.log(el.comments);
         if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
           for(j = 0; j < el.comments.length; j++){
             $("<div id='commpanel" + el.comments[j].id_comment +

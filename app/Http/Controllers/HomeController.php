@@ -66,7 +66,7 @@ class HomeController extends Controller{
 
     //inserisco anche i miei posts
     array_push($posts, Post::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
-
+    array_push($list_comments, CommentU::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
 
     //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
     foreach ($friends as $friend){
@@ -75,11 +75,9 @@ class HomeController extends Controller{
         //post
         array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
         //commenti
-        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->orderBy('updated_at', 'asc')->get());
+        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
       }
     }
-
-
     foreach ($followed_pages_id as $id_page){
       $id_page_post = PostPage::where('id_page', $id_page['id_page'])->get();
       foreach ($id_page_post as $post_page){
@@ -103,7 +101,6 @@ class HomeController extends Controller{
 
     foreach($posts as $post){
       $tmp_comm = array();
-
       foreach($list_comments as $comment){
         if($comment['id_post'] === $post['id_post']){
           if(!is_numeric($comment['id_author'])){
