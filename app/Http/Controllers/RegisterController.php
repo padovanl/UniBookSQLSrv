@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Input;
 use App\User;
 use Cookie;
 
+use App\Mail\ConfirmEmail;
+use Illuminate\Support\Facades\Mail;
 
 
 class RegisterController extends Controller
@@ -64,12 +66,18 @@ class RegisterController extends Controller
     //Daniele: non credo sia una buona idea, dobbiamo mandare una mail e confermare l'utente
     #io farei fare l'auto login e poi una notifica standard che dice di validare account con email
     if ($user = User::where('email', request('email'))->first()){
-      Cookie::queue('session', $user->id_user, 10000);
-      return redirect('/');
+      Cookie::queue('session', $user->id_user);
+      Mail::to($user)->send(new ConfirmEmail());
+      return redirect('/register/confirm');
     }
     else{
       return redirect('/login');
     }
   }
+
+  public function confirm(){
+    return view('/confirm');
+  }
+
 
 }

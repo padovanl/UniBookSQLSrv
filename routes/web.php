@@ -13,12 +13,15 @@
 //Login and Registration Routes
 Route::get('/login', 'LoginController@showLogin')->name('login.showLogin');
 Route::post('/login/submit', 'LoginController@doLogin');
+Route::get('/register/confirm', 'RegisterController@confirm');
+Route::resource('/register', 'RegisterController');
+
 
 //Home Routes
 Route::get('/', 'HomeController@landing');
 Route::post('/post', 'HomeController@newPost');
 Route::resource('/comment', 'CommentController');
-Route::resource('/register', 'RegisterController');
+
 Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
