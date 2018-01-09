@@ -16,8 +16,7 @@
                           </div>
                       </form>
                   </div>
-                  <!--Caricamento dei post-->
-                  <!--Nuovo pannello commenti-->
+                  <!--Pannello Post-->
                   <div class="panel panel-default" id="post">
                     <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
                           <li class="dropdown">
@@ -32,23 +31,27 @@
                               </ul>
                           </li>
                       </ul>
+                      <!--Post Header-->
                       <div>
                           <h4 id="post_u_name">User Name</h4>
-                          <img id="post_pic_path" src="" class="img-circle pull-left">
+                          <img id="post_pic_path" class="img-circle pull-left">
                       </div>
                     </div>
+                    <!--Post Content-->
                     <div class="panel-body">
                     <p id="post_content">Content</p>
-                    <div class="clearfix"></div>
-                          <div id="commpanel">
-                            <hr>
-                            <!--TODO: immagine-->
-                            <a id="author" href="Link_To_User">Comment User Name  </a>
-                            <p id="comm_details">
-                              Comment Body
-                            </p>
-                          </div>
-                          <hr>
+                    <div id="insert_after" class="clearfix"></div>
+                    <!--Comment Panel-->
+                    <!--div id="commpanel">
+                      <hr>
+
+                      <a id="author" href="Link_To_User">Comment User Name  </a>
+                      <p id="comm_details">
+                        Comment Body
+                      </p>
+                    </div!-->
+                    <hr>
+                    <!--Comment Form-->
                     <form>
                     <div class="input-group">
                       <div class="input-group-btn">
@@ -78,37 +81,35 @@
              dataType : "json",
              success : function (data)
              {
-               //ciclo su tutti i post:
-               for(i = 0; i < data.length; i++)
+               $("#post").hide();
+               //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
+               for(i = data.length - 1; i >= 0; i--)
                {
-                 $("#post").hide();
                  $post_clone = $("#post").clone();
                  $post_clone.attr("id", "post_" + i);
                  $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
                  $post_clone.find("#post_pic_path").attr('src', data[i].pic_path);
                  $post_clone.find("#post_content").text(data[i].content);
                  $post_clone.find("#like_butt").text(data[i].likes);
-                 for(j = 0; j < data[i].comments.length; j++){
-                   $panel = $("#commpanel").clone();
-                   $panel.attr("id", "comm_panel_" + j);
-                   //controllare che sia pagina
-                   if(isNaN(data[i].comments[j].id_user)){
-                     $panel.find("#author").attr("href", "/profile/user/" + data[i].comments[j].id_author);
-                     $panel.find("#author").text(data[i].comments[j].auth_name + " " + data[i].comments[j].auth_surname);
-                  }
-                   else{
-                     $panel.find("#author").attr("href", "/profile/page/" + data[i].comments[j].id_author);
-                     $panel.find("#author").text(data[i].comments[j].auth_name);
-                   }
-                  $panel.find("#comm_details").text(data[i].comments[j].content);
-                  $panel.insertAfter(".clearfix")
-                 }
+                 $post_clone.find("#insert_after").attr('id', "insert_after" + data[i].id_post);
                  $post_clone.insertAfter(".form");
                  $post_clone.show();
+                 }
+                 data.forEach(function(el) {
+                   //carico i commenti
+                   if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
+                     for(j = 0; j < el.comments.length; j++){
+                       $("<div id='commpanel" + el.comments[j].id_comment +
+                          "'><hr><!--TODO: immagine-->" +
+                          "<a id='author' href='/profile/user/" + el.comments[j].id_user + "'>" +
+                          el.comments[j].auth_name + " " + el.comments[j].auth_surname +
+                          "</a><p id='comm_details'>" + el.comments[j].content +"</p></div>").insertAfter("#insert_after" + el.id_post);
+                 }
                }
-             }
-         });
+             })
+           }
   });
+});
   </script>
 @endsection
 
