@@ -38,7 +38,7 @@
       {{csrf_field()}}
 
       <div class="group">
-        <input type="text" name="email" id="email" required>
+        <input type="email" name="email" id="email" required>
         <span class="highlight"></span>
         <span class="bar"></span>
         <label>Email</label>

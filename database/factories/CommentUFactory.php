@@ -11,7 +11,7 @@ $factory->define(App\CommentU::class, function (Faker $faker) {
             'content' => $faker->sentence(10),
             'id_author' => $faker->randomElement($userIDs),
             'id_post' => $faker->randomElement($postIDs),
-            'created_at' =>now(),
+            'created_at' =>$faker->date($format = 'Y-m-d', $max = 'now'),
             'updated_at' =>now()
         ];
 });

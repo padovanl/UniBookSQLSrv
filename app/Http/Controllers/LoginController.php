@@ -56,7 +56,7 @@ class LoginController extends Controller{
     }
 
     if(!$user->confirmed)
-      return view('confirmEmail'); ///DA METTERE A POSTO
+      return view('confirm'); ///DA METTERE A POSTO
 
     $rem = $request->input('rem');
 

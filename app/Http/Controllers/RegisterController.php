@@ -47,10 +47,10 @@ class RegisterController extends Controller
     $user -> surname = request("surname");
     $user -> birth_date = request("birth_date");
     $user -> email = request("email");
-    $user -> pwd_hash = bcrypt("pwd_hash");
+    $user->pwd_hash = password_hash($request->input('pwd_hash'), PASSWORD_DEFAULT);
     $user -> citta = request("citta");
     $user -> gender = request("gender");
-    //$user -> pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
+    $user->confirmed = false;
     if(Input::hasFile('file')){
       $file = Input::file('file');
       $file->move('assets/images', $user->id_user . '.jpg');
@@ -59,20 +59,16 @@ class RegisterController extends Controller
       $user->pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
     }
 
-    $user->confirmed = false;
+
     $user -> save();
 
     #sarebbe da fare la redirect con l'utente già loggato
     //Daniele: non credo sia una buona idea, dobbiamo mandare una mail e confermare l'utente
     #io farei fare l'auto login e poi una notifica standard che dice di validare account con email
-    if ($user = User::where('email', request('email'))->first()){
-      Cookie::queue('session', $user->id_user);
+      //Cookie::queue('session', $user->id_user);
       Mail::to($user)->send(new ConfirmEmail());
       return redirect('/register/confirm');
-    }
-    else{
-      return redirect('/login');
-    }
+
   }
 
   public function confirm(){
