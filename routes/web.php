@@ -51,6 +51,8 @@ Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser
 //Messaggi
 Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
+Route::post('/message/newMessage', 'MessageController@newMessage');
+
 
 //Authentication
 #Route::post('register', 'authController@register');

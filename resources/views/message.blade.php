@@ -4,42 +4,20 @@
 
 
 
+<article>
+ <div class="container-full">
 
- <div style="padding: 75px 30px" class="container-full ">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="pre-scrollable">
-        <div class="list-group">
-        @foreach($messages as $m)
-        <a href="#" onclick="ChangeChat('{{$m->fromId}}')" class="list-group-item" id="messages{{$m->from}}">
-          <div class="row">
-              <div class="col-md-2">
-                  <img src="{{$m->picPath}}" alt="Avatar" width="50" height="50">
-              </div>
-              <div class="col-md-10">
-                  <p>{{$m->from}}</p>
-                  <p>{{$m->listMessage[0]->content}}</p>
-              </div>
-          </div>
-        </a>
-        @endforeach
-        </div> 
-      </div>
-
-      
-    </div>
-    <div class="col-md-8">
       <div class="pre-scrollable" id="messaggi">
-      @foreach($messages[1]->listMessage as $m)
+      @foreach($messages[0]->listMessage as $m)
         @if($m->sender == $logged_user->id_user)
           <div class="container darker">
-            <img src="{{$messages[1]->picPathReceiver}}" alt="Avatar" class="right">
+            <img src="{{$messages[0]->picPathReceiver}}" alt="Avatar" class="right">
             <p>{{$m->content}}</p>
             <span class="time-left">11:01</span>
           </div>
         @else
           <div class="container">
-            <img src="{{$messages[1]->picPath}}" alt="Avatar">
+            <img src="{{$messages[0]->picPath}}" alt="Avatar">
             <p>{{$m->content}}</p>
             <span class="time-right">11:01</span>
           </div>
@@ -50,42 +28,49 @@
         <form>
           <div class="form-group">
             <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
-            <textarea class="form-control" id="messageUser" rows="7"></textarea>
-            <h5 id="errorMessage"></h5>
+            <textarea class="form-control" id="messageUser" rows="4"></textarea>
+            <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage('{{$idFirstUser}}')">Invia messaggio</button>    
           </div>
         </form>
       </div>
 
-
-          <!--<div class="container">
-            <img src="/w3images/bandmember.jpg" alt="Avatar">
-            <p>Hello. How are you today?</p>
-            <span class="time-right">11:00</span>
-          </div>
-
-          <div class="container darker">
-            <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
-            <p>Hey! I'm fine. Thanks for asking!</p>
-            <span class="time-left">11:01</span>
-          </div>
-
-          <div class="container">
-            <img src="/w3images/bandmember.jpg" alt="Avatar">
-            <p>Sweet! So, what do you wanna do today?</p>
-            <span class="time-right">11:02</span>
-          </div>
-
-          <div class="container darker">
-            <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
-            <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-            <span class="time-left">11:05</span>
-          </div> 
- -->
-        </div>
           
-      </div>
+
     </div>
   </div>
+</article>
+
+<aside class="side">
+   <div class="pre-scrollable">
+      <div class="list-group" id="sidebar">
+        @foreach($messages as $m)
+        <a href="#" onclick="ChangeChat('{{$m->fromId}}')" class="list-group-item listMessagesLink" id="messages{{$m->fromId}}">
+          <div class="row">
+              <div class="col-md-2">
+                  <img src="{{$m->picPath}}" alt="Avatar" width="50" height="50">
+              </div>
+              <div class="col-md-10">
+                <div  class="row">
+                  <div class="col-md-10">
+                    <p>{{$m->from}}</p>
+                  </div>
+                  <div class="col-md-2">
+                    @if($m->numNuovi > 0)
+                      <span class="badge badge-danger" id="newMessage{{$m->fromId}}">{{$m->numNuovi}}</span>
+                    @endif
+                  </div>
+                </div>
+
+                  <p>{{$m->listMessage[count($m->listMessage) - 1]->content}}</p>
+              </div>
+          </div>
+        </a>
+        @endforeach
+      </div> 
+    </div>
+</aside>
+
+
 
     
     <style>
@@ -102,7 +87,7 @@
      /* Chat containers */
       .container {
           border: 2px solid #dedede;
-          background-color: #f1f1f1;
+          background-color: #77c0eb;
           border-radius: 5px;
           padding: 10px;
           margin: 10px 0;
@@ -112,7 +97,7 @@
       /* Darker chat container */
       .darker {
           border-color: #ccc;
-          background-color: #ddd;
+          background-color: rgb(233, 194, 139);
       }
 
       /* Clear floats */
@@ -156,6 +141,10 @@
   <script src="../assets/js/admin/bootstrap.min.js"></script>
 
 <script>
+
+  $("#sidebar a:first-child").addClass("active");
+
+
   function ChangeChat(from){
     $.ajax({
       dataType: 'json',
@@ -163,15 +152,91 @@
       url: '/message/changeChat',
       data: { from: from }
     }).done(function (data) {
-      console.log(data);
+      //console.log(data);
+      $('.listMessagesLink').removeClass('active');
+      $('#messages' + from).addClass('active');
+      $('#newMessage' + from).remove();
+      manageChatBox(data, from);
+      var elem = document.getElementById('messaggi');
+      elem.scrollTop = elem.scrollHeight;
     });
   }
+
+  function manageChatBox(data, from){
+    var message = '';
+    $.each(data, function (key, value) {
+      if(value.tipo == 1){
+        message += '   <div class="container darker">';
+        message += '      <img src="' + value.picPath + '" alt="Avatar" class="right">';
+        message += '      <p>'+ value.content + '</p>';
+        message += '      <span class="time-left">' + value.time + '</span>';
+        message += '   </div>';
+      }else{
+        message += '   <div class="container">';
+        message += '      <img src="' + value.picPathReceiver + '" alt="Avatar">';
+        message += '      <p>'+ value.content + '</p>';
+        message += '      <span class="time-right">' + value.time + '</span>';
+        message += '   </div>';       
+      }
+    });
+
+    message += '      <div class="container darker">';
+    message += '    <form>';
+    message += '      <div class="form-group">';
+    message += '        <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>';
+    message += '        <textarea class="form-control" id="messageUser" rows="4"></textarea>';
+    message += '        <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage(\'' + from + '\')">Invia messaggio</button> ';   
+    message += '      </div>';
+    message += '    </form>';
+    message += '  </div>';
+
+    $("#messaggi").html(message);
+
+
+    $('#messageUser').keyup(function(event){
+      var text = $('#messageUser').val();
+      if(text == ''){
+        $('#bthSendMessageUser').attr('disabled', true);
+      }else{
+        $('#bthSendMessageUser').attr('disabled', false);
+      }
+    });
+
+  }
+
+
+  function addMessage(to){
+    var newMessage = $('#messageUser').val();
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/message/newMessage',
+      data: { to: to, message: newMessage }
+    }).done(function (data) {
+      ChangeChat(to);
+    });
+  }
+
+
+  $('#messageUser').keyup(function(event){
+    var text = $('#messageUser').val();
+    if(text == ''){
+      $('#bthSendMessageUser').attr('disabled', true);
+    }else{
+      $('#bthSendMessageUser').attr('disabled', false);
+    }
+  });
+
 
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+
+  $('#btnTimeline').addClass('btn-border');
+  $('#btnPage').addClass('btn-border');
+  $('#btnMessage').removeClass('btn-border');
 </script>
 
 @endsection

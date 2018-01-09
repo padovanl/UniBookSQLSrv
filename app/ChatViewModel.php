@@ -13,4 +13,5 @@ class ChatViewModel //extends Model
     public $picPath;
     public $picPathReceiver;
     public $fromId;
+    public $numNuovi;
 }
