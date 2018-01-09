@@ -66,13 +66,26 @@ class RegisterController extends Controller
     //Daniele: non credo sia una buona idea, dobbiamo mandare una mail e confermare l'utente
     #io farei fare l'auto login e poi una notifica standard che dice di validare account con email
       //Cookie::queue('session', $user->id_user);
-      Mail::to($user)->send(new ConfirmEmail());
+    $path = route('activeAccount', ['id_user' => $user->id_user]);
+      Mail::to($user)->send(new ConfirmEmail($path));
       return redirect('/register/confirm');
 
   }
 
   public function confirm(){
     return view('/confirm');
+  }
+
+  public function confirmEmail($id_user){
+    $user = User::where('id_user', '=', $id_user)->first();
+    if(!$user)
+      return redirect('/');
+
+
+    Cookie::queue('session', $user->id_user);
+    User::where('id_user', '=', $id_user)->update([ 'confirmed' => true]);
+
+    return redirect('/');
   }
 
 
