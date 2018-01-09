@@ -66,7 +66,7 @@
         </div>
         <div class="pwd_dimenticata">
           <span>
-            <a>Password dimeticata?</a>
+            <a href="">Password dimeticata?</a>
           </span>
         </div>
       </div>

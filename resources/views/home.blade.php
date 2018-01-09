@@ -6,14 +6,14 @@
           <!-- content -->
               <!-- main col right -->
                   <div class="well">
-                      <form class="form" method="POST" action="/post">
+                      <div>
                           <h4>New Post</h4>
                           <div class="input-group text-center">
-                            <input name="_token" type="hidden" value="{{ csrf_token() }}">
-                              <input class="form-control input-lg" name="content" placeholder="Hey, What's Up?" type="text">
-                              <span class="input-group-btn"><button type="submit" class="btn btn-lg btn-primary">Post</button></span>
+                            <input id="_token" type="hidden" value="{{ csrf_token() }}">
+                              <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
+                              <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
-                      </form>
+                      </div>
                   </div>
                   <!--Pannello Post-->
                   <div class="panel panel-default" id="post">
@@ -43,14 +43,12 @@
                     <!--Comment Panel-->
                     <hr>
                     <!--Comment Form-->
-                    <form>
                     <div class="input-group">
                       <div class="input-group-btn">
                       <button id="like_butt" class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
                       </div>
-                      <input class="form-control" placeholder="Add a comment.." type="text">
+                      <input onkeypress="newComment(event)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
                     </div>
-                    </form>
                     </div>
                  </div>
                 <button id="load" onclick="loadOlder()" type="button"/>Load More..
@@ -62,12 +60,71 @@
 
   <script>
 
+  function newComment(e){
+    if(e.keyCode === 13){
+            e.preventDefault(); // Ensure it is only this code that rusn
+            $.ajax({
+              method: "POST",
+              url: "/home/comment",
+              data: {content: $("#comment_insert").val()},
+              beforeSend: function (xhr) {
+                   var token = '{{csrf_token()}}';
+
+                   if (token) {
+                       return xhr.setRequestHeader('X-CSRF-TOKEN', token);
+                   }
+               },
+               success : function (data)
+               {
+                 console.log(data);
+               }
+            })
+        }
+    }
+
+  function newPost(){
+    $.ajax({
+            method: "POST",
+            url: "/home/post",
+            data: {content: $("#new_post_content").val(), is_fixed: 0},
+            dataType : "json",
+            beforeSend: function (xhr) {
+                 var token = '{{csrf_token()}}';
+
+                 if (token) {
+                     return xhr.setRequestHeader('X-CSRF-TOKEN', token);
+                 }
+             },
+            success : function (data)
+            {
+              $post_clone = $("#post").clone();
+              $post_clone.attr("id", "post_" + data.id_post);
+              $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
+              $post_clone.find("#post_pic_path").attr('src', data.pic_path);
+              $post_clone.find("#post_content").text(data.content);
+              $post_clone.find("#like_butt").text(data.likes);
+              $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
+              $post_clone.insertAfter(".well");
+              $post_clone.show();
+              if(data.comments.length > 0){
+                for(j = 0; j < data.comments.length; j++){
+                  $("<div id='commpanel" + data.comments[j].id_comment +
+                     "'><hr><!--TODO: immagine-->" +
+                     "<a id='author' href='/profile/user/" + data.comments[j].id_user + "'>" +
+                     data.comments[j].auth_name + " " + data.comments[j].auth_surname +
+                     "</a><p id='comm_details'>" + data.comments[j].content +"</p></div>").insertAfter("#insert_after" + data.id_post);
+              }
+            }
+          }
+        });
+  }
+
+
   function onLoad(data){
     $("#post").hide();
     //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
     for(var i = data.length - 1; i >= 0; i--)
     {
-      console.log(data.length);
       $post_clone = $("#post").clone();
       $post_clone.attr("id", "post_" + data[i].id_post);
       $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
@@ -80,6 +137,7 @@
       }
       data.forEach(function(el) {
         //carico i commenti
+        console.log(el.comments);
         if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
           for(j = 0; j < el.comments.length; j++){
             $("<div id='commpanel" + el.comments[j].id_comment +
@@ -106,7 +164,6 @@
               {
                 for(var x = posts.length - 1; x >= 0 ; x--)
                 {
-                  console.log(x);
                   $post_clone = $("#post").clone();
                   $post_clone.attr("id", "post_" + posts[x].id_post);
                   $post_clone.find("#post_u_name").text(posts[x].auth_name + " " + posts[x].auth_surname);
