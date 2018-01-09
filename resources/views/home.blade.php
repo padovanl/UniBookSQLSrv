@@ -6,14 +6,14 @@
           <!-- content -->
               <!-- main col right -->
                   <div class="well">
-                      <form class="form" method="POST" action="/post">
+                      <div>
                           <h4>New Post</h4>
                           <div class="input-group text-center">
-                            <input name="_token" type="hidden" value="{{ csrf_token() }}">
-                              <input class="form-control input-lg" name="content" placeholder="Hey, What's Up?" type="text">
-                              <span class="input-group-btn"><button type="submit" class="btn btn-lg btn-primary">Post</button></span>
+                            <input id="_token" type="hidden" value="{{ csrf_token() }}">
+                              <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
+                              <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
-                      </form>
+                      </div>
                   </div>
                   <!--Pannello Post-->
                   <div class="panel panel-default" id="post">
@@ -61,6 +61,46 @@
 </div>
 
   <script>
+
+  function newPost(){
+    $content = $("#new_post_content").val();
+    $.ajax({
+            method: "POST",
+            url: "/home/post",
+            data: {content: $content, is_fixed: 0},
+            dataType : "json",
+            beforeSend: function (xhr) {
+                 // Function needed from Laravel because of the CSRF Middleware
+                 var token = '{{csrf_token()}}';
+
+                 if (token) {
+                     return xhr.setRequestHeader('X-CSRF-TOKEN', token);
+                 }
+             },
+            success : function (data)
+            {
+              $post_clone = $("#post").clone();
+              $post_clone.attr("id", "post_" + data.id_post);
+              $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
+              $post_clone.find("#post_pic_path").attr('src', data.pic_path);
+              $post_clone.find("#post_content").text(data.content);
+              $post_clone.find("#like_butt").text(data.likes);
+              $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
+              $post_clone.insertAfter(".well");
+              $post_clone.show();
+              if(data.comments.length > 0){
+                for(j = 0; j < data.comments.length; j++){
+                  $("<div id='commpanel" + data.comments[j].id_comment +
+                     "'><hr><!--TODO: immagine-->" +
+                     "<a id='author' href='/profile/user/" + data.comments[j].id_user + "'>" +
+                     data.comments[j].auth_name + " " + data.comments[j].auth_surname +
+                     "</a><p id='comm_details'>" + data.comments[j].content +"</p></div>").insertAfter("#insert_after" + data.id_post);
+              }
+            }
+          }
+        });
+  }
+
 
   function onLoad(data){
     $("#post").hide();
