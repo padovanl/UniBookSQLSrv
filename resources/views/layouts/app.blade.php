@@ -21,14 +21,14 @@
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta name="_token" content="{{ csrf_token() }}">
 
 </head>
 <body>
 <div class="wrapper">
       <header class="main-head">
         <div class="name">
-          <div class="marcato">UNI</div>
-          <div class="fino">BOOK</div>
+          <div class="marcato">UNI</div><div class="fino">BOOK</div>
         </div>
         <div class="middle-nav">
           <div class="growing-search">
@@ -48,8 +48,11 @@
             <i class="fa fa-commenting fa-lg" aria-hidden="true"></i>
           </div>
         </div>
-
-        <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="{{$logged_user ->pic_path}}" alt="Avatar"></div>
+        <?php
+        echo "<a href=\"profile/user/{{$logged_user -> id_user}}\">"
+        ?>
+          <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="{{$logged_user ->pic_path}}" alt="Avatar"></div>
+        </a>
       </header>
       <nav class="main-nav">
         <div class="side-sec">
