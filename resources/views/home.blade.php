@@ -17,72 +17,71 @@
                   </div>
                   <!--Pannello Post-->
                   <div class="panel panel-default" id="post">
-                    <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
-                          <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="glyphicon glyphicon-user"></i>
-                              </a>
-                              <ul class="dropdown-menu">
-                                  <li><a href="">Dettagli Post</a></li>
-                                  <li><a href="">Visualizza Profilo</a></li>
-                                  <li><a href="">Rimuovi dagli amici</a></li>
-                                  <li><a href="">Segnala Post</a></li>
-                              </ul>
-                          </li>
-                      </ul>
-                      <!--Post Header-->
-                      <div>
-                          <h4 id="post_u_name">User Name</h4>
-                          <img id="post_pic_path" class="img-circle pull-left">
-                      </div>
+                    <div class="panel-heading">
+                      <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                  <i class="glyphicon glyphicon-user"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="">Dettagli Post</a></li>
+                                    <li><a href="">Visualizza Profilo</a></li>
+                                    <li><a href="">Rimuovi dagli amici</a></li>
+                                    <li><a href="">Segnala Post</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!--Post Header-->
+                        <div>
+                          <img id="post_pic_path" style="width:50px; border-radius:50%" >
+                          <a href="" id="post_u_name" style="">User Name</a>
+                        </div>
                     </div>
+
                     <!--Post Content-->
                     <div class="panel-body">
                     <p id="post_content">Content</p>
                     <div id="insert_after" class="clearfix"></div>
                     <!--Comment Panel-->
-                    <hr>
                     <!--Comment Form-->
-                    <div class="input-group">
-                      <div class="input-group-btn">
+                    <div class="input-group" id="input_panel">
                       <button id="like_butt" class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-                      </div>
-                      <input onkeypress="newComment(event)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
-                    </div>
+                      <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
                     </div>
                  </div>
-                <button id="load" onclick="loadOlder()" type="button"/>Load More..
           <hr>
   </div><!-- /padding -->
+  <button id="load" onclick="loadOlder()" type="button"/>Load More..
 </article>
 <aside class="side">Sidebar</aside>
 </div>
 
   <script>
 
-  function newComment(e){
+  function newComment(e, id){
+    //manca controllo campo vuoto!!
     if(e.keyCode === 13){
             e.preventDefault(); // Ensure it is only this code that rusn
+            console.log(id.split("_")[2]);
             $.ajax({
               method: "POST",
               url: "/home/comment",
-              data: {content: $("#comment_insert").val()},
-              beforeSend: function (xhr) {
-                   var token = '{{csrf_token()}}';
-
-                   if (token) {
-                       return xhr.setRequestHeader('X-CSRF-TOKEN', token);
-                   }
-               },
+              dataType : "json",
+              data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], _token: '{{csrf_token()}}'},
                success : function (data)
                {
-                 console.log(data);
+                 $("<div id='commpanel" + data.id_comment +
+                    "'><hr><!--TODO: immagine-->" +
+                    "<a id='author' href='/profile/user/" + data.id_user + "'>" +
+                    data.auth_name + " " + data.auth_surname +
+                    "</a><p id='comm_details'>" + data.content +"</p></div>").insertBefore("#input_panel_" + data.id_post);
                }
             })
         }
     }
 
   function newPost(){
+    //manca controllo che il campo non sia vuoto!
     $.ajax({
             method: "POST",
             url: "/home/post",
@@ -99,6 +98,8 @@
             {
               $post_clone = $("#post").clone();
               $post_clone.attr("id", "post_" + data.id_post);
+              $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
+              $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
               $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
               $post_clone.find("#post_pic_path").attr('src', data.pic_path);
               $post_clone.find("#post_content").text(data.content);
@@ -112,7 +113,7 @@
                      "'><hr><!--TODO: immagine-->" +
                      "<a id='author' href='/profile/user/" + data.comments[j].id_user + "'>" +
                      data.comments[j].auth_name + " " + data.comments[j].auth_surname +
-                     "</a><p id='comm_details'>" + data.comments[j].content +"</p></div>").insertAfter("#insert_after" + data.id_post);
+                     "</a><p id='comm_details'>" + data.comments[j].content +"</p></div>").insertBefore("#input_panel_" + data.id_post);
               }
             }
           }
@@ -126,6 +127,8 @@
     for(var i = data.length - 1; i >= 0; i--)
     {
       $post_clone = $("#post").clone();
+      $post_clone.find("#input_panel").attr("id", "input_panel_" + data[i].id_post);
+      $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data[i].id_post);
       $post_clone.attr("id", "post_" + data[i].id_post);
       $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
       $post_clone.find("#post_pic_path").attr('src', data[i].pic_path);
@@ -137,7 +140,6 @@
       }
       data.forEach(function(el) {
         //carico i commenti
-        console.log(el.comments);
         if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
           for(j = 0; j < el.comments.length; j++){
             $("<div id='commpanel" + el.comments[j].id_comment +
@@ -165,6 +167,8 @@
                 for(var x = posts.length - 1; x >= 0 ; x--)
                 {
                   $post_clone = $("#post").clone();
+                  $post_clone.find("#input_panel").attr("id", "input_panel_" + posts[x].id_post);
+                  $post_clone.find("#comment_insert").attr("id", "comment_insert_" + posts[x].id_post);
                   $post_clone.attr("id", "post_" + posts[x].id_post);
                   $post_clone.find("#post_u_name").text(posts[x].auth_name + " " + posts[x].auth_surname);
                   $post_clone.find("#post_pic_path").attr('src', posts[x].pic_path);
