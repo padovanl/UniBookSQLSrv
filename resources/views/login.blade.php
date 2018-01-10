@@ -66,7 +66,7 @@
         </div>
         <div class="pwd_dimenticata">
           <span>
-            <a href="">Password dimeticata?</a>
+            <a href="{{ route('forgotPassword') }}">Password dimeticata?</a>
           </span>
         </div>
       </div>
