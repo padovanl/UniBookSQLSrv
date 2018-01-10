@@ -44,6 +44,8 @@ return array(
     'App\\LikePost' => $baseDir . '/app/LikePost.php',
     'App\\Like_comments' => $baseDir . '/app/Like_comments.php',
     'App\\Like_posts' => $baseDir . '/app/Like_posts.php',
+    'App\\Mail\\ConfirmEmail' => $baseDir . '/app/Mail/ConfirmEmail.php',
+    'App\\Mail\\ForgotPasswordEmail' => $baseDir . '/app/Mail/ForgotPasswordEmail.php',
     'App\\Message' => $baseDir . '/app/Message.php',
     'App\\MessageViewModel' => $baseDir . '/app/MessageViewModel.php',
     'App\\Page' => $baseDir . '/app/Page.php',

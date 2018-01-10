@@ -370,6 +370,8 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'App\\LikePost' => __DIR__ . '/../..' . '/app/LikePost.php',
         'App\\Like_comments' => __DIR__ . '/../..' . '/app/Like_comments.php',
         'App\\Like_posts' => __DIR__ . '/../..' . '/app/Like_posts.php',
+        'App\\Mail\\ConfirmEmail' => __DIR__ . '/../..' . '/app/Mail/ConfirmEmail.php',
+        'App\\Mail\\ForgotPasswordEmail' => __DIR__ . '/../..' . '/app/Mail/ForgotPasswordEmail.php',
         'App\\Message' => __DIR__ . '/../..' . '/app/Message.php',
         'App\\MessageViewModel' => __DIR__ . '/../..' . '/app/MessageViewModel.php',
         'App\\Page' => __DIR__ . '/../..' . '/app/Page.php',
