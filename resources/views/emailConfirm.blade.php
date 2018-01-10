@@ -1,25 +1,14 @@
-
-
-
 <html>
+
 <head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-  <div class="row">
-    <div class="col-md-12">
-      <p>Grazie per esserti iscritto su UniBook! Ti resta solo una cosa da fare: attivare il tuo account cliccando sul pulsante.</p>
-    </div>
+  <div id="container" style="width: 970px; margin: 0 auto; text-align: center;">
+    <p style="text-align:center;">Grazie per esserti iscritto su UniBook! Ti resta solo una cosa da fare: attivare il tuo account cliccando sul pulsante.</p>
+    <br>
+    <a class="link-button" href="{{$path}}" style="width: 100px; margin: 0 auto; background: #037ac9 none repeat scroll 0 0; border: 1px solid #037ac9; color: #ffffff; outline: medium none; padding: 10px;border-radius: 6px; text-decoration: none;"><strong>Attiva il tuo account!</strong></a>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <a class="btn btn-primary" href="{{$path}}" role="button">Attiva il tuo account!</a>
-    </div>
-  </div>
-
-
-  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 </body>
+
 </html>

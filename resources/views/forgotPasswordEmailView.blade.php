@@ -6,20 +6,9 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="row">
-    <div class="col-md-12">
-      <p>Ecco la tua nuova password: {{$newPassword}}</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <a class="btn btn-primary" href="#" role="button">Attiva il tuo account!</a>
-    </div>
-  </div>
-
-
-  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+  <h5>UniBook - Email di reset password</h5>
+      <p>Ciao! Hai ricevuto questa email perchè hai dimenticato la tua password. Purtroppo per ragioni di sicurezza neppure noi conosciamo la tua password, per cui te ne abbiamo inviata una temporanea con cui potrai accedere al nostro sito. Ecco la tua nuova password: <strong>{{$newPassword}}</strong></p>
+      <br />
+      <p><b>Il team di UniBook</b></p>
 </body>
 </html>
