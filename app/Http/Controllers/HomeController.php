@@ -203,7 +203,7 @@ class HomeController extends Controller{
     $comment->updated_at = now();
     $comment->content = $request->input('content');
     $comment->id_author = $logged_user['id_user'];
-    return($request->input('content') . $logged_user['id_user']);
+    $comment->id_post =  $request->input('id_post');
     $comment->save();
     $comm_tmp = CommentU::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
     DB::table('comments_user')->insert(['id_user' => $logged_user['id_user'], 'id_comment' => $comm_tmp['id_comment']]);

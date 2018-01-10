@@ -89,6 +89,8 @@ class MessageController extends Controller
     }
 
     public function newMessage(Request $request){
+
+        date_default_timezone_set('Europe/Rome');
         $id = Cookie::get('session');
         $logged_user = User::where('id_user', '=', $id)->first();
         $id_receiver = $request->input('to');

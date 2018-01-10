@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
+use \Datetime;
 
 use App\User;
+use App\ResetPassword;
+
 use Cookie;
 
 use App\Mail\ConfirmEmail;
+use App\Mail\ForgotPasswordEmail;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -86,6 +89,60 @@ class RegisterController extends Controller
     User::where('id_user', '=', $id_user)->update([ 'confirmed' => true]);
 
     return redirect('/');
+  }
+
+
+  public function forgotPassword(){
+    return view('/forgotPassword');
+  }
+
+
+  public function sendEmailForgotPassword(Request $request){
+    $email = $request->input('email');
+    $user = User::where('email', '=', $email)->first();
+    if($user){
+      $tmp = ResetPassword::where('id_user', '=', $user->id_user)->first();
+      if(!$tmp || $tmp->expire_at < date("Y-m-d H:i:s")){
+        $newPassword = $this->generateRandomPassword();
+        $resetPassword = new ResetPassword();
+        $resetPassword->id_user = $user->id_user;
+        $resetPassword->pwd_hash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+
+        $datetime = new DateTime(date("Y-m-d H:i:s"));
+        $datetime->modify('+1 day');
+        $date = $datetime->format('Y-m-d H:i:s');
+
+        $resetPassword->expire_at = $date;
+        $resetPassword->save();
+        Mail::to($user)->send(new ForgotPasswordEmail($newPassword));        
+      }
+
+    }
+    return response()->json(['message' => 'Operazione completata!']);
+
+  }
+
+  protected function generateRandomPassword(){
+    $newPassword = '';
+    $passwordLength = 9;
+    for ($i=0; $i < $passwordLength; $i++) { 
+      $scelta = rand(0, 1);
+      if($scelta == 0){ //numero
+        $numero = chr(rand(48, 57));
+        $newPassword = $newPassword . $numero;
+      }else{ //lettera
+        $minOrMaiusc = rand(0, 1);
+        if($minOrMaiusc == 0){ //maiuscola
+          $lettera = chr(rand(65, 90));
+          $newPassword = $newPassword . $lettera;
+        }else{ //minuscola
+          $lettera = chr(rand(97, 122));
+          $newPassword = $newPassword . $lettera;
+        }
+      }
+    }
+    return $newPassword;
   }
 
 
