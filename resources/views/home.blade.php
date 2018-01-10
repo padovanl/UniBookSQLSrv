@@ -17,25 +17,27 @@
                   </div>
                   <!--Pannello Post-->
                   <div class="panel panel-default" id="post">
-                    <div class="panel-heading"><ul class="nav navbar-nav navbar-right">
-                          <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="glyphicon glyphicon-user"></i>
-                              </a>
-                              <ul class="dropdown-menu">
-                                  <li><a href="">Dettagli Post</a></li>
-                                  <li><a href="">Visualizza Profilo</a></li>
-                                  <li><a href="">Rimuovi dagli amici</a></li>
-                                  <li><a href="">Segnala Post</a></li>
-                              </ul>
-                          </li>
-                      </ul>
-                      <!--Post Header-->
-                      <div>
-                          <h4 id="post_u_name">User Name</h4>
-                          <img id="post_pic_path" class="img-circle pull-left">
-                      </div>
+                    <div class="panel-heading">
+                      <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                  <i class="glyphicon glyphicon-user"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="">Dettagli Post</a></li>
+                                    <li><a href="">Visualizza Profilo</a></li>
+                                    <li><a href="">Rimuovi dagli amici</a></li>
+                                    <li><a href="">Segnala Post</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!--Post Header-->
+                        <div>
+                          <img id="post_pic_path" style="width:50px; border-radius:50%" >
+                          <a href="" id="post_u_name" style="">User Name</a>
+                        </div>
                     </div>
+
                     <!--Post Content-->
                     <div class="panel-body">
                     <p id="post_content">Content</p>
