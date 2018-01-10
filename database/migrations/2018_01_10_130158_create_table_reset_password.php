@@ -19,6 +19,7 @@ class CreateTableResetPassword extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('expire_at')->nullable();
+	    $table->boolean('valid')->default(true);
 
             $table->primary('id_user');
 

@@ -15,6 +15,9 @@ use App\Mail\ConfirmEmail;
 use App\Mail\ForgotPasswordEmail;
 use Illuminate\Support\Facades\Mail;
 
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Redirect;
+
 
 class RegisterController extends Controller
 {
@@ -102,7 +105,7 @@ class RegisterController extends Controller
     $user = User::where('email', '=', $email)->first();
     if($user){
       $tmp = ResetPassword::where('id_user', '=', $user->id_user)->first();
-      if(!$tmp || $tmp->expire_at < date("Y-m-d H:i:s")){
+      if(!$tmp || ($tmp->expire_at < date("Y-m-d H:i:s") && !$tmp->valid)){
         $newPassword = $this->generateRandomPassword();
         $resetPassword = new ResetPassword();
         $resetPassword->id_user = $user->id_user;
@@ -143,6 +146,29 @@ class RegisterController extends Controller
       }
     }
     return $newPassword;
+  }
+
+  public function resetPassword($id_user){
+    return view('resetPasswordView')->with('id_user', $id_user);
+  }
+
+  public function resetPasswordPost(Request $request){
+    $newPassword = $request->input('newPwd');
+    $rePassword = $request->input('reNewPwd');
+    $id_user = $request->input('idUser');
+    if($newPassword != $rePassword){
+      $errors = new MessageBag(['reNewPwd' => ['Le due password non coincidono.']]);
+      return Redirect::back()->withErrors($errors)->withInput(Input::except('reNewPwd'));
+    }else{
+      $user = User::where('id_user', '=', $id_user)->first();
+      if(!$user)
+        return redirect('/');
+      $pwd_hash = password_hash($newPassword, PASSWORD_DEFAULT);
+      User::where('id_user', '=', $id_user)->update(['pwd_hash' => $pwd_hash]);
+      ResetPassword::where('id_user', '=', $id_user)->update(['valid' => false]);
+      Cookie::queue('session', $id_user);
+      return redirect('/');
+    }
   }
 
 

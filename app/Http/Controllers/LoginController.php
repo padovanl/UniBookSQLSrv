@@ -7,6 +7,8 @@ use App\User;
 use Cookie;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Redirect;
+use App\ResetPassword;
+
 use Input;
 
 class LoginController extends Controller{
@@ -51,8 +53,19 @@ class LoginController extends Controller{
 
     if(!password_verify($pwd, $user->pwd_hash)){
       #return redirect('/login'); //e stampo un errore
-      $errors = new MessageBag(['password' => ['Password invalida.']]);
-      return Redirect::back()->withErrors($errors)->withInput(Input::except('password'));
+      //controllo se ha richiesto il reset password
+      $tmp = ResetPassword::where([['id_user', '=', $user->id_user], ['valid', '=', true]])->first();
+      if(!$tmp){
+        $errors = new MessageBag(['password' => ['Password invalida.']]);
+        return Redirect::back()->withErrors($errors)->withInput(Input::except('password'));
+      }else{
+        if(password_verify($pwd, $tmp->pwd_hash))
+          return redirect()->route('resetPassword', ['id_user' => $user->id_user]);
+        else{
+          $errors = new MessageBag(['password' => ['Password invalida.']]);
+          return Redirect::back()->withErrors($errors)->withInput(Input::except('password'));
+        }
+      }
     }
 
     if(!$user->confirmed)

@@ -15,8 +15,11 @@ Route::get('/login', 'LoginController@showLogin')->name('login.showLogin');
 Route::post('/login/submit', 'LoginController@doLogin');
 Route::get('/register/confirm', 'RegisterController@confirm');
 Route::get('/register/confirmEmail/{id_user}', 'RegisterController@confirmEmail')->name('activeAccount');
-Route::get('/register/forgotPassword', 'RegisterController@forgotPassword');
+Route::get('/register/forgotPassword', 'RegisterController@forgotPassword')->name('forgotPassword');
 Route::post('/register/sendEmailForgotPassword', 'RegisterController@sendEmailForgotPassword');
+Route::get('/register/resetPassword/{id_user}', 'RegisterController@resetPassword')->name('resetPassword');
+Route::post('/register/resetPassword/{id_user}', 'RegisterController@resetPasswordPost');
+
 Route::resource('/register', 'RegisterController');
 
 
