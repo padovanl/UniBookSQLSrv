@@ -17,7 +17,12 @@ class LoginController extends Controller{
   //bisogna ovviamente migliorarlo
   public function verify_cookie(){
     if (Cookie::has('session')){
-      return true;
+      $id = Cookie::get('session');
+      $user = User::where('id_user', '=', $id)->first();
+      if(!$user)
+        return false;
+      else
+        return true;
     }
     else{
       return false;

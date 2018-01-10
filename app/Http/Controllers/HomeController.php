@@ -45,8 +45,12 @@ class HomeController extends Controller{
 
   public function verify_cookie(){
     if (Cookie::has('session')){
-      //conrollo che l'id presente nel cookie esista nel db
-      return true;
+      $id = Cookie::get('session');
+      $user = User::where('id_user', '=', $id)->first();
+      if(!$user)
+        return false;
+      else
+        return true;
     }
     else{
       return false;
