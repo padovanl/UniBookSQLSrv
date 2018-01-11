@@ -28,7 +28,7 @@ Route::get('/', 'HomeController@landing');
 Route::post('/home/post', 'HomeController@newPost');
 Route::post('/home/comment', 'HomeController@newComment');
 Route::resource('/comment', 'CommentController');
-
+Route::post('/home/reaction', 'HomeController@reaction');
 Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
@@ -66,7 +66,7 @@ Route::post('/admin/dashboard/sbloccaPage', 'AdminController@sbloccaPage');
 Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
-
+Route::post('/message/countNewMessage', 'MessageController@countNewMessage');
 
 //Authentication
 #Route::post('register', 'authController@register');
