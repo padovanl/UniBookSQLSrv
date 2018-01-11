@@ -20,6 +20,7 @@ class CreateTablePages extends Migration
             $table->string('nome');
             $table->uuid('id_user');
             $table->boolean('ban')->default(false);
+	    $table->timestamps();
 
             //foreign key
             $table->foreign('id_user')->references('id_user')->on('users');
