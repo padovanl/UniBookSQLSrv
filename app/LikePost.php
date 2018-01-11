@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class LikePost extends Model
 {
-    protected $table = 'like_posts';
+  protected $table = 'like_posts';
+  public $timestamps = false;
 }
