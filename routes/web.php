@@ -66,7 +66,7 @@ Route::post('/admin/dashboard/sbloccaPage', 'AdminController@sbloccaPage');
 Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
-
+Route::post('/message/countNewMessage', 'MessageController@countNewMessage');
 
 //Authentication
 #Route::post('register', 'authController@register');

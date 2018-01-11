@@ -43,9 +43,9 @@
           </div>
 
           <div id="notifiche">
-            <i class="fa fa-user fa-lg" aria-hidden="true"></i>
-            <i class="fa fa-bell fa-lg" aria-hidden="true"></i>
-            <i class="fa fa-commenting fa-lg" aria-hidden="true"></i>
+            <a href="#"><i class="fa fa-user fa-lg" aria-hidden="true"></i></a>
+            <a href="#"><i class="fa fa-bell fa-lg" aria-hidden="true"></i></a>
+            <a href="/message" id="navBarMessages"><span class="fa-stack fa-1x has-badge" id="spanNewMessages"><i class="fa fa-commenting fa-stack-1x" aria-hidden="true"></i></span></a>
           </div>
         </div>
         <?php
@@ -64,11 +64,58 @@
               <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnMessage" onclick="window.location='/message'"><span class="fa fa-commenting" aria-hidden="true"></span> Messaggi</button></li>
               <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnPage"><span class="fa fa-book" aria-hidden="true"></span> Pagine</button></li>
               @if($logged_user->admin)
-              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnMessage" onclick="window.location='/admin'"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Dashboard</button></li>
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnAdmin" onclick="window.location='/admin'"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Dashboard</button></li>
               @endif
           </ul>
         </div>
       </nav>
         @yield('content')
+
+
+      <!--prova nuovi messaggi-->
+      <script>
+
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $(document).ready(function(){
+          $.ajax({
+            dataType: 'json',
+            type: 'POST',
+            url: '/message/countNewMessage',
+            data: { id_user: '{{$logged_user->id_user}}' }
+          }).done(function (data) {
+            if(data.newMessages > 0){
+              var html = '&nbsp;&nbsp;<span class="badge badge-danger" style="font-size:10px;">' + data.newMessages + '</span>';
+              $('#btnMessage').append(html);
+              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewMessages" data-count="' + data.newMessages + '"><i class="fa fa-commenting fa-stack-1x" aria-hidden="true"></i></span>';
+              $('#navBarMessages').html(htmlNavBar);
+            }else{
+              var htmlNavBar = '<i class="fa fa-commenting" aria-hidden="true"></i>';
+              $('#navBarMessages').html(htmlNavBar);
+            }
+          });
+        });
+      </script>
+      <style type="text/css">
+        .fa-stack[data-count]:after{
+        position:absolute;
+        right:0%;
+        top:1%;
+        content: attr(data-count);
+        font-size:50%;
+        padding:.6em;
+        border-radius:999px;
+        line-height:.75em;
+        color: white;
+        background:rgba(255,0,0,.85);
+        text-align:center;
+        min-width:2em;
+        font-weight:bold;
+      }
+      </style>
 </body>
 </html>
