@@ -8,8 +8,6 @@
   font-size: 18px;
   color: #ffffff;
   display: grid;
-  width: 100vw;
-  height: 100vh;
   background: #4285f4;
   grid-template-columns: repeat(3, 1fr);
   grid-template-areas:

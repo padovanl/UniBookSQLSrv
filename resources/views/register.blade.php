@@ -42,23 +42,18 @@
           <span class="bar"></span>
           <label>Email</label>
         </div>
-
         <div class="group">
           <input type="password" name="pwd_hash" id="password" required>
           <span class="highlight"></span>
           <span class="bar"></span>
           <label>Password</label>
         </div>
-
         <div class="group">
           <input type="text" name="citta" required>
           <span class="highlight"></span>
           <span class="bar"></span>
           <label>Città</label>
         </div>
-
-
-
         <p>Data di nascita</p>
         <div class="form-row">
             <input class="form-control" type="date" name="birth_date" required>
@@ -66,34 +61,26 @@
 
 
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" id="gender" value="0" checked>
+          <input class="form-check-input" type="radio" name="gender" class="gender" value="0" checked>
           <label class="form-check-label" for="gender">Donna</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" id="gender" value="1">
+          <input class="form-check-input" type="radio" name="gender" class="gender" value="1">
           <label class="form-check-label" for="gender">Uomo</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" id="gender" value="3">
-          <label class="form-check-label" for="gender">Other</label>
+          <input class="form-check-input" type="radio" name="gender" class="gender" value="3">
+          <label class="form-check-label" for="gender">Altro</label>
         </div></br>
 
         <div class="group">
-          <div class="row">
-            <div class="col-md-2">
-                <label>Foto profilo</label>
-            </div>
-            <div class="col-md-10">
-              <input type="file" name="file" id="file" required>
-              <span class="highlight"></span>
-              <span class="bar"></span>
-            </div>
+          <p>Foto profilo</p>
+          <div>
+            <input type="file" name="file" id="file" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
           </div>
         </div>
-        
-        @if($error != '')
-          {{$error}}
-        @endif
 
         <div class="lg-btn">
           <button type="submit" class="button" value="Register">Registrati</button>
@@ -103,6 +90,14 @@
 
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var err = '{{$error}}'
+      if(err !== '')
+        alert("{{$error}}");
+    });
+  </script>
 
 </body>
 </html>

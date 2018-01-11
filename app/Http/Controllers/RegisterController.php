@@ -49,7 +49,7 @@ class RegisterController extends Controller
     $tmp = User::where('email', '=', $email)->first();
     $error = '';
     if($tmp){
-      $error = "Questa email è già presente su UniBook";
+      $error = "Indirizzo e-mail: ".$email.", già in uso.";
       return view('/register', compact('error'));
     }
     $user = new User;
@@ -70,7 +70,6 @@ class RegisterController extends Controller
       $user->pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
     }
 
-
     $user -> save();
 
     #sarebbe da fare la redirect con l'utente già loggato
@@ -78,8 +77,8 @@ class RegisterController extends Controller
     #io farei fare l'auto login e poi una notifica standard che dice di validare account con email
       //Cookie::queue('session', $user->id_user);
     $path = route('activeAccount', ['id_user' => $user->id_user]);
-      Mail::to($user)->send(new ConfirmEmail($path));
-      return redirect('/register/confirm');
+    Mail::to($user)->send(new ConfirmEmail($path));
+    return redirect('/register/confirm');
 
   }
 
@@ -123,7 +122,7 @@ class RegisterController extends Controller
 
         $resetPassword->expire_at = $date;
         $resetPassword->save();
-        Mail::to($user)->send(new ForgotPasswordEmail($newPassword));        
+        Mail::to($user)->send(new ForgotPasswordEmail($newPassword));
       }
 
     }
@@ -134,7 +133,7 @@ class RegisterController extends Controller
   protected function generateRandomPassword(){
     $newPassword = '';
     $passwordLength = 9;
-    for ($i=0; $i < $passwordLength; $i++) { 
+    for ($i=0; $i < $passwordLength; $i++) {
       $scelta = rand(0, 1);
       if($scelta == 0){ //numero
         $numero = chr(rand(48, 57));

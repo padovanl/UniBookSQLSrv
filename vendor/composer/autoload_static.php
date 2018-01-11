@@ -388,6 +388,7 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\ReportComment' => __DIR__ . '/../..' . '/app/ReportComment.php',
         'App\\ReportPost' => __DIR__ . '/../..' . '/app/ReportPost.php',
+        'App\\ResetPassword' => __DIR__ . '/../..' . '/app/ResetPassword.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\Users_follow_pages' => __DIR__ . '/../..' . '/app/Users_follow_pages.php',
         'App\\Users_make_friends' => __DIR__ . '/../..' . '/app/Users_make_friends.php',
