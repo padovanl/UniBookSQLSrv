@@ -95,7 +95,12 @@
       dataType: 'json',
       type: 'POST',
       url: '/register/sendEmailForgotPassword',
-      data: { email: email }
+      data: { email: email },
+      beforeSend: function(){
+        var html = '';
+        html = '<img src="../assets/img/loading.gif" style="display:block; margin: 0 auto;" class="img-responsive" />';
+        $('#container').html(html);
+      }
     }).done( function(data){
       //alert(data.message);
       var html = '';
