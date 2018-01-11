@@ -63,6 +63,15 @@
     </div>
   </div>
 
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="lg-btn">
+          <a class="btn button" role="button" id="btnToHome" onclick="window.location='/'">Ritorna alla pagina di login</a>
+        </div>
+      </div>
+    </div>
+
   </div>
   
   <div class="side"  style="background-image:url(../assets/img/uni3.png)">

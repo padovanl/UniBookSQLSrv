@@ -1,0 +1,74 @@
+.letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+svg {
+  display: block
+  margin: auto;
+  cursor: pointer;
+}
+svg circle {
+  fill: #0D47A1;
+  stroke: #A54538;
+  stroke-width: 5;
+  stroke-dasharray: 700;
+  stroke-dashoffset: 700;
+    animation: 3s circle-stroke-out forwards alternate;
+  transform-origin: 50% 50%;
+}
+svg:hover circle {
+  animation: 1s circle-stroke-in infinite alternate;
+  opacity: 0.1;
+}
+
+svg path{
+    animation: 0.5s path-scale-out forwards;
+  transform-origin: 50% 50%;
+}
+svg:hover path {
+  animation: 0.5s path-scale-in forwards alternate;
+}
+
+@keyframes circle-stroke-in {
+    from {
+    transform: rotate(0);
+    stroke-dashoffset: 700;
+    opacity: 0.3;
+  }
+  to {
+    transform: rotate(960deg);
+    stroke-dashoffset: 550;
+    opacity: 1;
+    stroke-width: 10;
+  }
+}
+@keyframes circle-stroke-out {
+    from {
+    transform: rotate(960deg);
+    stroke-dashoffset: 550;
+    opacity: 1;
+  }
+  to {
+    transform: rotate(0);
+    stroke-dashoffset: 700;
+    opacity: 0.3;
+  }
+}
+@keyframes path-scale-out {
+  from {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(0.9);
+  }
+}
+@keyframes path-scale-in {
+   from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}

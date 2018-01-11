@@ -62,6 +62,7 @@ return array(
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\ReportComment' => $baseDir . '/app/ReportComment.php',
     'App\\ReportPost' => $baseDir . '/app/ReportPost.php',
+    'App\\ResetPassword' => $baseDir . '/app/ResetPassword.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\Users_follow_pages' => $baseDir . '/app/Users_follow_pages.php',
     'App\\Users_make_friends' => $baseDir . '/app/Users_make_friends.php',
