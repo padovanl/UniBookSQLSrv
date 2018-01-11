@@ -15,44 +15,9 @@
                           </div>
                       </div>
                   </div>
-                  {{-- <div class="panel panel-default" id="post">
-                    <div class="panel-heading">
-                      <ul class="nav navbar-nav navbar-right">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                  <i class="glyphicon glyphicon-user"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="">Dettagli Post</a></li>
-                                    <li><a href="">Visualizza Profilo</a></li>
-                                    <li><a href="">Rimuovi dagli amici</a></li>
-                                    <li><a href="">Segnala Post</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <!--Post Header-->
-                        <div>
-                          <img id="post_pic_path" style="width:50px; border-radius:50%" >
-                          <a href="" id="post_u_name" style="">User Name</a>
-                          <span id="creation_date"></span>
-                        </div>
-                    </div>
-
-                    <!--Post Content-->
-                    <div class="panel-body">
-                    <p id="post_content">Content</p>
-                    <div id="insert_after" class="clearfix"></div>
-                    <!--Comment Panel-->
-                    <!--Comment Form-->
-                    <div class="input-group" id="input_panel">
-                      <button id="like_butt" class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-                      <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
-                    </div>
-                  </div>
-                  <hr> --}}
                   <!--Pannello Post-->
                   <div class="container" id="post">
-                  	<div class="col-md-7">
+                  	<div class="col-md-9">
                           <div class="panel panel-default">
                               <div class="panel-body">
                                  <section class="post-heading">
@@ -81,11 +46,11 @@
                                  <section class="post-footer">
                                      <hr>
                                      <div class="post-footer-option container">
-                                          <ul class="list-unstyled">
-                                              <li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Like</a></li>
-                                              <li><a href="#"><i class="glyphicon glyphicon-thumbs-down"></i> Dislike</a></li>
-                                              <li><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                              <li><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>
+                                          <ul id="option_" class="list-unstyled">
+                                              <li><a><i onclick="reaction(this.id)" id="like" class="glyphicon glyphicon-thumbs-up"> Like</i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" id="dislike" class="glyphicon glyphicon-thumbs-down"> Dislike</i></a></li>
+                                              <li><a><i onclick="commentfocus(this.id)" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                                              <li><a><i onclick="share(this.id)" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
                                           </ul>
                                      </div>
                                      <div class="post-footer-comment-wrapper">
@@ -99,9 +64,16 @@
                                                 <div class="media-body">
                                                   <a href="#" id="comment_author" class="anchor-username"><h4 class="media-heading">Media heading</h4></a>
                                                   <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                  <span id="comment_content"></span>
                                                 </div>
+                                                <div class="post-footer-option-container">
+                                                <ul class="list-unstyled">
+                                                  <li><a><i onclick="reaction(this.id)" id="likecomm" class="glyphicon glyphicon-thumbs-up">Like</i></a></li>
+                                                  <li><a><i onclick="reaction(this.id)" id="dislikecomm" class="glyphicon glyphicon-thumbs-down">Dislike</i></a></li>
+                                                </ul>
                                               </div>
-                                              <span id="comment_content"></span>
+                                              </div>
+
                                          </div>
                                          <hr>
 
@@ -123,10 +95,110 @@
 
 <script>
 
+function commentfocus(id){
+    $("#comment_insert_" + id.split("_")[1]).focus();
+}
+
+
+function reaction(id){
+  $.ajax({
+    method: "POST",
+    url: "/home/reaction",
+    dataType: "json",
+    data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
+     success : function (data)
+     {
+       switch (data.type) {
+         case "post":
+           if((data.change == null) && (data.like == '1')){
+               $("#like_" + data.id_post).removeAttr('style');
+           }
+           else if((data.change == '0') && (data.like == '1')){
+               $("#like_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
+           }
+           else if((data.change == null) && (data.like == '0')){
+               $("#like_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
+           }
+           else if((data.change == '1') && (data.like == '0')){
+               $("#like_" + data.id_post).removeAttr('style');
+               $("#dislike_" + data.id_post).css({ 'color': 'red', 'font-size': '105%' });
+           }
+           else if((data.change == '1') && (data.like == '1')){
+             $("#dislike_" + data.id_post).removeAttr('style');
+             $("#like_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
+           }
+           break;
+           case "comm":
+             if((data.change == null) && (data.like == '1')){
+                 $("#likecomm_" + data.id_post).removeAttr('style');
+             }
+             else if((data.change == '0') && (data.like == '1')){
+                 $("#likecomm_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
+             }
+             else if((data.change == null) && (data.like == '0')){
+                 $("#likecomm_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
+             }
+             else if((data.change == '1') && (data.like == '0')){
+                 $("#likecomm_" + data.id_post).removeAttr('style');
+                 $("#dislikecomm_" + data.id_post).css({ 'color': 'red', 'font-size': '105%' });
+             }
+             else if((data.change == '1') && (data.like == '1')){
+               $("#dislikecomm_" + data.id_post).removeAttr('style');
+               $("#likecomm_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
+             }
+             break;
+       }
+     }
+  })
+}
+
+function createcomment(comment){
+  $comment_clone = $("#comment_panel").clone();
+  $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
+  $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
+  $comment_clone.find("#comment_author").text(comment.auth_name + " " + comment.auth_surname);
+  $comment_clone.find("#comment_created_at").text(comment.created_at);
+  $comment_clone.find("#comment_content").text(comment.content);
+  if(comment.userlike == '0'){
+    $comment_clone.find("#dislikecomm").css({ 'color': 'red', 'font-size': '105%' });
+  }
+  else if(comment.userlike == '1'){
+    $comment_clone.find("#likecomm").css({ 'color': 'blue', 'font-size': '105%'});
+  }
+  $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
+  $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+  return($comment_clone);
+}
+
+function createPost(data){
+  $post_clone = $("#post").clone();
+  $post_clone.attr("id", "post_" + data.id_post);
+  $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
+  $post_clone.find("#creation_date").text(data.created_at);
+  $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
+  $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
+  $post_clone.find("#post_pic_path").attr('src', data.pic_path);
+  $post_clone.find("#post_content").text(data.content);
+  $post_clone.find("#like_butt").text(data.likes);
+  $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
+  if(data.userlike == '0'){
+    $post_clone.find("#dislike").css({ 'color': 'red', 'font-size': '105%' });
+  }
+  else if(data.userlike == '1'){
+    $post_clone.find("#like").css({ 'color': 'blue', 'font-size': '105%'});
+  }
+  $post_clone.find("#like").attr('id', 'like_' + data.id_post);
+  $post_clone.find("#dislike").attr('id', 'dislike_' + data.id_post);
+  $post_clone.find("#comment").attr('id', 'comment_' + data.id_post);
+  $post_clone.find("#share").attr('id', 'share_' + data.id_post);
+
+  return($post_clone);
+}
+
 function newComment(e, id){
   //manca controllo campo vuoto!!
   if(e.keyCode === 13){
-          e.preventDefault(); 
+          e.preventDefault();
           $.ajax({
             method: "POST",
             url: "/home/comment",
@@ -134,15 +206,16 @@ function newComment(e, id){
             data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], _token: '{{csrf_token()}}'},
              success : function (data)
              {
-               $("#comment_insert_" + id.split("_")[2]).val('');
-               $comment_clone = $("#comment_panel").clone();
-               $comment_clone.attr("id", "comment_panel_" + data.id_comment);
-               $comment_clone.find("#comm_pic_path").attr('src', data.pic_path);
-               $comment_clone.find("#comment_author").text(data.auth_name + " " + data.auth_surname);
-               $comment_clone.find("#comment_created_at").text(data.created_at);
-               $comment_clone.find("#comment_content").text(data.content);
-               $comment_clone.insertBefore("#comment_insert_" + data.id_post);
-               $comment_clone.show();
+               console.log(data);
+               if(data.ban != 1){
+                 $("#comment_insert_" + id.split("_")[2]).val('');
+                 createcomment(data);
+                 $comment_clone.insertBefore("#comment_insert_" + data.id_post);
+                 $comment_clone.show();
+               }
+               else{
+                 alert("Non puoi commentare, sei bannato!");
+               }
              }
           })
       }
@@ -164,33 +237,24 @@ function newPost(){
            },
           success : function (data)
           {
-            $("#new_post_content").val('');
-            $post_clone = $("#post").clone();
-            $post_clone.attr("id", "post_" + data.id_post);
-            $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
-            $post_clone.find("#creation_date").text(data.created_at);
-            $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
-            $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
-            $post_clone.find("#post_pic_path").attr('src', data.pic_path);
-            $post_clone.find("#post_content").text(data.content);
-            $post_clone.find("#like_butt").text(data.likes);
-            $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
-            $post_clone.insertAfter(".well");
-            $post_clone.show();
-            $("#comment_panel").hide();
-
-            if(data.comments.length > 0){
-              for(j = 0; j < data.comments.length; j++){
-                $comment_clone = $("#comment_panel").clone();
-                $comment_clone.attr("id", "comment_panel_" + data.comments[j].id_comment);
-                $comment_clone.find("#comm_pic_path").attr('src', data.comments[j].pic_path);
-                $comment_clone.find("#comment_author").text(data.comments[j].auth_name + " " + data.comments[j].auth_surname);
-                $comment_clone.find("#comment_created_at").text(data.comments[j].created_at);
-                $comment_clone.find("#comment_content").text(data.comments[j].content);
-                $comment_clone.insertBefore("#comment_insert_" + data.id_post);
-                $comment_clone.show();
+            if(data.ban != 1){
+              $("#new_post_content").val('');
+              $post_clone = createPost(data)
+              $post_clone.insertAfter(".well");
+              $post_clone.show();
+              $("#comment_panel").hide();
+              if(data.comments.length > 0){
+                for(j = 0; j < data.comments.length; j++){
+                  $comment_clone = createcomment(data.comments[j]);
+                  $comment_clone.insertBefore("#comment_insert_" + data.id_comment);
+                  $comment_clone.show();
+              }
             }
-          }
+            }
+            else{
+              alert("non puoi fare post, sei bannato!");
+            }
+
         }
       });
 }
@@ -202,16 +266,7 @@ function onLoad(data){
   //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
   for(var i = data.length - 1; i >= 0; i--)
   {
-    $post_clone = $("#post").clone();
-    $post_clone.find("#input_panel").attr("id", "input_panel_" + data[i].id_post);
-    $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data[i].id_post);
-    $post_clone.find("#creation_date").text(data[i].created_at);
-    $post_clone.attr("id", "post_" + data[i].id_post);
-    $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
-    $post_clone.find("#post_pic_path").attr('src', data[i].pic_path);
-    $post_clone.find("#post_content").text(data[i].content);
-    $post_clone.find("#like_butt").text(data[i].likes);
-    $post_clone.find("#insert_after").attr('id', "insert_after" + data[i].id_post);
+    $post_clone = createPost(data[i]);
     $post_clone.insertAfter(".well");
     $post_clone.show();
     }
@@ -219,12 +274,7 @@ function onLoad(data){
       //carico i commenti
       if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
         for(j = 0; j < el.comments.length; j++){
-          $comment_clone = $("#comment_panel").clone();
-          $comment_clone.attr("id", "comment_panel_" + el.comments[j].id_comment);
-          $comment_clone.find("#comm_pic_path").attr('src', el.comments[j].pic_path);
-          $comment_clone.find("#comment_author").text(el.comments[j].auth_name + " " + el.comments[j].auth_surname);
-          $comment_clone.find("#comment_created_at").text(el.comments[j].created_at);
-          $comment_clone.find("#comment_content").text(el.comments[j].content);
+          $comment_clone = createcomment(el.comments[j]);
           $comment_clone.insertBefore("#comment_insert_" + el.id_post);
           $comment_clone.show();
     }
@@ -246,16 +296,7 @@ function loadOlder(){
             {
               for(var x = posts.length - 1; x >= 0 ; x--)
               {
-                $post_clone = $("#post").clone();
-                $post_clone.find("#input_panel").attr("id", "input_panel_" + posts[x].id_post);
-                $post_clone.find("#comment_insert").attr("id", "comment_insert_" + posts[x].id_post);
-                $post_clone.find("#creation_date").text(posts[x].created_at);
-                $post_clone.attr("id", "post_" + posts[x].id_post);
-                $post_clone.find("#post_u_name").text(posts[x].auth_name + " " + posts[x].auth_surname);
-                $post_clone.find("#post_pic_path").attr('src', posts[x].pic_path);
-                $post_clone.find("#post_content").text(posts[x].content);
-                $post_clone.find("#like_butt").text(posts[x].likes);
-                $post_clone.find("#insert_after").attr('id', "insert_after" + posts[x].id_post);
+                $post_clone = createPost(posts[x]);
                 $post_clone.insertAfter("#post_" + $post_id);
                 $post_clone.show();
                 $("#comment_panel").hide();
@@ -265,12 +306,7 @@ function loadOlder(){
                   //carico i commenti
                   if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
                     for(j = 0; j < el.comments.length; j++){
-                      $comment_clone = $("#comment_panel").clone();
-                      $comment_clone.attr("id", "comment_panel_" + el.comments[j].id_comment);
-                      $comment_clone.find("#comm_pic_path").attr('src', el.comments[j].pic_path);
-                      $comment_clone.find("#comment_author").text(el.comments[j].auth_name + " " + el.comments[j].auth_surname);
-                      $comment_clone.find("#comment_created_at").text(el.comments[j].created_at);
-                      $comment_clone.find("#comment_content").text(el.comments[j].content);
+                      $comment_clone = createcomment(el.comments[j]);
                       $comment_clone.insertBefore("#comment_insert_" + el.id_post);
                       $comment_clone.show();
                 }
@@ -280,10 +316,8 @@ function loadOlder(){
             else{
               $("#load").text("Nothing More!");
             }
-
           }
         })
-
 }
 
 //Caricamento dei post
@@ -295,6 +329,7 @@ $(document).ready(function(){
          data: { post_id: -1 },
          success : function (posts)
          {
+           console.log(posts);
            onLoad(posts);
          }
      });

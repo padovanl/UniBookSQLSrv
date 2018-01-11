@@ -20,8 +20,9 @@ class PostViewModel //extends Model
     public $likes;
     public $dislike;
     public $userlike;
+    public $ban;
 
-    public function __construct($id_post, $auth_name, $auth_surname, $pic_path, $content, $created_at, $updated_at, $fixed, $id_auth, $comments, $likes, $dislike, $userlike) {
+    public function __construct($id_post, $auth_name, $auth_surname, $pic_path, $content, $created_at, $updated_at, $fixed, $id_auth, $comments, $likes, $dislike, $userlike, $ban) {
        $this->id_post = $id_post;
        $this->auth_name = $auth_name;
        $this->auth_surname = $auth_surname;
@@ -35,6 +36,7 @@ class PostViewModel //extends Model
        $this->likes = $likes;
        $this->dislike = $dislike;
        $this->userlike = $userlike;
+       $this->ban = $ban;
    }
 }
 

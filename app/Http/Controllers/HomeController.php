@@ -13,11 +13,10 @@ use App\PostPage;
 use App\CommentUser;
 use App\CommentU;
 use App\CommentP;
-use App\LikePost;
-use App\LikeComments;
 use App\PostViewModel;
 use App\CommentViewModel;
 use App\LikeComment;
+use App\LikePost;
 
 use Illuminate\Support\Facades\DB;
 
@@ -116,8 +115,8 @@ class HomeController extends Controller{
                                                       $comment['id_post'], '0',
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $comment['id_author'])->where('id_comment', $comment['id_comment'])->get(),
-                                                      $comment['id_author']));
+                                                      LikeComment::where('id_user', $comment['id_author'])->where('id_comment', $comment['id_comment'])->first()['like'],
+                                                      $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
           }
           else{
             array_push($tmp_comm, new CommentViewModel($comment['id_comment'], Page::where('id_page', $comment['id_author'])->first()->nome,
@@ -127,8 +126,8 @@ class HomeController extends Controller{
                                                       $comment['id_post'], '0',
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $comment['id_author'])->where('id_comment', $comment['id_comment'])->get(),
-                                                      $comment['id_author']));
+                                                      LikeComment::where('id_user', $comment['id_author'])->where('id_comment', $comment['id_comment'])->first()['like'],
+                                                      $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
           }
 
         }
@@ -141,7 +140,8 @@ class HomeController extends Controller{
                                       $post['is_fixed'], $post['id_author'], $tmp_comm,
                                       LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
                                       LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->get()));
+                                      LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->first()['like'],
+                                      User::where('id_user', $post['id_author'])->first()['ban']));
       }
       else{
         array_push($toreturn, new PostViewModel($post['id_post'], Page::where('id_page', $post['id_author'])->first()->nome,
@@ -151,7 +151,8 @@ class HomeController extends Controller{
                                       $post['is_fixed'], $post['id_author'], $tmp_comm,
                                       LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
                                       LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->get()));
+                                      LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->first()['like'],
+                                      User::where('id_user', $post['id_author'])->first()['ban']));
       }
     }
     if($request->input('post_id') == '-1'){
@@ -182,38 +183,136 @@ class HomeController extends Controller{
     }
   }
 
+  public function reaction(Request $request){
+    //manca controllo bontà dei parametri
+    $like = NULL;
+    switch(request('action')){
+      case "like":
+        $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
+        if(($request) && ($record['like'] == '1')){
+          //se premo di nuovo il pulsante elimino il record
+          DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => null)));
+        }
+        else if($record){
+          DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => '1'));
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '1')));
+        }
+        else{
+          $like = new LikePost();
+          $like->id_post = request('id');
+          $like->like = 1;
+          $like->id_user = Cookie::get('session');
+          $like->save();
+          return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+        }
+        break;
 
+      case "dislike":
+        $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
+        if(($request) && ($record['like'] == '0')){
+          //se premo di nuovo il pulsante elimino il record
+          DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => null)));
+        }
+        else if($record){
+          DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => '0'));
+          return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => '1')));
+        }
+        else{
+          $like = new LikePost();
+          $like->id_post = request('id');
+          $like->like = 0;
+          $like->id_user = Cookie::get('session');
+          $like->save();
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+        }
+        break;
+
+      case "likecomm":
+        $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
+        if(($request) && ($record['like'] == '1')){
+          //se premo di nuovo il pulsante elimino il record
+          DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => null)));
+        }
+        else if($record){
+          DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => '1'));
+          return(json_encode(array('type' => 'comm', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '1')));
+        }
+        else{
+          $like = new LikeComment();
+          $like->id_comment = request('id');
+          $like->like = 0;
+          $like->id_user = Cookie::get('session');
+          $like->save();
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+        }
+        break;
+
+      case "dislikecomm":
+        $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
+        if(($request) && ($record['like'] == '0')){
+          //se premo di nuovo il pulsante elimino il record
+          DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => null)));
+        }
+        else if($record){
+          DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => '0'));
+          return(json_encode(array('type' => 'comm', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => '1')));
+        }
+        else{
+          $like = new LikeComment();
+          $like->id_comment = request('id');
+          $like->like = 0;
+          $like->id_user = Cookie::get('session');
+          $like->save();
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+        }
+        break;
+    }
+
+  }
 
   public function newPost(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    //verifica dei campi
-    $post = new Post();
-    $post->content =  $request->input('content');
-    $post->created_at = now();
-    $post->updated_at = now();
-    $post->fixed = $request->input('is_fixed');
-    $post->id_author = $logged_user['id_user'];
-    $post->save();
-    $post_tmp = Post::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
-    DB::table('posts_user')->insert(['id_user' => $logged_user['id_user'], 'id_post' => $post_tmp['id_post']]);
-    $post = new PostViewModel($post_tmp['id_post'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'], $post_tmp['content'], $post_tmp['created_at'], $post_tmp['updated_at'], $post_tmp['fixed'], $post_tmp['id_author'], [], [], [], []);
-    return(json_encode($post));
-  }
+      //verifica dei campi
+      if($logged_user['ban'] != 1){
+        $post = new Post();
+        $post->content =  $request->input('content');
+        $post->created_at = now();
+        $post->updated_at = now();
+        $post->fixed = $request->input('is_fixed');
+        $post->id_author = $logged_user['id_user'];
+        $post->save();
+        $post_tmp = Post::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
+        DB::table('posts_user')->insert(['id_user' => $logged_user['id_user'], 'id_post' => $post_tmp['id_post']]);
+        $post = new PostViewModel($post_tmp['id_post'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'], $post_tmp['content'], $post_tmp['created_at'], $post_tmp['updated_at'], $post_tmp['fixed'], $post_tmp['id_author'], [], [], [], [], $logged_user['ban']);
+        return(json_encode($post));
+      }
+      else{
+        return(json_encode(new PostViewModel(null, $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],null, null, null,  null, null, null, null, null, null, $logged_user['ban'])));
+      }
+    }
 
   public function newComment(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    $comment = new CommentU();
-    $comment->created_at = now();
-    $comment->updated_at = now();
-    $comment->content = $request->input('content');
-    $comment->id_author = $logged_user['id_user'];
-    $comment->id_post =  $request->input('id_post');
-    $comment->save();
-    $comm_tmp = CommentU::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
-    DB::table('comments_user')->insert(['id_user' => $logged_user['id_user'], 'id_comment' => $comm_tmp['id_comment']]);
-    $comment = new CommentViewModel($comm_tmp['id_comment'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],$comm_tmp['content'], $comm_tmp['created_at'], $comm_tmp['updated_at'], $comm_tmp['id_post'], NULL, [], [], NULL, $logged_user['id_user']);
-    return(json_encode($comment));
-
+    if($logged_user['ban'] != 1){
+      $comment = new CommentU();
+      $comment->created_at = now();
+      $comment->updated_at = now();
+      $comment->content = $request->input('content');
+      $comment->id_author = $logged_user['id_user'];
+      $comment->id_post =  $request->input('id_post');
+      $comment->save();
+      $comm_tmp = CommentU::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
+      DB::table('comments_user')->insert(['id_user' => $logged_user['id_user'], 'id_comment' => $comm_tmp['id_comment']]);
+      $comment = new CommentViewModel($comm_tmp['id_comment'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],$comm_tmp['content'], $comm_tmp['created_at'], $comm_tmp['updated_at'], $comm_tmp['id_post'], NULL, [], [], NULL, $logged_user['id_user'], $logged_user['ban']);
+      return(json_encode($comment));
+    }
+    else{
+      return(json_encode(new CommentViewModel(null, $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],null, null, null, null, NULL, [], [], NULL, $logged_user['id_user'], $logged_user['ban'])));
+    }
   }
 
   //prendendo in ingresso un id, restituisce l'utente relativo
