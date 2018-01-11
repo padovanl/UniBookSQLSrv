@@ -1,0 +1,20 @@
+<?php
+
+namespace App;
+
+//use Illuminate\Database\Eloquent\Model;
+
+class DetailsPageAdminViewModel //extends Model
+{
+
+    public $id_page;
+    public $nome;
+    public $ban;
+    public $linkAdmin;
+    public $nomeAdmin;
+    public $totPage;
+    public $created_at;
+    public $picPath;
+
+
+}

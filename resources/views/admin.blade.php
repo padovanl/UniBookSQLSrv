@@ -19,6 +19,9 @@
           <li class="nav-item">
             <a class="nav-link" href="#utenti" onclick="changeSelectedSection(4)" id="sezione4">Utenti</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pagine" onclick="changeSelectedSection(5)" id="sezione5">Pagine</a>
+          </li>
         </ul>
       </nav>
 
@@ -370,6 +373,90 @@
             </nav>
           </div>
         </div>
+
+
+
+        <!--PAGINE-->
+        <h2 id="pagine">Pagine</h2>
+        <div class="alert alert-primary" role="alert">
+          <div class="row">
+            <div class="col-md-3">
+                <label for="selectpickerPagelabel">Stato pagina:</label>           
+                 <select class="selectpicker" id="selectpickerPage">
+                  <option selected>Tutte</option>
+                  <option>Bloccate</option>
+                </select> 
+            </div>
+            <div class="col-md-6">
+               <label for="textIdPagelabel">Id pagina:</label>           
+               <input type="text" id="textIdPage"> 
+            </div>
+            <div class="col-md-1">
+              
+            </div>
+            <div class="col-md-2">
+               <button type="button" class="btn btn-danger" id="btnClearFilterPage"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;&nbsp;Pulisci filtri</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Id pagina</th>
+                    <th>Nome</th>
+                    <th>Data creazione</th>
+                    <th>Stato</th>
+                    <th>Opzioni</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyPage">
+                  @foreach($pageList as $p)
+                    <tr id="userRow{{$r->id_report}}">
+                      <td>{{$p->id_page}}</td>
+                      <td>{{$p->nome}}</td>
+                      <td>{{$p->created_at->format('M j, Y H:i')}}</td>
+                      <td>
+                        @if($p->ban == 1)
+                          <span class="badge badge-danger">Bloccata</span>
+                        @else
+                          <span></span>
+                        @endif
+                      </td>
+                      <td>
+                       <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="#pageModal" data-toggle="modal" data-whatever="{{$p->id_page}}" id="openPage">
+                            <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>
+                        </div>
+                      </div>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center" id="paginationPageUl">
+                
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+
+
+
       </main>
     </div>
   </div>
@@ -541,6 +628,52 @@
   </div>
 </div>
 
+<!-- page modal -->
+<div class="modal fade bd-example1-modal-lg" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title">Dettagli pagina</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 id="nomePage"></h4>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-4">
+            <img src="../assets/images/facebook4.jpeg" class="rounded-circle pull-left" id="imgPage" height="300" width="300">
+          </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-6">
+            <h5 id="adminPage"></h5>
+            <h5 id="dataCreazionePage"></h5>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+         <div class="row">
+          <div class="col-md-12">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>      
+           <button type="button" class="btn btn-danger" data-dismiss="modal" id="toggleBanPage">Blocca pagina</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
   <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -612,7 +745,10 @@
       }).done(function (data) {
           currentPage = page;
           manageRow(data);  
-          generatePagination(data[0].totPage, page);
+          if(data.length > 0)
+            generatePagination(data[0].totPage, page);
+          else
+            generatePagination(1, 1);
       }).fail(function () {
           alert('Reports could not be loaded.');
       });
@@ -838,7 +974,10 @@
       }).done(function (data) {
           currentPageComment = page;
           manageRowComment(data);  
-          generatePaginationComment(data[0].totPage, page);
+          if(data.length > 0)
+            generatePaginationComment(data[0].totPage, page);
+          else
+            generatePaginationComment(1, 1);
       }).fail(function () {
           alert('Reports could not be loaded.');
       });
@@ -976,7 +1115,10 @@
       }).done(function (data) {
           currentPageUser = page;
           manageRowUser(data);  
-          generatePaginationUser(data[0].totPage, page);
+          if(data.length > 0)
+            generatePaginationUser(data[0].totPage, page);
+          else
+            generatePaginationUser(1, 1);
       }).fail(function () {
           alert('Users could not be loaded.');
       });
@@ -1022,13 +1164,13 @@
         rows = rows + '</td>';
         rows = rows + '</tr>';
 
-        $('#toggleBanUser' + value.id_user).click(function(){
-          if(value.ban == 1){
-            sbloccaUtente(value.id_user);
-          }else{
-            bloccaUtente(value.id_user);
-          }
-        });
+        //$('#toggleBanUser' + value.id_user).click(function(){
+        //  if(value.ban == 1){
+        //    sbloccaUtente(value.id_user);
+        //  }else{
+        //    bloccaUtente(value.id_user);
+        //  }
+        //});
 
 
       });
@@ -1216,10 +1358,205 @@
 
 
     //FINE GESTIONE UTENTI
+
+    //GESTIONE PAGINE
+    var currentPagePage = 1;
+    var sceltaPage = 'Tutte'; //bloccate, tutte
+    var idPage = -1;
+
+    generatePaginationPage({{$num_page_page}}, currentPagePage);
+
+    function generatePaginationPage(nPage, currentPage){
+      var html;
+      if(currentPage == 1){
+        html = '<li class="page-item disabled" id="previousPostPage">';
+        html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
+        html = html + '</li>';
+      }else{
+        html = '<li class="page-item" id="previousPostPage">';
+        html = html + ' <button class="page-link" tabindex="-1" onclick="getPagePage(' + (currentPage - 1) + ')"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button>';
+        html = html + '</li>';          
+      }
+
+      var i;
+      for(i = 0; i < nPage; i++){
+        if((i + 1) == currentPage){
+          html = html + '<li class="page-item active"><button class="page-link" onclick="getPagePage(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
+          currentPage = i + 1;
+        }else{
+          html = html + '<li class="page-item"><button class="page-link" onclick="getPagePage(' + (i + 1) + ')">' + (i + 1) + '</button></li>';
+        }
+      }
+      if(currentPage == nPage){
+        html = html + '<li class="page-item disabled" id="previousPostPage">';
+        html = html + ' <button class="page-link" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
+        html = html + '</li>';
+      }else{
+        html = html + '<li class="page-item" id="previousPostPage">';
+        html = html + ' <button class="page-link" tabindex="-1" onclick="getPagePage(' + (currentPage + 1) + ')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>';
+        html = html + '</li>';
+      }
+     
+      $('#paginationPageUl').html(html);
+    }
+
+    function getPagePage(page){
+      $.ajax({
+          url : '/admin/dashboard/page',
+          dataType: 'json',
+          type: 'POST',
+          data: { page: page, filter: sceltaPage, idPage: idPage }
+      }).done(function (data) {
+          currentPagePage = page;
+          manageRowPage(data);  
+          if(data.length > 0)
+            generatePaginationPage(data[0].totPage, page);
+          else
+            generatePaginationPage(1, 1);
+      }).fail(function () {
+          alert('Pages could not be loaded.');
+      });
+    }
+
+    function manageRowPage(data) {
+      var rows = '';
+      $.each(data, function (key, value) {
+        rows = rows + '<tr>';
+        rows = rows + '<td>' + value.id_page + '</td>';
+        rows = rows + '<td>' + value.nome + '</td>';
+        rows = rows + '<td>' + value.created_at + '</td>';
+        if(value.ban == 1){
+          rows = rows + '<td><span class="badge badge-danger" id="labelStatusPage' + value.id_page + '">Bloccato</span></td>';
+        }else{
+          rows = rows + '<td><span id="labelStatusPage"></span></td>';
+          
+        }
+        rows = rows + '<td>';
+        rows = rows + ' <div class="dropdown">';
+        rows = rows + '   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        rows = rows + '     <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;Opzioni';
+        rows = rows + '     </button>';
+        rows = rows + '     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+        rows = rows + '     <a class="dropdown-item edit-item" href="#pageModal" data-toggle="modal" data-whatever="' + value.id_page + '">';
+        rows = rows + '        <i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualizza dettagli</a>';
+        rows = rows + '   </div>';
+        rows = rows + '  </div>';
+        rows = rows + '</td>';
+        rows = rows + '</tr>';
+
+
+      });
+      $("#tbodyPage").html(rows);
+    }
+
+
+    $('#pageModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      $.ajax({
+          dataType: 'json',
+          type: 'POST',
+          url: '/admin/dashboard/getPageDetails',
+          data: { id_page: recipient }
+      }).done(function (data) {
+        console.log(data);
+        //post = data;
+        var modal = $('#pageModal');
+        modal.find('.modal-title').text('Dettagli pagina ' + recipient);
+        $('#nomePage').text(data.nome);
+        $('#adminPage').html('Amministratore: <a href="' + data.linkAdmin + '">' + data.nomeAdmin + '</a>');
+        $('#dataCreazionePage').text('Data creazione: ' + data.created_at);
+        $('#imgPage').attr("src", data.picPath);
+
+        if(data.ban == false){
+          $('#toggleBanPage').removeClass('btn-primary').addClass('btn-danger').text('Blocca pagina');
+          $('#toggleBanPage').click(function(){
+            //rimuovi admin
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/bloccaPage',
+              data: { id_page: recipient }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatusPage' + recipient).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+              getPagePage(currentPagePage);
+              toastr.success(data.body, data.message , { timeOut: 5000 });
+            });
+          });
+        }else{
+          $('#toggleBanPage').addClass('btn-primary').removeClass('btn-danger').text('Sblocca pagina');
+          $('#toggleBanPage').click(function(){
+            //rendi admin
+            $.ajax({
+              dataType: 'json',
+              type: 'POST',
+              url: '/admin/dashboard/sbloccaPage',
+              data: { id_page: recipient }
+            }).done(function (data) {
+              console.log(data.message);
+              $('#labelStatusPage' + recipient).text(data.label).removeClass(data.classLabelRemove).addClass(data.classLabelAdd);
+              getPagePage(currentPagePage);
+              toastr.success(data.body, data.message , { timeOut: 5000 });
+            });
+          });
+
+        }
+
+
+
+      });
+    });
+
+    $('#pageModal').on('hide.bs.modal', function(event){
+      //rimuovo gli eventi una volta che chiudo il modal
+      $('#toggleBanPage').unbind();
+    });
+
+
+    $('#selectpickerPage').change(function(){
+      var str = $('#selectpickerPage option:selected').text();
+      sceltaPage = str;
+      currentPagePage = 1;
+      getPagePage(currentPagePage);
+    }).change();
+
+    $('#textIdPage').keyup(function(){
+      var str = $('#textIdPage').val();
+      if(str == "")
+        idPage = -1;
+      else
+        idPage = str;
+      currentPagePage = 1;
+      getPagePage(currentPagePage);
+    });
+
+    $('#btnClearFilterPage').click(function(){
+      var change = false;
+      if(sceltaPage != 'Tutte'){
+        sceltaPage = 'Tutte';
+        change = true;
+      }
+      if(idPage != -1){
+        idPage = -1;
+        change = true;
+      }
+      if(change){
+        currentPagePage = 1;
+        $('#textIdPage').val("");
+          $('#selectpickerPage').val('Tutte');
+        getPagePage(currentPagePage);
+      }
+    });
+
+
+
+    //FINE GESTIONE PAGINE
   </script>
 
-  //grafici
+
   <script>
+      //grafici
     $(document).ready(function() {
       //barChart();
       //lineChart();
@@ -1318,7 +1655,7 @@
   <script>
     function changeSelectedSection(id) {
       var idA;
-      for (var i = 1; i < 5; i++) {
+      for (var i = 1; i < 6; i++) {
         if (i == id) {
           idA = "sezione" + id;
           document.getElementById(idA).classList.add('active');
