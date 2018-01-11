@@ -27,6 +27,7 @@ use App\DetailsReportViewModel;
 use App\DetailsReportCommentViewModel;
 use App\DetailsUserAdminViewModel;
 use App\AdminDonutChartViewModel;
+use App\DetailsPageAdminViewModel;
 
 class AdminController extends Controller
 {
@@ -83,7 +84,19 @@ class AdminController extends Controller
     if(($userList->count() % $el_per_page_comment) != 0){
      $num_page_user++;
     }
-    $userList = $userList->splice($current_page_comment * $el_per_page - 5, 5);
+    $userList = $userList->splice($current_page_user * $el_per_page - 5, 5);
+
+
+    //lista pagine
+    $pageList = Page::latest()->get();
+    $el_per_page_page = 5;
+    $current_page_page = 1;
+    $num_page_page = intval(($pageList->count()/$el_per_page_page));
+    if(($pageList->count() % $el_per_page_page) != 0){
+     $num_page_page++;
+    }
+    $pageList = $pageList->splice($current_page_page * $el_per_page - 5, 5);
+
     //recupero numero utenti totali
     $totUser = User::where('confirmed', '=', 1)->count();
     //recupero numero post totali
@@ -118,7 +131,7 @@ class AdminController extends Controller
             }
         }
     }
-    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user', 'donutChart'));
+    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user', 'donutChart', 'pageList', 'num_page_page'));
   }
 
   public function getPostDetails(Request $request){
@@ -647,6 +660,105 @@ class AdminController extends Controller
     }else{
         return response()->json(['message' => 'Errore!', 'body' => 'Non hai i permessi necessari.']);
     }
+  }
+
+
+  //////
+
+
+  public function listPage(Request $request){
+
+    $page = $request->input('page');
+    //$report = ReportPost::latest()->get();
+
+    $filter = $request->input('filter');
+    if(!$filter || $filter == "Tutte"){
+        $pages = Page::latest()->get();
+    }else{
+        $pages = Page::where('ban', '=', 1)->latest()->get();
+    }
+
+
+    $id_page = intval($request->input('idPage'));
+    if($id_page != -1){
+        $c = collect();
+        foreach ($pages as $p) {
+            if(strpos($p->id_page, (string)$id_page) || ($p->id_page == $id_page))
+                $c->push($p);
+        }
+        $pages = $c;  
+    }
+
+
+    $el_per_page = 5;
+    $num_page_page = intval(($pages->count()/$el_per_page));
+    if(($pages->count() % $el_per_page) != 0){
+     $num_page_page++;
+    }  
+    
+
+
+    $pageList = $pages->splice($page * 5 - 5, 5);    
+
+
+    $array = array();
+    //$length = count($reportList);
+    $x = 0;
+
+    //$current_page_post = 1;
+
+    
+    foreach ($pageList as $p) {
+        $viewModel = new DetailsPageAdminViewModel();
+        $viewModel->id_page = $p->id_page;
+        $viewModel->nome = $p->nome;
+        $viewModel->ban = $p->ban;
+        $viewModel->created_at = $p->created_at->format('M j, Y H:i');
+        $viewModel->picPath = $p->pic_path;
+        $viewModel->totPage = $num_page_page;
+        $array[$x] = $viewModel;
+        $x++;
+    }
+
+    
+    return response()->json($array); 
+  }
+
+  public function getPageDetails(Request $request){
+    $id = $request->input('id_page');
+    $p = Page::where('id_page', '=', $id)->first();
+
+    $viewModel = new DetailsPageAdminViewModel();
+    $viewModel->id_page = $p->id_page;
+    $viewModel->nome = $p->nome;
+    $viewModel->ban = $p->ban;
+    $admin = User::where('id_user', '=', $p->id_user)->first();
+    $viewModel->linkAdmin = '/profile/user/' . $admin->id_user;
+    $viewModel->nomeAdmin = $admin->name . ' ' . $admin->surname;
+    $viewModel->created_at = $p->created_at->format('M j, Y H:i');
+    $viewModel->picPath = '../' . $p->pic_path;
+    $viewModel->totPage = 1;
+
+    return response()->json($viewModel);
+
+
+  }
+
+
+public function bloccaPage(Request $request){
+    $id = $request->input('id_page');
+
+    Page::where([['id_page', '=', $id], ['ban', '=', false]])->update(['ban' => true]);
+
+    return response()->json(['message' => 'Operazione completata!', 'body' => 'La pagina è stata bloccata. Non potrà scrivere post e commentare su UniBook.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
+  }
+
+  public function sbloccaPage(Request $request){
+    $id = $request->input('id_page');
+
+    Page::where([['id_page', '=', $id], ['ban', '=', true]])->update(['ban' => false]);
+
+    return response()->json(['message' => 'Operazione completata!', 'body' => 'La pagina è stata sbloccata.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
   }
 
 

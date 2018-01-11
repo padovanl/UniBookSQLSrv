@@ -57,6 +57,10 @@ Route::post('/admin/dashboard/retrocediUser', 'AdminController@retrocediUser');
 Route::post('/admin/dashboard/bloccaUser', 'AdminController@bloccaUser');
 Route::post('/admin/dashboard/sbloccaUser', 'AdminController@sbloccaUser');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
+Route::post('/admin/dashboard/page', 'AdminController@listPage');
+Route::post('/admin/dashboard/getPageDetails', 'AdminController@getPageDetails');
+Route::post('/admin/dashboard/bloccaPage', 'AdminController@bloccaPage');
+Route::post('/admin/dashboard/sbloccaPage', 'AdminController@sbloccaPage');
 
 //Messaggi
 Route::get('/message', 'MessageController@index');
