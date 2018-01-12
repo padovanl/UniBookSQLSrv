@@ -10,7 +10,7 @@
                           <h4>New Post</h4>
                           <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
                             <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                              <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
+                              <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
                               <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
                       </div>
@@ -79,7 +79,7 @@
                                          <hr>
 
                                          <div class="comment-form">
-                                           <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
+                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text"></textarea>
                                          </div>
                                      </div>
                                  </section>
@@ -105,7 +105,7 @@
   .pre-scrollable {
     max-height: 800px;
     overflow-y: scroll;
-    overflow-x: hidden; 
+    overflow-x: hidden;
   }
 </style>
 
