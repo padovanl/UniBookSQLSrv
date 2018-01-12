@@ -2,31 +2,32 @@
 
 @section('content')
   <article class="content">
-  <div class="padding">
+  <div class="padding pre-scrollable" style="max-height: 800px;">
           <!-- content -->
               <!-- main col right -->
                   <div class="well">
                       <div>
                           <h4>New Post</h4>
-                          <div class="input-group text-center">
+                          <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
                             <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                              <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
+                              <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
                               <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
                       </div>
                   </div>
                   <!--Pannello Post-->
                   <div class="container" id="post">
-                  	<div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
                           <div class="panel panel-default">
                               <div class="panel-body">
                                  <section class="post-heading">
                                       <div class="row">
-                                          <div class="col-md-11">
+                                          <div class="col-md-10">
                                               <div class="media">
                                                 <div class="media-left">
                                                   <a href="#">
-                                                    <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="...">
+                                                    <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
                                                   </a>
                                                 </div>
                                                 <div class="media-body">
@@ -35,9 +36,10 @@
                                                 </div>
                                               </div>
                                           </div>
-                                           <div class="col-md-1">
-                                               <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                           </div>
+                                          <div class="col-md-2">
+                                            <a href="#" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                          </div>
+
                                       </div>
                                  </section>
                                  <section class="post-body">
@@ -58,7 +60,7 @@
                                               <div class="media">
                                                 <div class="media-left">
                                                   <a href="#">
-                                                    <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="...">
+                                                    <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="..." style="border-radius: 50%;">
                                                   </a>
                                                 </div>
                                                 <div class="media-body">
@@ -78,20 +80,39 @@
                                          <hr>
 
                                          <div class="comment-form">
-                                           <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
+                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text"></textarea>
                                          </div>
                                      </div>
                                  </section>
                               </div>
                           </div>
-                  	</div>
+                    </div>
+                    </div>
+
                   </div>
 
   </div><!-- /padding -->
-  <button id="load" onclick="loadOlder()" type="button"/>Load More..
+  <div class="row">
+    <div class="col-md-12" style="text-align:center;">
+        <button id="load" onclick="loadOlder()" type="button" class="button btn-primary" style="border-radius: 5px;">Carica post più vecchi...</button>
+    </div>
+  </div>
+
 </article>
 <aside class="side">Sidebar</aside>
 </div>
+
+<style>
+  .pre-scrollable {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+</style>
+
+<script>
+  $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
+  $
+</script>
 
 <script>
 
@@ -101,7 +122,7 @@ function commentfocus(id){
 
 
 function reaction(id){
-  console.log(id);
+  console.log(id)
   $.ajax({
     method: "POST",
     url: "/home/reaction",
@@ -115,6 +136,7 @@ function reaction(id){
            $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
            break;
          case "comm":
+          console.log("like: " + data.status_like + " dislike: " + data.status_dislike);
            $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
            $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
            break;
@@ -127,21 +149,20 @@ function createcomment(comment){
   $comment_clone = $("#comment_panel").clone();
   $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
   $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
-  $comment_clone.find("#comment_author").text(comment.auth_name + " " + comment.auth_surname);
+  $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
   $comment_clone.find("#comment_created_at").text(comment.created_at);
   $comment_clone.find("#comment_content").text(comment.content);
-  if(comment.userlike == 0){
-    console.log("asd");
-    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_comment);;
-    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
+  if(comment.userlike == '0'){
+    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_post);;
+    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
   }
-  else if(comment.userlike == 1){
-    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_comment);
-    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+  else if(comment.userlike == '1'){
+    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_post);
+    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
   }
   else{
-    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
-    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
+    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
   }
   return($comment_clone);
 }
@@ -153,7 +174,7 @@ function createPost(data){
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
   $post_clone.find("#creation_date").text(data.created_at);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
-  $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
+  $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname);
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
   $post_clone.find("#like_butt").text(data.likes);
@@ -187,7 +208,6 @@ function newComment(e, id){
             data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], _token: '{{csrf_token()}}'},
              success : function (data)
              {
-               console.log(data);
                if(data.ban != 1){
                  $("#comment_insert_" + id.split("_")[2]).val('');
                  createcomment(data);

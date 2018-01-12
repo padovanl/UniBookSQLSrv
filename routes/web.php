@@ -19,9 +19,11 @@ Route::get('/register/forgotPassword', 'RegisterController@forgotPassword')->nam
 Route::post('/register/sendEmailForgotPassword', 'RegisterController@sendEmailForgotPassword');
 Route::get('/register/resetPassword/{id_user}', 'RegisterController@resetPassword')->name('resetPassword');
 Route::post('/register/resetPassword/{id_user}', 'RegisterController@resetPasswordPost');
-
 Route::resource('/register', 'RegisterController');
 
+//General App Routes: messaggi, notifiche, richieste di amicizia
+Route::post('/getnotifications', 'GeneralAppController@getNotifications');
+Route::post('/getcountNewMessage', 'GeneralAppController@countNewMessage');
 
 //Home Routes
 Route::get('/', 'HomeController@landing');
@@ -67,7 +69,6 @@ Route::post('/admin/dashboard/sbloccaPage', 'AdminController@sbloccaPage');
 Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
-Route::post('/message/countNewMessage', 'MessageController@countNewMessage');
 
 //Authentication
 #Route::post('register', 'authController@register');

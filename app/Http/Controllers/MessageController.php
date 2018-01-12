@@ -104,9 +104,5 @@ class MessageController extends Controller
         return response()->json(['message' => 'Operazione completata']);
     }
 
-    public function countNewMessage(Request $request){
-        $id = $request->input('id_user');
-        $newMessages = Message::where([['receiver', '=', $id], ['letto', '=', false]])->count();
-        return response()->json(['newMessages' => $newMessages]);
-    }
+  
 }
