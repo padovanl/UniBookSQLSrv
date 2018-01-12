@@ -92,7 +92,7 @@
             if(data.newMessages > 0){
               var html = '&nbsp;&nbsp;<span class="badge badge-danger" style="font-size:10px;">' + data.newMessages + '</span>';
               $('#btnMessage').append(html);
-              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewMessages" data-count="' + data.newMessages + '"><i class="fa fa-commenting fa-stack-1x" aria-hidden="true"></i></span>';
+              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewMessages" data-count="' + data.newMessages + '"><i class="fa fa-commenting fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
               $('#navBarMessages').html(htmlNavBar);
             }else{
               var htmlNavBar = '<i class="fa fa-commenting fa-lg" aria-hidden="true"></i>';
