@@ -47,10 +47,10 @@
                                      <hr>
                                      <div class="post-footer-option container">
                                           <ul id="option_" class="list-unstyled">
-                                              <li><a><i onclick="reaction(this.id)" id="like" class="glyphicon glyphicon-thumbs-up"> Like</i></a></li>
-                                              <li><a><i onclick="reaction(this.id)" id="dislike" class="glyphicon glyphicon-thumbs-down"> Dislike</i></a></li>
-                                              <li><a><i onclick="commentfocus(this.id)" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                              <li><a><i onclick="share(this.id)" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"> Like</i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"> Dislike</i></a></li>
+                                              <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                                              <li><a><i onclick="share(this.id)" style="cursor:pointer;" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
                                           </ul>
                                      </div>
                                      <div class="post-footer-comment-wrapper">
@@ -68,8 +68,8 @@
                                                 </div>
                                                 <div class="post-footer-option-container">
                                                 <ul class="list-unstyled">
-                                                  <li><a><i onclick="reaction(this.id)" id="likecomm" class="glyphicon glyphicon-thumbs-up">Like</i></a></li>
-                                                  <li><a><i onclick="reaction(this.id)" id="dislikecomm" class="glyphicon glyphicon-thumbs-down">Dislike</i></a></li>
+                                                  <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up">Like</i></a></li>
+                                                  <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down">Dislike</i></a></li>
                                                 </ul>
                                               </div>
                                               </div>
@@ -101,6 +101,7 @@ function commentfocus(id){
 
 
 function reaction(id){
+  console.log(id);
   $.ajax({
     method: "POST",
     url: "/home/reaction",
@@ -110,43 +111,13 @@ function reaction(id){
      {
        switch (data.type) {
          case "post":
-           if((data.change == null) && (data.like == '1')){
-               $("#like_" + data.id_post).removeAttr('style');
-           }
-           else if((data.change == '0') && (data.like == '1')){
-               $("#like_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
-           }
-           else if((data.change == null) && (data.like == '0')){
-               $("#like_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
-           }
-           else if((data.change == '1') && (data.like == '0')){
-               $("#like_" + data.id_post).removeAttr('style');
-               $("#dislike_" + data.id_post).css({ 'color': 'red', 'font-size': '105%' });
-           }
-           else if((data.change == '1') && (data.like == '1')){
-             $("#dislike_" + data.id_post).removeAttr('style');
-             $("#like_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
-           }
+           $("#like_" + data.id_post).css({ 'color': data.status_like })
+           $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
            break;
-           case "comm":
-             if((data.change == null) && (data.like == '1')){
-                 $("#likecomm_" + data.id_post).removeAttr('style');
-             }
-             else if((data.change == '0') && (data.like == '1')){
-                 $("#likecomm_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
-             }
-             else if((data.change == null) && (data.like == '0')){
-                 $("#likecomm_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
-             }
-             else if((data.change == '1') && (data.like == '0')){
-                 $("#likecomm_" + data.id_post).removeAttr('style');
-                 $("#dislikecomm_" + data.id_post).css({ 'color': 'red', 'font-size': '105%' });
-             }
-             else if((data.change == '1') && (data.like == '1')){
-               $("#dislikecomm_" + data.id_post).removeAttr('style');
-               $("#likecomm_" + data.id_post).css({ 'color': 'blue', 'font-size': '105%' });
-             }
-             break;
+         case "comm":
+           $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
+           $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
+           break;
        }
      }
   })
@@ -159,18 +130,24 @@ function createcomment(comment){
   $comment_clone.find("#comment_author").text(comment.auth_name + " " + comment.auth_surname);
   $comment_clone.find("#comment_created_at").text(comment.created_at);
   $comment_clone.find("#comment_content").text(comment.content);
-  if(comment.userlike == '0'){
-    $comment_clone.find("#dislikecomm").css({ 'color': 'red', 'font-size': '105%' });
+  if(comment.userlike == 0){
+    console.log("asd");
+    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_comment);;
+    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
   }
-  else if(comment.userlike == '1'){
-    $comment_clone.find("#likecomm").css({ 'color': 'blue', 'font-size': '105%'});
+  else if(comment.userlike == 1){
+    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_comment);
+    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
   }
-  $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
-  $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+  else{
+    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
+    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+  }
   return($comment_clone);
 }
 
 function createPost(data){
+  console.log(data);
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
@@ -182,13 +159,17 @@ function createPost(data){
   $post_clone.find("#like_butt").text(data.likes);
   $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
   if(data.userlike == '0'){
-    $post_clone.find("#dislike").css({ 'color': 'red', 'font-size': '105%' });
+    $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'like_' + data.id_post);;
+    $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
   }
   else if(data.userlike == '1'){
-    $post_clone.find("#like").css({ 'color': 'blue', 'font-size': '105%'});
+    $post_clone.find("#like").css({ 'color': 'blue'}).attr('id', 'like_' + data.id_post);
+    $post_clone.find("#dislike").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
   }
-  $post_clone.find("#like").attr('id', 'like_' + data.id_post);
-  $post_clone.find("#dislike").attr('id', 'dislike_' + data.id_post);
+  else{
+    $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'like_' + data.id_post);
+    $post_clone.find("#dislike").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
+  }
   $post_clone.find("#comment").attr('id', 'comment_' + data.id_post);
   $post_clone.find("#share").attr('id', 'share_' + data.id_post);
 
@@ -264,6 +245,7 @@ function onLoad(data){
   $("#post").hide();
   $("#comment_panel").hide();
   //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
+  console.log(data);
   for(var i = data.length - 1; i >= 0; i--)
   {
     $post_clone = createPost(data[i]);
@@ -329,7 +311,6 @@ $(document).ready(function(){
          data: { post_id: -1 },
          success : function (posts)
          {
-           console.log(posts);
            onLoad(posts);
          }
      });
