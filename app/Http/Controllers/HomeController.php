@@ -115,7 +115,7 @@ class HomeController extends Controller{
                                                       $comment['id_post'], '0',
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $comment['id_author'])->where('id_comment', $comment['id_comment'])->first()['like'],
+                                                      LikeComment::where('id_user', $logged_user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
                                                       $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
           }
           else{
@@ -126,7 +126,7 @@ class HomeController extends Controller{
                                                       $comment['id_post'], '0',
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $comment['id_author'])->where('id_comment', $comment['id_comment'])->first()['like'],
+                                                      null, //bisogna capire se la pagina può mettere like
                                                       $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
           }
 
@@ -140,7 +140,7 @@ class HomeController extends Controller{
                                       $post['is_fixed'], $post['id_author'], $tmp_comm,
                                       LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
                                       LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->first()['like'],
+                                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
                                       User::where('id_user', $post['id_author'])->first()['ban']));
       }
       else{
@@ -151,7 +151,7 @@ class HomeController extends Controller{
                                       $post['is_fixed'], $post['id_author'], $tmp_comm,
                                       LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
                                       LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $post['id_author'])->where('id_post', $post['id_post'])->first()['like'],
+                                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
                                       User::where('id_user', $post['id_author'])->first()['ban']));
       }
     }
@@ -189,14 +189,14 @@ class HomeController extends Controller{
     switch(request('action')){
       case "like":
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == '1')){
+        if(($request) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record
           DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
-          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => null)));
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
-        else if($record){
-          DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => '1'));
-          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '1')));
+        else if(($record) && ($record['like'] == 0)){
+          DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => 1));
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         else{
           $like = new LikePost();
@@ -204,20 +204,20 @@ class HomeController extends Controller{
           $like->like = 1;
           $like->id_user = Cookie::get('session');
           $like->save();
-          return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+          return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         break;
 
       case "dislike":
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == '0')){
+        if(($request) && ($record['like'] == 0)){
           //se premo di nuovo il pulsante elimino il record
           DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
-          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => null)));
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
-        else if($record){
-          DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => '0'));
-          return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => '1')));
+        else if(($record) && ($record['like'] == 1)){
+          DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => 0));
+          return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         else{
           $like = new LikePost();
@@ -225,41 +225,41 @@ class HomeController extends Controller{
           $like->like = 0;
           $like->id_user = Cookie::get('session');
           $like->save();
-          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+          return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         break;
 
       case "likecomm":
         $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == '1')){
+        if(($request) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record
           DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
-          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => null)));
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
-        else if($record){
-          DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => '1'));
-          return(json_encode(array('type' => 'comm', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '1')));
+        else if(($record) && ($record['like'] == 0)){
+          DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => 1));
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         else{
           $like = new LikeComment();
           $like->id_comment = request('id');
-          $like->like = 0;
+          $like->like = 1;
           $like->id_user = Cookie::get('session');
           $like->save();
-          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         break;
 
       case "dislikecomm":
         $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == '0')){
+        if(($request) && ($record['like'] == 0)){
           //se premo di nuovo il pulsante elimino il record
           DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
-          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => null)));
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
-        else if($record){
-          DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => '0'));
-          return(json_encode(array('type' => 'comm', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '0', 'change' => '1')));
+        else if(($record) && ($record['like'] == 1)){
+          DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => 0));
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         else{
           $like = new LikeComment();
@@ -267,7 +267,7 @@ class HomeController extends Controller{
           $like->like = 0;
           $like->id_user = Cookie::get('session');
           $like->save();
-          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'like' => '1', 'change' => '0')));
+          return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         break;
     }
