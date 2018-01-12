@@ -10,7 +10,7 @@
                           <h4>New Post</h4>
                           <div class="input-group text-center">
                             <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                              <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text" rows="2"></textarea> 
+                              <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
                               <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
                       </div>
@@ -35,9 +35,9 @@
                                                 </div>
                                               </div>
                                           </div>
-                                          <div class="col-md-1">
-                                            <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                          </div>
+                                           <div class="col-md-1">
+                                               <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                                           </div>
                                       </div>
                                  </section>
                                  <section class="post-body">
@@ -78,7 +78,7 @@
                                          <hr>
 
                                          <div class="comment-form">
-                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text" rows="2"></textarea> 
+                                           <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
                                          </div>
                                      </div>
                                  </section>
@@ -101,7 +101,7 @@ function commentfocus(id){
 
 
 function reaction(id){
-  console.log(id);
+  console.log(id)
   $.ajax({
     method: "POST",
     url: "/home/reaction",
@@ -115,6 +115,7 @@ function reaction(id){
            $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
            break;
          case "comm":
+          console.log("like: " + data.status_like + " dislike: " + data.status_dislike);
            $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
            $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
            break;
@@ -130,18 +131,17 @@ function createcomment(comment){
   $comment_clone.find("#comment_author").text(comment.auth_name + " " + comment.auth_surname);
   $comment_clone.find("#comment_created_at").text(comment.created_at);
   $comment_clone.find("#comment_content").text(comment.content);
-  if(comment.userlike == 0){
-    console.log("asd");
-    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_comment);;
-    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
+  if(comment.userlike == '0'){
+    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_post);;
+    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
   }
-  else if(comment.userlike == 1){
-    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_comment);
-    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+  else if(comment.userlike == '1'){
+    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_post);
+    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
   }
   else{
-    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_comment);
-    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_comment);
+    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
+    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
   }
   return($comment_clone);
 }
@@ -187,7 +187,6 @@ function newComment(e, id){
             data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], _token: '{{csrf_token()}}'},
              success : function (data)
              {
-               console.log(data);
                if(data.ban != 1){
                  $("#comment_insert_" + id.split("_")[2]).val('');
                  createcomment(data);

@@ -81,12 +81,12 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
-
+        //pannello messaggi
         $(document).ready(function(){
           $.ajax({
             dataType: 'json',
             type: 'POST',
-            url: '/message/countNewMessage',
+            url: 'getcountNewMessage',
             data: { id_user: '{{$logged_user->id_user}}' }
           }).done(function (data) {
             if(data.newMessages > 0){
@@ -100,23 +100,22 @@
             }
           });
         });
+
+        //pannello notifiche
+        $(document).ready(function(){
+             $.ajax({
+                 url : '/getnotifications',
+                 method : "POST",
+                 dataType : "json",
+                 data: { id_user: '{{ $logged_user->id_user}}' },
+                 success : function (notifications)
+                 {
+                   
+                 }
+             });
+        });
       </script>
-      <style type="text/css">
-        .fa-stack[data-count]:after{
-        position:absolute;
-        right:0%;
-        top:1%;
-        content: attr(data-count);
-        font-size:50%;
-        padding:.6em;
-        border-radius:999px;
-        line-height:.75em;
-        color: white;
-        background:rgba(255,0,0,.85);
-        text-align:center;
-        min-width:2em;
-        font-weight:bold;
-      }
-      </style>
+
+
 </body>
 </html>
