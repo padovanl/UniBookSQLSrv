@@ -37,6 +37,7 @@ Route::get('/search/{search_term}', 'SearchController@search');
 
 //Profiles
 Route::get('/profile/user/{id}', 'ProfileController@show');
+Route::get('/profile/user/settings', 'ProfileController@settings');
 
 //Admin Routes
 Route::get('/admin', 'AdminController@dashboard');

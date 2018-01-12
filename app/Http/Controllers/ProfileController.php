@@ -15,7 +15,7 @@ use Cookie;
 
 class ProfileController extends Controller{
 
-  public function verify_cookie(){
+  protected function verify_cookie(){
     if (Cookie::has('session')){
       $id = Cookie::get('session');
       $user = User::where('id_user', '=', $id)->first();
@@ -68,6 +68,18 @@ class ProfileController extends Controller{
       return ($user['name'] . ' ' . $user['surname']);
     }
 
+  }
+
+
+
+  //Impostazioni account
+  public function settings(){
+    if($this->verify_cookie()){
+      $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      return view('settings', compact('logged_user'));
+    }else{
+      return view('login');
+    }
   }
 }
 ?>
