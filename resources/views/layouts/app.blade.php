@@ -66,6 +66,7 @@
               @if($logged_user->admin)
               <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnAdmin" onclick="window.location='/admin'"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Dashboard</button></li>
               @endif
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnLogout" onclick="window.location='/logout'"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Logout</button></li>
           </ul>
         </div>
       </nav>
