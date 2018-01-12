@@ -17,7 +17,7 @@ class GeneralAppController extends Controller{
   }
 
   public function getNotifications(){
-
+    
   }
 
 }
