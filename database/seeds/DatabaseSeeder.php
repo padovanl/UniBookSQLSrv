@@ -42,8 +42,8 @@ class DatabaseSeeder extends Seeder
       $friends = factory(App\Users_make_friends::class,100)->create();
 
       #like a commenti e post
-      $like_comment = factory(App\LikeComments::class,120)->create();
-      $like_post = factory(App\LikePosts::class,120)->create();
+      $like_comment = factory(App\Like_comments::class,120)->create();
+      $like_post = factory(App\Like_posts::class,120)->create();
 
       #pagine seguite da utenti
       $follow_page = factory(App\Users_follow_pages::class,10)->create();
