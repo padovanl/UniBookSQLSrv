@@ -49,8 +49,8 @@
                                      <hr>
                                      <div class="post-footer-option container">
                                           <ul id="option_" class="list-unstyled">
-                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"> Like</i></a></li>
-                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"> Dislike</i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"></i></a></li>
                                               <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
                                               <li><a><i onclick="share(this.id)" style="cursor:pointer;" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
                                           </ul>
@@ -70,8 +70,8 @@
                                                 </div>
                                                 <div class="post-footer-option-container">
                                                 <ul class="list-unstyled">
-                                                  <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up">Like</i></a></li>
-                                                  <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down">Dislike</i></a></li>
+                                                  <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                                  <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down"></i></a></li>
                                                 </ul>
                                               </div>
                                               </div>
