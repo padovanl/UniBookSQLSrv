@@ -10,7 +10,7 @@
                           <h4>New Post</h4>
                           <div class="input-group text-center">
                             <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                              <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
+                              <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text" rows="2"></textarea> 
                               <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
                       </div>
@@ -35,9 +35,9 @@
                                                 </div>
                                               </div>
                                           </div>
-                                           <div class="col-md-1">
-                                               <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                           </div>
+                                          <div class="col-md-1">
+                                            <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                                          </div>
                                       </div>
                                  </section>
                                  <section class="post-body">
@@ -78,7 +78,7 @@
                                          <hr>
 
                                          <div class="comment-form">
-                                           <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
+                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text" rows="2"></textarea> 
                                          </div>
                                      </div>
                                  </section>
