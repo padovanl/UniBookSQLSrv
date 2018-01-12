@@ -253,7 +253,7 @@ function newPost(){
             }
             }
             else{
-              alert("non puoi fare post, sei bannato!");
+              alert("Non puoi scrivere post, sei bannato!");
             }
 
         }
