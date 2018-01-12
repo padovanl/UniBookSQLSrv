@@ -103,17 +103,21 @@
 
         //pannello notifiche
         $(document).ready(function(){
-             $.ajax({
+              $.ajax({
                  url : '/getnotifications',
                  method : "POST",
                  dataType : "json",
-                 data: { id_user: '{{ $logged_user->id_user}}' },
-                 success : function (notifications)
-                 {
-                   
-                 }
-             });
-        });
+                 data: { id_user: '{{ $logged_user->id_user}}' }
+              }).done(function (data) {
+                if(data.newNotifications > 0){
+                  var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewNotifications" data-count="' + data.newNotifications + '"><i class="fa fa-bell fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
+                  $('#navBarNotification').html(htmlNavBar);
+                }else{
+                  var htmlNavBar = '<i class="fa fa-bell fa-lg" aria-hidden="true"></i>';
+                  $('#navBarNotification').html(htmlNavBar);
+                }
+              });
+            });
       </script>
 
 
