@@ -16,8 +16,10 @@ class GeneralAppController extends Controller{
       return response()->json(['newMessages' => $newMessages]);
   }
 
-  public function getNotifications(){
-    
+  public function getNotifications(Request $request){
+    $id = $request->input('id_user');
+    $newNot = Notification::where([['id_user', '=', $id], ['new', '=', true]])->count();
+    return response()->json(['newNotifications' => $newNot]);
   }
 
 }
