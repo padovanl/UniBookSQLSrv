@@ -2,13 +2,13 @@
 
 @section('content')
   <article class="content">
-  <div class="padding">
+  <div class="padding pre-scrollable">
           <!-- content -->
               <!-- main col right -->
                   <div class="well">
                       <div>
                           <h4>New Post</h4>
-                          <div class="input-group text-center">
+                          <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
                             <input id="_token" type="hidden" value="{{ csrf_token() }}">
                               <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text" rows="2"></textarea> 
                               <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
@@ -17,7 +17,8 @@
                   </div>
                   <!--Pannello Post-->
                   <div class="container" id="post">
-                  	<div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
                           <div class="panel panel-default">
                               <div class="panel-body">
                                  <section class="post-heading">
@@ -84,14 +85,29 @@
                                  </section>
                               </div>
                           </div>
-                  	</div>
+                    </div>
+                    </div>
+
                   </div>
 
   </div><!-- /padding -->
-  <button id="load" onclick="loadOlder()" type="button"/>Load More..
+  <div class="row">
+    <div class="col-md-12" style="text-align:center;">
+        <button id="load" onclick="loadOlder()" type="button" class="button btn-primary" style="border-radius: 5px;">Carica post più vecchi...</button>
+    </div>
+  </div>
+
 </article>
 <aside class="side">Sidebar</aside>
 </div>
+
+<style>
+  .pre-scrollable {
+    max-height: 800px;
+    overflow-y: scroll;
+    overflow-x: hidden; 
+  }
+</style>
 
 <script>
 
