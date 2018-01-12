@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Like_comments::class, function (Faker $faker) {
+$factory->define(App\LikeComment::class, function (Faker $faker) {
 
         $userIDs = DB::table('users')->pluck('id_user')->all();
         $commentIDs = DB::table('comments')->pluck('id_comment')->all();

@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Like_posts::class, function (Faker $faker) {
+$factory->define(App\LikePost::class, function (Faker $faker) {
   $userIDs = DB::table('users')->pluck('id_user')->all();
   $postIDs = DB::table('posts')->pluck('id_post')->all();
 
