@@ -2,7 +2,7 @@
 
 @section('content')
   <article class="content">
-  <div class="padding pre-scrollable">
+  <div class="padding pre-scrollable" style="max-height: 800px;">
           <!-- content -->
               <!-- main col right -->
                   <div class="well">
@@ -23,11 +23,11 @@
                               <div class="panel-body">
                                  <section class="post-heading">
                                       <div class="row">
-                                          <div class="col-md-11">
+                                          <div class="col-md-10">
                                               <div class="media">
                                                 <div class="media-left">
                                                   <a href="#">
-                                                    <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="...">
+                                                    <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
                                                   </a>
                                                 </div>
                                                 <div class="media-body">
@@ -36,8 +36,8 @@
                                                 </div>
                                               </div>
                                           </div>
-                                          <div class="col-md-1">
-                                            <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                                          <div class="col-md-2">
+                                            <a href="#" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
                                           </div>
                                       </div>
                                  </section>
@@ -59,7 +59,7 @@
                                               <div class="media">
                                                 <div class="media-left">
                                                   <a href="#">
-                                                    <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="...">
+                                                    <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="..." style="border-radius: 50%;">
                                                   </a>
                                                 </div>
                                                 <div class="media-body">
@@ -103,11 +103,15 @@
 
 <style>
   .pre-scrollable {
-    max-height: 800px;
     overflow-y: scroll;
     overflow-x: hidden; 
   }
 </style>
+
+<script>
+  $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
+  $
+</script>
 
 <script>
 
@@ -143,7 +147,7 @@ function createcomment(comment){
   $comment_clone = $("#comment_panel").clone();
   $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
   $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
-  $comment_clone.find("#comment_author").text(comment.auth_name + " " + comment.auth_surname);
+  $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
   $comment_clone.find("#comment_created_at").text(comment.created_at);
   $comment_clone.find("#comment_content").text(comment.content);
   if(comment.userlike == 0){
@@ -169,7 +173,7 @@ function createPost(data){
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
   $post_clone.find("#creation_date").text(data.created_at);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
-  $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
+  $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname);
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
   $post_clone.find("#like_butt").text(data.likes);
