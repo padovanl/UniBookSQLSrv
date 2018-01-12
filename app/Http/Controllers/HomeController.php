@@ -17,6 +17,7 @@ use App\PostViewModel;
 use App\CommentViewModel;
 use App\LikeComment;
 use App\LikePost;
+use App\Notification;
 
 use Illuminate\Support\Facades\DB;
 
@@ -185,9 +186,21 @@ class HomeController extends Controller{
 
   public function reaction(Request $request){
     //manca controllo bontà dei parametri
-    $like = NULL;
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
     switch(request('action')){
       case "like":
+        //se il post non è mio, inserisco una notifica
+        // $post = Post::where('id_post', request('id'))['id_author']
+        // if ($post != $logged_user['id_user']) {
+        //   $notify = new Notification();
+        //   $notify->created_at = now();
+        //   $notify->updated_at = now();
+        //   $notify->content = $logged_user['name'] . " " . $logged_user['surname'] . " ha messo like al tuo post.";
+        //   $notify->new = 1;
+        //   $notify->id_user = Post::where('id_post', request('id'))['id_author'];
+        //   $notify->link = "/post/details/" . request('id');
+        //   $notify->save();
+        // }
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
         if(($request) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record

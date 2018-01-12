@@ -21,6 +21,9 @@ Route::get('/register/resetPassword/{id_user}', 'RegisterController@resetPasswor
 Route::post('/register/resetPassword/{id_user}', 'RegisterController@resetPasswordPost');
 Route::resource('/register', 'RegisterController');
 
+//Pagina dettaglio post
+Route::get('/details/post/{id_post}', 'DetailsController@landing');
+
 //General App Routes: messaggi, notifiche, richieste di amicizia
 Route::post('/getnotifications', 'GeneralAppController@getNotifications');
 Route::post('/getcountNewMessage', 'GeneralAppController@countNewMessage');

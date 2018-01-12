@@ -20,10 +20,8 @@ class CreateTableNotifications extends Migration
             $table->string('content');
             $table->boolean('new')->default(true);
             $table->uuid('id_user');
-            $table->string('id_post');
-            $table->string('id_comment');
-            $table->string('type');
-            
+            $table->string('link');
+
             //foreign key
             $table->foreign('id_user')->references('id_user')->on('users');
          });

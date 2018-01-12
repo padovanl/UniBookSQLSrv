@@ -122,7 +122,6 @@ function commentfocus(id){
 
 
 function reaction(id){
-  console.log(id)
   $.ajax({
     method: "POST",
     url: "/home/reaction",
@@ -136,7 +135,6 @@ function reaction(id){
            $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
            break;
          case "comm":
-          console.log("like: " + data.status_like + " dislike: " + data.status_dislike);
            $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
            $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
            break;
@@ -168,7 +166,6 @@ function createcomment(comment){
 }
 
 function createPost(data){
-  console.log(data);
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
