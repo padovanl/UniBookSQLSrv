@@ -122,13 +122,15 @@ function commentfocus(id){
 
 
 function reaction(id){
+  console.log(id);
   $.ajax({
     method: "POST",
-    url: "/home/reaction",
     dataType: "json",
+    url: "/home/reaction",
     data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
      success : function (data)
      {
+       console.log(data);
        switch (data.type) {
          case "post":
            $("#like_" + data.id_post).css({ 'color': data.status_like })
