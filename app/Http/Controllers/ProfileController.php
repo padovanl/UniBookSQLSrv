@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
+use App\Page;
 use App\Users_make_friends;
 use App\PostUser;
 use App\CommentUser;
 use App\CommentU;
+use App\CommentViewModel;
+use App\LikeComment;
 use App\LikePost;
+use App\PostViewModel;
 
 use Illuminate\Support\Facades\DB;
 use Cookie;
@@ -86,8 +90,6 @@ class ProfileController extends Controller{
   //loading dei post
   public function loadMore(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    #$friends = $logged_user::friends($logged_user['id_user']);     //Torna un array con gli amici
-    #$followed_pages_id = Users_follow_pages::where('id_user', $logged_user['id_user'])->get();
 
     //Caricamento dei post degli amici e delle pagine
     $posts = array();
@@ -98,32 +100,8 @@ class ProfileController extends Controller{
     array_push($posts, Post::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
     array_push($list_comments, CommentU::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
 
-    /*
-    //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
-    foreach ($friends as $friend){
-      $id_posts = PostUser::where('id_user', $friend['id_user'])->get();
-      foreach ($id_posts as $post){
-        //post
-        array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
-        //commenti
-        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
-      }
-    }
-    foreach ($followed_pages_id as $id_page){
-      $id_page_post = PostPage::where('id_page', $id_page['id_page'])->get();
-      foreach ($id_page_post as $post_page){
-        array_push($posts, Post::where('id_post', $post_page['id_post'])->get());
-      }
-    }
-    */
-
-    #$posts = array_flatten($posts);
-    #$list_comments = array_flatten($list_comments);
-
-    foreach($posts as $post){
-      array_push($likes, LikePost::where('id_post', $post['id_post'])->get());
-    }
-    $likes = array_flatten($likes);
+    $posts = array_flatten($posts);
+    $list_comments = array_flatten($list_comments);
 
     //ordino per data
     usort($posts, array($this, 'cmp'));
@@ -197,6 +175,11 @@ class ProfileController extends Controller{
     }
     return(json_encode($asd));
 
+  }
+
+  function cmp($a, $b) {
+      if ($a['created_at'] == $b['created_at']) return 0;
+      return (strtotime($a['created_at']) < strtotime($b['created_at'])) ? 1 : -1;
   }
 }
 ?>
