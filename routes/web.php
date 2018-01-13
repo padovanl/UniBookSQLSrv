@@ -43,6 +43,8 @@ Route::get('/search/{search_term}', 'SearchController@search');
 //Profiles
 Route::get('/profile/user/{id}', 'ProfileController@show');
 Route::get('/profile/user/settings', 'ProfileController@settings');
+Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
+//Route::get('/profile/user/loadmore', 'ProfileController@loadMore');
 
 //Admin Routes
 Route::get('/admin', 'AdminController@dashboard');
