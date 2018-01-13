@@ -81,4 +81,6 @@ Route::post('/message/newMessage', 'MessageController@newMessage');
 Route::get('/page/{view}', 		 	 'pageController@page');
 #Route::get('/registrazione', 		 'utentiController@registrazione');
 
+//segnalazioni
 Route::post('/home/reportPost', 'HomeController@reportPost');
+Route::post('/home/reportComment', 'HomeController@reportComment');

@@ -19,6 +19,7 @@ use App\LikeComment;
 use App\LikePost;
 use App\Notification;
 use App\ReportPost;
+use App\ReportComment;
 
 use Illuminate\Support\Facades\DB;
 
@@ -395,4 +396,17 @@ class HomeController extends Controller{
     return response()->json(['message' => 'Segnalazione completata!']);
   }
 
+  public function reportComment(Request $request){
+    $id = $request->input('id_comment');
+    $comment = CommentU::where('id_comment', '=', $id)->first();
+    if(!$comment)
+      return response()->json(['message' => 'Commento non trovato']);
+    $motivo = $request->input('motivo');
+    $report = new ReportComment();
+    $report->id_comment = $id;
+    $report->status = "aperta";
+    $report->description = $motivo;
+    $report->save();
+    return response()->json(['message' => 'Segnalazione completata!']);
+  }
 }
