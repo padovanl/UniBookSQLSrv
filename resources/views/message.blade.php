@@ -7,20 +7,20 @@
 <article>
  <div class="container-full">
 
-    <div class="pre-scrollable" id="messaggi">
+    <div class="pre-scrollable" id="messaggi" style="width: 100%;">
       @if(count($messages) > 0)
         @foreach($messages[0]->listMessage as $m)
           @if($m->sender == $logged_user->id_user)
             <div class="container darker">
               <img src="{{$messages[0]->picPathReceiver}}" alt="Avatar" class="right">
               <p>{{$m->content}}</p>
-              <span class="time-left">11:01</span>
+              <span class="time-left">{{$m->created_at->format('H:i')}}</span>
             </div>
           @else
             <div class="container">
               <img src="{{$messages[0]->picPath}}" alt="Avatar">
               <p>{{$m->content}}</p>
-              <span class="time-right">11:01</span>
+              <span class="time-right">{{$m->created_at->format('H:i')}}</span>
             </div>
           @endif
         @endforeach
@@ -30,7 +30,7 @@
           <form>
             <div class="form-group">
               <label for="messageUser" class="form-control-label">Nuovo messaggio:</label>
-              <textarea class="form-control" id="messageUser" rows="4"></textarea>
+              <textarea class="form-control form-rounded" id="messageUser" rows="4"></textarea>
               <button type="button" class="btn btn-primary" id="bthSendMessageUser" disabled="true" onclick="addMessage('{{$idFirstUser}}')">Invia messaggio</button>    
             </div>
           </form>
@@ -72,6 +72,11 @@
 
 
 
+<style>
+  .form-rounded {
+    border-radius: 1rem;
+  }
+</style>
     
     <style>
       img {
@@ -87,17 +92,17 @@
      /* Chat containers */
       .container {
           border: 2px solid #dedede;
-          background-color: #77c0eb;
+          background-color: #afd7ee;
           border-radius: 5px;
           padding: 10px;
-          margin: 10px 0;
+          margin: 0 auto;
           width: 100%;
       }
 
       /* Darker chat container */
       .darker {
           border-color: #ccc;
-          background-color: rgb(233, 194, 139);
+          background-color: rgb(203, 247, 197);
       }
 
       /* Clear floats */
@@ -126,7 +131,7 @@
       /* Style time text */
       .time-right {
           float: right;
-          color: #aaa;
+          color: rgb(7, 5, 5);
       }
 
       /* Style time text */

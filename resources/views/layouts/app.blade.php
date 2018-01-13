@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <meta name="_token" content="{{ csrf_token() }}">
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/U-Bahn_Berlin_logo.svg/2000px-U-Bahn_Berlin_logo.svg">
+  <link rel="icon" href="../../assets/img/icon2.png">
 </head>
 <body>
 <div class="wrapper">
