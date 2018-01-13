@@ -18,6 +18,7 @@ use App\CommentViewModel;
 use App\LikeComment;
 use App\LikePost;
 use App\Notification;
+use App\ReportPost;
 
 use Illuminate\Support\Facades\DB;
 
@@ -378,6 +379,20 @@ class HomeController extends Controller{
       return ($user['name'] . ' ' . $user['surname']);
     }
 
+  }
+
+  public function reportPost(Request $request){
+    $id = $request->input('id_post');
+    $post = Post::where('id_post', '=', $id)->first();
+    if(!$post)
+      return response()->json(['message' => 'Post non trovato']);
+    $motivo = $request->input('motivo');
+    $report = new ReportPost();
+    $report->id_post = $id;
+    $report->status = "aperta";
+    $report->description = $motivo;
+    $report->save();
+    return response()->json(['message' => 'Segnalazione completata!']);
   }
 
 }

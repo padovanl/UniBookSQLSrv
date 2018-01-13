@@ -37,7 +37,7 @@
                                               </div>
                                           </div>
                                           <div class="col-md-2">
-                                            <a href="#" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                            <a id="reportingPost" href="#reportModal" data-toggle="modal" data-whatever="5" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
                                           </div>
 
                                       </div>
@@ -102,6 +102,41 @@
 <aside class="side">Sidebar</aside>
 </div>
 
+
+<!--Report modal-->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Segnala post</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-post">
+        <div class="form-group">
+          <label for="reasonReportPost">Selezione il motivo della segnalazione:</label>
+          <select class="form-control" id="reasonReportPost">
+            <option selected>Incita all'odio</option>
+            <option>È una minaccia</option>
+            <option>È una notizia falsa</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+          <div class="col-md-5">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button> 
+          </div>
+          <div class="col-md-5">
+            <button type="button" class="btn btn-primary" id="btnReportPost">Segnala</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <style>
   .pre-scrollable {
     overflow-y: scroll;
@@ -109,9 +144,41 @@
   }
 </style>
 
+
+
+
+
+<script>
+  $('#reportModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    $('#btnReportPost').click(function(){
+      var motivo = $('#reasonReportPost').find(":selected").text();
+      $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: '/home/reportPost',
+        data: { id_post: recipient, motivo: motivo }
+      }).done(function (data) {
+        var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
+        $('#modal-body-post').html(html);
+        $('#btnReportPost').hide();
+      });
+    });
+
+
+    var modal = $(this);
+    modal.find('.modal-title').text('Segnala post');
+  });
+
+  $('#reportModal').on('hide.bs.modal', function(event){
+    //rimuovo gli eventi una volta che chiudo il modal
+    $('#btnReportPost').unbind();
+  });
+</script>
+
 <script>
   $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
-  $
 </script>
 
 <script>
@@ -177,6 +244,9 @@ function createPost(data){
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
   $post_clone.find("#like_butt").text(data.likes);
+  //segnalazione
+  $post_clone.find('#reportingPost').attr('data-whatever', data.id_post);
+
   $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
   if(data.userlike == '0'){
     $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'like_' + data.id_post);;
@@ -336,5 +406,7 @@ $(document).ready(function(){
 });
 
 </script>
+
+
 
 @endsection
