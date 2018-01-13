@@ -297,7 +297,7 @@
                 </select> 
             </div>
             <div class="col-md-6">
-               <label for="textIdUserlabel">Id utente:</label>           
+               <label for="textIdUserlabel">Email:</label>           
                <input type="text" id="textIdUser"> 
             </div>
             <div class="col-md-1">
@@ -388,7 +388,7 @@
                 </select> 
             </div>
             <div class="col-md-6">
-               <label for="textIdPagelabel">Id pagina:</label>           
+               <label for="textIdPagelabel">Nome pagina:</label>           
                <input type="text" id="textIdPage"> 
             </div>
             <div class="col-md-1">
