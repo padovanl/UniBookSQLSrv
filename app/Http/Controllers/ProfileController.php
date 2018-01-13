@@ -11,6 +11,7 @@ use App\CommentUser;
 use App\CommentU;
 use App\LikePost;
 
+use Illuminate\Support\Facades\DB;
 use Cookie;
 
 class ProfileController extends Controller{
@@ -82,8 +83,7 @@ class ProfileController extends Controller{
     }
   }
 
-
-  //loading dei post dell'utente loggato nella sua pagina profilo
+  //loading dei post
   public function loadMore(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     #$friends = $logged_user::friends($logged_user['id_user']);     //Torna un array con gli amici
@@ -161,7 +161,6 @@ class ProfileController extends Controller{
 
         }
       }
-
       if(!is_numeric($post['id_author'])){
         array_push($toreturn, new PostViewModel($post['id_post'], User::where('id_user', $post['id_author'])->first()->name,
                                       User::where('id_user', $post['id_author'])->first()->surname,

@@ -361,8 +361,8 @@ function loadOlder(){
   $post_id = $prev_post.attr("id").split("_")[1];
   $.ajax({
           method: "GET",
-          //url: "/profile/user/"<?php $logged_user -> user_id ?>"/loadmore",
-          url : '/profile/user/loadmore',
+          url: "/profile/user/"+{{$logged_user -> id_user }}+"/loadmore",
+          //url : '/profile/user/loadmore',
           data: { post_id: $post_id },
           dataType : "json",
           success : function (posts)
@@ -414,8 +414,8 @@ function loadOlder(){
 //Caricamento dei post
 $(document).ready(function(){
      $.ajax({
-         //url : '/profile/user/"<?php $logged_user -> user_id ?>"/loadmore',
-         url : '/profile/user/loadmore',
+         url : "/profile/user/"+{{$logged_user -> id_user }}+"/loadmore",
+         //url : '/profile/user/loadmore',
          method : "GET",
          dataType : "json",
          data: { post_id: -1 },
