@@ -30,7 +30,7 @@ background-color: #4285f4!important;
           </div>
         </div>
         <div class="w3-container">
-          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Designer</p>
+          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Student</p>
           <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$logged_user -> citta}}</p>
           <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$logged_user -> email}}</p>
           <!--<p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p> -->
@@ -78,165 +78,101 @@ background-color: #4285f4!important;
     </div>
 
     <!-- Right Column -->
-    <div class="w3-twothird">
+    <div class="padding pre-scrollable" style="max-height: 800px;">
+            <!-- content -->
+                <!-- main col right -->
+                    <div class="well">
+                        <div>
+                            <h4>New Post</h4>
+                            <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+                              <input id="_token" type="hidden" value="{{ csrf_token() }}">
+                                <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
+                                <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Pannello Post-->
+                    <div class="container" id="post">
+                      <div class="row">
+                          <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                   <section class="post-heading">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="media">
+                                                  <div class="media-left">
+                                                    <a href="#">
+                                                      <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
+                                                    </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                    <a href="#" id="post_u_name" class="anchor-username"><h4 class="media-heading">User_name</h4></a>
+                                                    <a href="#" id="creation_date" class="anchor-time">time</a>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                              <a id="reportingPost" href="#reportModal" data-toggle="modal" data-whatever="5" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                            </div>
 
-        <div class="padding">
-          <div class="well">
-          <div>
-              <h4>New Post</h4>
-              <div class="input-group text-center">
-                <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                  <input class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text">
-                  <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-              </div>
-          </div>
-      </div>
-      {{-- <div class="panel panel-default" id="post">
-        <div class="panel-heading">
-          <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      <i class="glyphicon glyphicon-user"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="">Dettagli Post</a></li>
-                        <li><a href="">Visualizza Profilo</a></li>
-                        <li><a href="">Rimuovi dagli amici</a></li>
-                        <li><a href="">Segnala Post</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!--Post Header-->
-            <div>
-              <img id="post_pic_path" style="width:50px; border-radius:50%" >
-              <a href="" id="post_u_name" style="">User Name</a>
-              <span id="creation_date"></span>
-            </div>
-        </div>
+                                        </div>
+                                   </section>
+                                   <section class="post-body">
+                                       <p id="post_content">content</p>
+                                   </section>
+                                   <section class="post-footer">
+                                       <hr>
+                                       <div class="post-footer-option container">
+                                            <ul id="option_" class="list-unstyled">
+                                                <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                                <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"></i></a></li>
+                                                <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                                                <li><a><i onclick="share(this.id)" style="cursor:pointer;" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
+                                            </ul>
+                                       </div>
+                                       <div class="post-footer-comment-wrapper">
+                                           <div id="comment_panel" class="comment">
+                                                <div class="media">
+                                                  <div class="media-left">
+                                                    <a href="#">
+                                                      <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="..." style="border-radius: 50%;">
+                                                    </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                    <a href="#" id="comment_author" class="anchor-username"><h4 class="media-heading">Media heading</h4></a>
+                                                    <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                    <span id="comment_content"></span>
+                                                  </div>
+                                                  <div class="post-footer-option-container">
+                                                  <ul class="list-unstyled">
+                                                    <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                                    <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down"></i></a></li>
+                                                  </ul>
+                                                </div>
+                                                </div>
 
-        <!--Post Content-->
-        <div class="panel-body">
-        <p id="post_content">Content</p>
-        <div id="insert_after" class="clearfix"></div>
-        <!--Comment Panel-->
-        <!--Comment Form-->
-        <div class="input-group" id="input_panel">
-          <button id="like_butt" class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-          <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
-        </div>
-      </div>
-      <hr> --}}
-      <!--Pannello Post-->
-      <div class="container" id="post">
-        <div class="col-md-7">
-              <div class="panel panel-default">
-                  <div class="panel-body">
-                     <section class="post-heading">
-                          <div class="row">
-                              <div class="col-md-11">
-                                  <div class="media">
-                                    <div class="media-left">
-                                      <a href="#">
-                                        <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="...">
-                                      </a>
-                                    </div>
-                                    <div class="media-body">
-                                      <a href="#" id="post_u_name" class="anchor-username"><h4 class="media-heading">User_name</h4></a>
-                                      <a href="#" id="creation_date" class="anchor-time">time</a>
-                                    </div>
-                                  </div>
-                              </div>
-                               <div class="col-md-1">
-                                   <a href="#"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                               </div>
-                          </div>
-                     </section>
-                     <section class="post-body">
-                         <p id="post_content">content</p>
-                     </section>
-                     <section class="post-footer">
-                         <hr>
-                         <div class="post-footer-option container">
-                              <ul class="list-unstyled">
-                                  <li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Like</a></li>
-                                  <li><a href="#"><i class="glyphicon glyphicon-thumbs-down"></i> Dislike</a></li>
-                                  <li><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                  <li><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>
-                              </ul>
-                         </div>
-                         <div class="post-footer-comment-wrapper">
-                             <div id="comment_panel" class="comment">
-                                  <div class="media">
-                                    <div class="media-left">
-                                      <a href="#">
-                                        <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="...">
-                                      </a>
-                                    </div>
-                                    <div class="media-body">
-                                      <a href="#" id="comment_author" class="anchor-username"><h4 class="media-heading">Media heading</h4></a>
-                                      <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
-                                    </div>
-                                  </div>
-                                  <span id="comment_content"></span>
-                             </div>
-                             <hr>
+                                           </div>
+                                           <hr>
 
-                             <div class="comment-form">
-                               <input onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text">
-                             </div>
-                         </div>
-                     </section>
-                  </div>
-              </div>
-        </div>
+                                           <div class="comment-form">
+                                             <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text"></textarea>
+                                           </div>
+                                       </div>
+                                   </section>
+                                </div>
+                            </div>
+                      </div>
+                      </div>
+
+                    </div>
+
+    </div><!-- /padding -->
+    <div class="row">
+      <div class="col-md-12" style="text-align:center;">
+          <button id="load" onclick="loadOlder()" type="button" class="button btn-primary" style="border-radius: 5px;">Carica post più vecchi...</button>
       </div>
     </div>
-    <button id="load" onclick="loadOlder()" type="button"/>Load More..
-
-    <!--
-      <div class="w3-container w3-card w3-white w3-margin-bottom">
-        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience</h2>
-        <div class="w3-container">
-          <h5 class="w3-opacity"><b>Front End Developer / w3schools.com</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 - <span class="w3-tag w3-teal w3-round">Current</span></h6>
-          <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.</p>
-          <hr>
-        </div>
-        <div class="w3-container">
-          <h5 class="w3-opacity"><b>Web Developer / something.com</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Mar 2012 - Dec 2014</h6>
-          <p>Consectetur adipisicing elit. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.</p>
-          <hr>
-        </div>
-        <div class="w3-container">
-          <h5 class="w3-opacity"><b>Graphic Designer / designsomething.com</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jun 2010 - Mar 2012</h6>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p><br>
-        </div>
-      </div>
-    -->
-      <!--
-      <div class="w3-container w3-card w3-white">
-        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</h2>
-        <div class="w3-container">
-          <h5 class="w3-opacity"><b>W3Schools.com</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever</h6>
-          <p>Web Development! All I need to know in one place</p>
-          <hr>
-        </div>
-        <div class="w3-container">
-          <h5 class="w3-opacity"><b>London Business School</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
-          <p>Master Degree</p>
-          <hr>
-        </div>
-        <div class="w3-container">
-          <h5 class="w3-opacity"><b>School of Coding</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 - 2013</h6>
-          <p>Bachelor Degree</p><br>
-        </div>
-      </div>
-      -->
     <!-- End Right Column -->
     </div>
 
@@ -361,7 +297,7 @@ function loadOlder(){
   $post_id = $prev_post.attr("id").split("_")[1];
   $.ajax({
           method: "GET",
-          url: "/profile/user/"+{{$logged_user -> id_user }}+"/loadmore",
+          url: "/profile/user/%7B{{$logged_user -> id_user}}%7D/loadmore",
           //url : '/profile/user/loadmore',
           data: { post_id: $post_id },
           dataType : "json",
@@ -414,7 +350,7 @@ function loadOlder(){
 //Caricamento dei post
 $(document).ready(function(){
      $.ajax({
-         url : "/profile/user/"+{{$logged_user -> id_user }}+"/loadmore",
+         url : "/profile/user/%7B{{$logged_user -> id_user}}%7D/loadmore",
          //url : '/profile/user/loadmore',
          method : "GET",
          dataType : "json",
@@ -426,5 +362,90 @@ $(document).ready(function(){
      });
 });
 
+
+$('#reportModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  $('#btnReportPost').click(function(){
+    var motivo = $('#reasonReportPost').find(":selected").text();
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/home/reportPost',
+      data: { id_post: recipient, motivo: motivo }
+    }).done(function (data) {
+      var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
+      $('#modal-body-post').html(html);
+      $('#btnReportPost').hide();
+    });
+  });
+
+
+  var modal = $(this);
+  modal.find('.modal-title').text('Segnala post');
+});
+
+$('#reportModal').on('hide.bs.modal', function(event){
+  //rimuovo gli eventi una volta che chiudo il modal
+  $('#btnReportPost').unbind();
+});
+</script>
+
+<script>
+$('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
+</script>
+
+<script>
+
+function commentfocus(id){
+  $("#comment_insert_" + id.split("_")[1]).focus();
+}
+
+
+function reaction(id){
+console.log(id);
+$.ajax({
+  method: "POST",
+  dataType: "json",
+  url: "/home/reaction",
+  data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
+   success : function (data)
+   {
+     console.log(data);
+     switch (data.type) {
+       case "post":
+         $("#like_" + data.id_post).css({ 'color': data.status_like })
+         $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
+         break;
+       case "comm":
+         $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
+         $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
+         break;
+     }
+   }
+})
+}
+
+function createcomment(comment){
+$comment_clone = $("#comment_panel").clone();
+$comment_clone.attr("id", "comment_panel_" + comment.id_comment);
+$comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
+$comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
+$comment_clone.find("#comment_created_at").text(comment.created_at);
+$comment_clone.find("#comment_content").text(comment.content);
+if(comment.userlike == '0'){
+  $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_post);;
+  $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
+}
+else if(comment.userlike == '1'){
+  $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_post);
+  $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
+}
+else{
+  $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
+  $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
+}
+return($comment_clone);
+}
 </script>
 @endsection
