@@ -21,6 +21,9 @@ Route::get('/register/resetPassword/{id_user}', 'RegisterController@resetPasswor
 Route::post('/register/resetPassword/{id_user}', 'RegisterController@resetPasswordPost');
 Route::resource('/register', 'RegisterController');
 
+//Pagina dettaglio post
+Route::get('/details/post/{id_post}', 'DetailsController@landing');
+
 //General App Routes: messaggi, notifiche, richieste di amicizia
 Route::post('/getnotifications', 'GeneralAppController@getNotifications');
 Route::post('/getcountNewMessage', 'GeneralAppController@countNewMessage');
@@ -40,6 +43,8 @@ Route::get('/search/{search_term}', 'SearchController@search');
 //Profiles
 Route::get('/profile/user/{id}', 'ProfileController@show');
 Route::get('/profile/user/settings', 'ProfileController@settings');
+Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
+#Route::get('/profile/user/loadmore', 'ProfileController@loadMore');
 
 //Admin Routes
 Route::get('/admin', 'AdminController@dashboard');
@@ -70,19 +75,12 @@ Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
 
-//Authentication
-#Route::post('register', 'authController@register');
-//Route::post('login',    'authController@login');
-//Route::group(['middleware' => 'jwt-auth'], function () {
-//  Route::post('get_user_details', 'authController@get_user_details');
-//});
+
 
 // Route::post('/login',           'loginController@login');
 Route::get('/page/{view}', 		 	 'pageController@page');
 #Route::get('/registrazione', 		 'utentiController@registrazione');
 
-//Route::group(['middleware' => 'jwt-auth'], function () {
-
-//  Route::get('/modifica', 			   'utentiController@modifica');
-//  Route::get('/cancella_utente',   'utentiController@cancella_utente');
-//});
+//segnalazioni
+Route::post('/home/reportPost', 'HomeController@reportPost');
+Route::post('/home/reportComment', 'HomeController@reportComment');

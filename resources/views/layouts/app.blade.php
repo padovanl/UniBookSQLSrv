@@ -12,7 +12,11 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../assets/js/admin/popper.min.js"></script>
+  <script src="../../assets/js/admin/bootstrap.min.js"></script>
   <link href="../../assets/css/admin/bootstrap.min.css" rel="stylesheet">
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
@@ -20,7 +24,7 @@
   <link href="assets/css/home.css" rel="stylesheet">
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
   <meta name="_token" content="{{ csrf_token() }}">
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/U-Bahn_Berlin_logo.svg/2000px-U-Bahn_Berlin_logo.svg">
 </head>
@@ -43,9 +47,9 @@
           </div>
 
           <div id="notifiche">
-            <a href="#"><i class="fa fa-user fa-lg" aria-hidden="true"></i></a>
-            <a href="#"><i class="fa fa-bell fa-lg" aria-hidden="true"></i></a>
-            <a href="/message" id="navBarMessages"><span class="fa-stack fa-1x has-badge" id="spanNewMessages"><i class="fa fa-commenting fa-stack-1x" aria-hidden="true"></i></span></a>
+            <a href="/friend/request" id="navBarFriend"><span class="fa-stack fa-1x has-badge" id="spanNewFriend"><i class="fa fa-user fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
+            <a href="/notification" id="navBarNotification"><span class="fa-stack fa-1x has-badge" id="spanNewNotifications"><i class="fa fa-bell fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
+            <a href="/message" id="navBarMessages"><span class="fa-stack fa-1x has-badge" id="spanNewMessages"><i class="fa fa-commenting fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
           </div>
         </div>
         <?php
@@ -92,10 +96,10 @@
             if(data.newMessages > 0){
               var html = '&nbsp;&nbsp;<span class="badge badge-danger" style="font-size:10px;">' + data.newMessages + '</span>';
               $('#btnMessage').append(html);
-              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewMessages" data-count="' + data.newMessages + '"><i class="fa fa-commenting fa-stack-1x" aria-hidden="true"></i></span>';
+              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewMessages" data-count="' + data.newMessages + '"><i class="fa fa-commenting fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
               $('#navBarMessages').html(htmlNavBar);
             }else{
-              var htmlNavBar = '<i class="fa fa-commenting" aria-hidden="true"></i>';
+              var htmlNavBar = '<i class="fa fa-commenting fa-lg" aria-hidden="true"></i>';
               $('#navBarMessages').html(htmlNavBar);
             }
           });
@@ -103,17 +107,21 @@
 
         //pannello notifiche
         $(document).ready(function(){
-             $.ajax({
+              $.ajax({
                  url : '/getnotifications',
                  method : "POST",
                  dataType : "json",
-                 data: { id_user: '{{ $logged_user->id_user}}' },
-                 success : function (notifications)
-                 {
-                   
-                 }
-             });
-        });
+                 data: { id_user: '{{ $logged_user->id_user}}' }
+              }).done(function (data) {
+                if(data.newNotifications > 0){
+                  var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewNotifications" data-count="' + data.newNotifications + '"><i class="fa fa-bell fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
+                  $('#navBarNotification').html(htmlNavBar);
+                }else{
+                  var htmlNavBar = '<i class="fa fa-bell fa-lg" aria-hidden="true"></i>';
+                  $('#navBarNotification').html(htmlNavBar);
+                }
+              });
+            });
       </script>
 
 

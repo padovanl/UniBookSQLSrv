@@ -542,12 +542,15 @@ class AdminController extends Controller
         }
     }
 
+    //IN REALTA' E' L'EMAIL
+    $id_user = $request->input('idUser');
 
-    $id_user = intval($request->input('idUser'));
     if($id_user != -1){
         $c = collect();
         foreach ($users as $u) {
-            if(strpos($u->id_user, (string)$id_user) || ($u->id_user == $id_user))
+
+            //DA METTERE A POSTO!!!!!
+            if(strpos($u->email, $id_user) !== false)
                 $c->push($u);
         }
         $users = $c;  
@@ -679,11 +682,11 @@ class AdminController extends Controller
     }
 
 
-    $id_page = intval($request->input('idPage'));
+    $id_page = $request->input('idPage');
     if($id_page != -1){
         $c = collect();
         foreach ($pages as $p) {
-            if(strpos($p->id_page, (string)$id_page) || ($p->id_page == $id_page))
+            if(strpos(strtolower($p->nome), strtolower($id_page)) !== false)
                 $c->push($p);
         }
         $pages = $c;  
@@ -760,6 +763,7 @@ public function bloccaPage(Request $request){
 
     return response()->json(['message' => 'Operazione completata!', 'body' => 'La pagina è stata sbloccata.', 'classLabelAdd' => 'badge badge-primary', 'classLabelRemove' => '']);
   }
+
 
 
 
