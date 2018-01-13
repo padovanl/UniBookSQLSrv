@@ -7,10 +7,10 @@
               <!-- main col right -->
                   <div class="well">
                       <div>
-                          <h4>New Post</h4>
+                          <h4>Nuovo post</h4>
                           <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
                             <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                              <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
+                              <textarea class="form-control input-lg form-rounded" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
                               <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
                           </div>
                       </div>
@@ -82,7 +82,7 @@
                                          <hr>
 
                                          <div class="comment-form">
-                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text"></textarea>
+                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control form-rounded" placeholder="Add a comment.." type="text"></textarea>
                                          </div>
                                      </div>
                                  </section>
@@ -175,6 +175,12 @@
   .pre-scrollable {
     overflow-y: scroll;
     overflow-x: hidden;
+  }
+</style>
+
+<style>
+  .form-rounded {
+    border-radius: 1rem;
   }
 </style>
 

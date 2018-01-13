@@ -84,3 +84,6 @@ Route::get('/page/{view}', 		 	 'pageController@page');
 //segnalazioni
 Route::post('/home/reportPost', 'HomeController@reportPost');
 Route::post('/home/reportComment', 'HomeController@reportComment');
+
+//notifiche
+Route::get('/notification', 'NotificationController@index');
