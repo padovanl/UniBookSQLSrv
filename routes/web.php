@@ -94,3 +94,4 @@ Route::get('/post/details/{id}', 'PostController@details');
 
 //amicizie
 Route::get('/friend/request', 'FriendshipController@index');
+Route::post('/friend/accept', 'FriendshipController@acceptFriend');

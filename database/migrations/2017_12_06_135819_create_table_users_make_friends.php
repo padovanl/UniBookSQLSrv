@@ -15,6 +15,7 @@ class CreateTableUsersMakeFriends extends Migration
     {
         Schema::create('users_make_friends', function (Blueprint $table) {
             //increments imposta automaticamente la chiave primaria, non serve usare il metodo primary()
+	    $table->increments('id_request');
             $table->uuid('id_request_user');
             $table->uuid('id_user');
             $table->integer('status')->unsigned();

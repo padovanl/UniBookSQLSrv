@@ -7,6 +7,7 @@ use Cookie;
 
 use App\Users_make_friends;
 use App\User;
+use App\Notification;
 
 class FriendshipController extends Controller
 {
@@ -51,10 +52,30 @@ class FriendshipController extends Controller
     	return response()->json(['message' => 'Hai rimosso ' + $id_destination_user->name . $id_destination_user->surname . + '.']);
     }
 
+    public function acceptFriend(Request $request){
+    	$sender_user = User::where('id_user', '=', $request->input('id_user'))->first();
+    	$logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
+    	$id_request = $request->input('id_request');
+    	$friendRequest = Users_make_friends::where('id_request', '=', $id_request)->first();
+    	if(!$friendRequest)
+    		return response()->json(['message' => 'Richiesta di amicizia non trovata.']);
+		Users_make_friends::where('id_request', '=', $id_request)->update(['status' => 0]);
+    	//creo la notifica da inviare all'utente
+    	$notifica = new Notification();
+    	$notifica->new = true;
+    	$notifica->content = $logged_user->name . ' ' . $logged_user->surname . ' ha accettato la tua richiesta di amicizia';
+    	$notifica->id_user = $sender_user->id_user;
+    	$notifica->link = '/profile/user/' . $logged_user->id_user;
+    	$notifica->save();
+
+    	return response()->json(['message' => 'Richiesta accettata.']);
+    }
+
     public function index(){
     	if(!$this->controllaAutorizzazione())
     		return view('/');
     	$logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
-    	return view('requestFriendList', compact('logged_user'));
+    	$requestList = Users_make_friends::where([['id_user', '=', $logged_user->id_user], ['status', '=', true]])->get();
+    	return view('requestFriendList', compact('logged_user', 'requestList'));
     }
 }
