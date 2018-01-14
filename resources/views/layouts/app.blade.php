@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Unibook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link href="assets/css/bootstrap.css" rel="stylesheet">
+  <link href="/assets/css/bootstrap.css" rel="stylesheet">
   <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
@@ -21,7 +21,7 @@
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'></style>
-  <link href="assets/css/home.css" rel="stylesheet">
+  <link href="{{ asset('assets/css/home.css') }}" rel="stylesheet">
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -60,7 +60,7 @@
       </header>
       <nav class="main-nav">
         <div class="side-sec">
-          <img id="main_avatar" src="{{$logged_user -> pic_path}}" alt="Avatar">
+          <img id="main_avatar" src="/{{$logged_user -> pic_path}}" alt="Avatar">
           <span id="side-name">{{$logged_user -> name . " " . $logged_user -> surname}}</span>
           <hr>
           <ul class="nav-links">
@@ -107,21 +107,40 @@
 
         //pannello notifiche
         $(document).ready(function(){
-              $.ajax({
-                 url : '/getnotifications',
-                 method : "POST",
-                 dataType : "json",
-                 data: { id_user: '{{ $logged_user->id_user}}' }
-              }).done(function (data) {
-                if(data.newNotifications > 0){
-                  var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewNotifications" data-count="' + data.newNotifications + '"><i class="fa fa-bell fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
-                  $('#navBarNotification').html(htmlNavBar);
-                }else{
-                  var htmlNavBar = '<i class="fa fa-bell fa-lg" aria-hidden="true"></i>';
-                  $('#navBarNotification').html(htmlNavBar);
-                }
-              });
-            });
+          $.ajax({
+             url : '/getnotifications',
+             method : "POST",
+             dataType : "json",
+             data: { id_user: '{{ $logged_user->id_user}}' }
+          }).done(function (data) {
+            if(data.newNotifications > 0){
+              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewNotifications" data-count="' + data.newNotifications + '"><i class="fa fa-bell fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
+              $('#navBarNotification').html(htmlNavBar);
+            }else{
+              var htmlNavBar = '<i class="fa fa-bell fa-lg" aria-hidden="true"></i>';
+              $('#navBarNotification').html(htmlNavBar);
+            }
+          });
+        });
+
+
+        //pannello richieste amicizia
+        $(document).ready(function(){
+          $.ajax({
+             url : '/getcountNewRequest',
+             method : "POST",
+             dataType : "json",
+             data: { id_user: '{{ $logged_user->id_user}}' }
+          }).done(function (data) {
+            if(data.newRequest > 0){
+              var htmlNavBar = '<span class="fa-stack fa-1x has-badge" id="spanNewFriend" data-count="' + data.newRequest + '"><i class="fa fa-user fa-stack-1x fa-lg" aria-hidden="true"></i></span>';
+              $('#navBarFriend').html(htmlNavBar);
+            }else{
+              var htmlNavBar = '<i class="fa fa-user fa-lg" aria-hidden="true"></i>';
+              $('#navBarFriend').html(htmlNavBar);
+            }
+          });
+        });
       </script>
 
 

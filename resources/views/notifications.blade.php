@@ -9,22 +9,18 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="list-group" id="sidebar">
-		        <a href="#" onclick="ChangeChat(4)" class="list-group-item listMessagesLink" id="messages">
+		        <a href="/post/details/441" onclick="ChangeChat(4)" class="list-group-item listMessagesLink" id="messages">
 		          <div class="row">
 		              <div class="col-md-2">
-		                  <img src="" alt="Avatar" width="50" height="50">
+		                  <img src="../../assets/images/facebook1.jpg" alt="Avatar" width="50" height="50" style="border-radius: 50%;">
 		              </div>
 		              <div class="col-md-10">
-		                <div  class="row">
-		                  <div class="col-md-10">
-		                    <p>aaaa</p>
+		                  <div class="col-md-11">
+		                  	<p>Edyth Hermiston ha messo mi piace al tuo post.</p>
 		                  </div>
-		                  <div class="col-md-2">
-		                      <span class="badge badge-danger" id="newMessage">aaaaaaaaaaaaa</span>
+		                  <div class="col-md-1">
+		                      <img src="../../assets/img/puntoEsclamativo.png" width="20px" height="20px">
 		                  </div>
-		                </div>
-
-		                  <p>aaaaaaaaaa</p>
 		              </div>
 		          </div>
 		        </a>
@@ -33,7 +29,6 @@
 		</div>
 	</div>
 </article>
-
 <aside class="side">
    <div class="pre-scrollable">
       <div class="list-group" id="sidebar">
