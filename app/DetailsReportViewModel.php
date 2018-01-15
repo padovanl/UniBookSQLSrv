@@ -13,4 +13,5 @@ class DetailsReportViewModel //extends Model
     public $tipoAutore;
     public $content;
     public $totPage;
+    public $id_post;
 }

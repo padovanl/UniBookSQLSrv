@@ -404,6 +404,8 @@ class HomeController extends Controller{
   }
 
   public function reportPost(Request $request){
+    $id = Cookie::get('session');
+    $logged_user = User::where('id_user', '=', $id)->first();
     $id = $request->input('id_post');
     $post = Post::where('id_post', '=', $id)->first();
     if(!$post)
@@ -420,6 +422,8 @@ class HomeController extends Controller{
   }
 
   public function reportComment(Request $request){
+    $id = Cookie::get('session');
+    $logged_user = User::where('id_user', '=', $id)->first();
     $id = $request->input('id_comment');
     $comment = CommentU::where('id_comment', '=', $id)->first();
     if(!$comment)

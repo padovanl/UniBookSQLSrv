@@ -542,8 +542,7 @@
       <div class="modal-footer">
          <div class="row">
           <div class="col-md-12">
-           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-           <button type="button" class="btn btn-secondary" id="btnViewComment">Visualizza commento</button>        
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>      
            <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnEliminaComment">Elimina commento</button>
            <button type="button" class="btn btn-danger" id="btnEliminaBanComment" data-dismiss="modal">Elimina e blocca autore</button>
            <button type="button" class="btn btn-default" data-dismiss="modal" id="btnIgnoraReportComment">Ignora segnalazione</button>    

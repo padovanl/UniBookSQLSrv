@@ -51,10 +51,15 @@ class PageController extends Controller
 		 $page->pic_path = '/';
 		 $page->save();
          //$page->pic_path = 'assets/images/' . $page->id_page . '.jpg';
-         $pageId = $page->id_page;
+		 $temp = Page::orderBy('id_page', 'DESC')->get();
+		 if(count($temp) > 0){
+		 	$pageId = $temp[0]->id_page;
+		 }else{
+		 	$pageId = 1;
+		 }
          $file = Input::file('image');
          $file->move('assets/images', $pageId . '.jpg');
-         Page::where('id_page', '=', $pageId)->update(['pic_path' => 'assets/images/' . $page->id_page . '.jpg']);
+         Page::where('id_page', '=', $pageId)->update(['pic_path' => 'assets/images/' . $pageId . '.jpg']);
          //$page->save();
          return redirect('/page/mypage');
 	}
