@@ -8,7 +8,7 @@ class DetailsPageAdminViewModel //extends Model
 {
 
     public $id_page;
-    public $nome;
+    public $name;
     public $ban;
     public $linkAdmin;
     public $nomeAdmin;

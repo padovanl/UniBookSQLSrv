@@ -1423,7 +1423,7 @@
       $.each(data, function (key, value) {
         rows = rows + '<tr>';
         rows = rows + '<td>' + value.id_page + '</td>';
-        rows = rows + '<td>' + value.nome + '</td>';
+        rows = rows + '<td>' + value.name + '</td>';
         rows = rows + '<td>' + value.created_at + '</td>';
         if(value.ban == 1){
           rows = rows + '<td><span class="badge badge-danger" id="labelStatusPage' + value.id_page + '">Bloccato</span></td>';
@@ -1463,7 +1463,7 @@
         //post = data;
         var modal = $('#pageModal');
         modal.find('.modal-title').text('Dettagli pagina ' + recipient);
-        $('#nomePage').text(data.nome);
+        $('#nomePage').text(data.name);
         $('#adminPage').html('Amministratore: <a href="' + data.linkAdmin + '">' + data.nomeAdmin + '</a>');
         $('#dataCreazionePage').text('Data creazione: ' + data.created_at);
         $('#imgPage').attr("src", data.picPath);
