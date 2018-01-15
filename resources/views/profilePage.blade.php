@@ -31,7 +31,15 @@ background-color: #4285f4!important;
         </div>
         <div class="w3-container">
           <br />
-          <p style="text-align: center;"><a style="cursor: pointer; font-size: 20px;"><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>
+          <div id="divFollowPage">
+            @if($alreadyFollow)
+              <p id="stopFollowP" style="text-align: center; color: red;"><a style="cursor: pointer; font-size: 20px;" onclick="stopFollow({{$page->id_page}}, '{{$logged_user->id_user}}')"><i style="cursor:pointer; color: red;" id="follow" class="glyphicon glyphicon-thumbs-down"></i>&nbsp;Smetti di seguire la pagina</a></p>
+            @else
+              <p id="followP" style="text-align: center; color: blue;"><a style="cursor: pointer; font-size: 20px;" onclick="follow({{$page->id_page}}, '{{$logged_user->id_user}}')"><i style="cursor:pointer; color: blue;" id="follow" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>
+            @endif
+            <br />
+             <p id="totFollowers" style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;{{$tot_followers}}&nbsp;persone seguono questa pagina</p>
+          </div>
           <!--<p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p> -->
           <hr>
           @if($logged_user->id_user == $page->id_user)
@@ -156,216 +164,6 @@ background-color: #4285f4!important;
 </div>
 <script>
 
-function newComment(e, id){
-  //manca controllo campo vuoto!!
-  if(e.keyCode === 13){
-          e.preventDefault();
-          $.ajax({
-            method: "POST",
-            url: "/home/comment",
-            dataType : "json",
-            data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], _token: '{{csrf_token()}}'},
-             success : function (data)
-             {
-               $("#comment_insert_" + id.split("_")[2]).val('');
-               $comment_clone = $("#comment_panel").clone();
-               $comment_clone.attr("id", "comment_panel_" + data.id_comment);
-               $comment_clone.find("#comm_pic_path").attr('src', data.pic_path);
-               $comment_clone.find("#comment_author").text(data.auth_name + " " + data.auth_surname);
-               $comment_clone.find("#comment_created_at").text(data.created_at);
-               $comment_clone.find("#comment_content").text(data.content);
-               $comment_clone.insertBefore("#comment_insert_" + data.id_post);
-               $comment_clone.show();
-             }
-          })
-      }
-  }
-
-function newPost(){
-  //manca controllo che il campo non sia vuoto!
-  $.ajax({
-          method: "POST",
-          url: "/home/post",
-          data: {content: $("#new_post_content").val(), is_fixed: 0},
-          dataType : "json",
-          beforeSend: function (xhr) {
-               var token = '{{csrf_token()}}';
-
-               if (token) {
-                   return xhr.setRequestHeader('X-CSRF-TOKEN', token);
-               }
-           },
-          success : function (data)
-          {
-            $("#new_post_content").val('');
-            $post_clone = $("#post").clone();
-            $post_clone.attr("id", "post_" + data.id_post);
-            $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
-            $post_clone.find("#creation_date").text(data.created_at);
-            $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
-            $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
-            $post_clone.find("#post_pic_path").attr('src', data.pic_path);
-            $post_clone.find("#post_content").text(data.content);
-            $post_clone.find("#like_butt").text(data.likes);
-            $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
-            $post_clone.find("#name_container").attr('id', "name_container_" + data.id_post).attr('href','/profile/'+data.id_author);
-            $post_clone.insertAfter(".well");
-            $post_clone.show();
-            $("#comment_panel").hide();
-
-            if(data.comments.length > 0){
-              for(j = 0; j < data.comments.length; j++){
-                $comment_clone = $("#comment_panel").clone();
-                $comment_clone.attr("id", "comment_panel_" + data.comments[j].id_comment);
-                $comment_clone.find("#comm_pic_path").attr('src', data.comments[j].pic_path);
-                $comment_clone.find("#comment_author").text(data.comments[j].auth_name + " " + data.comments[j].auth_surname);
-                $comment_clone.find("#comment_created_at").text(data.comments[j].created_at);
-                $comment_clone.find("#comment_content").text(data.comments[j].content);
-                $comment_clone.insertBefore("#comment_insert_" + data.id_post);
-                $comment_clone.show();
-            }
-          }
-        }
-      });
-}
-
-
-function onLoad(data){
-  $("#post").hide();
-  $("#comment_panel").hide();
-  //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
-  for(var i = data.length - 1; i >= 0; i--)
-  {
-    $post_clone = $("#post").clone();
-    $post_clone.find("#input_panel").attr("id", "input_panel_" + data[i].id_post);
-    $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data[i].id_post);
-    $post_clone.find("#creation_date").text(data[i].created_at);
-    $post_clone.attr("id", "post_" + data[i].id_post);
-    $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
-    $post_clone.find("#post_pic_path").attr('src', data[i].pic_path);
-    $post_clone.find("#post_content").text(data[i].content);
-    $post_clone.find("#like_butt").text(data[i].likes);
-    $post_clone.find("#insert_after").attr('id', "insert_after" + data[i].id_post);
-    $post_clone.insertAfter(".well");
-    $post_clone.show();
-    }
-    data.forEach(function(el) {
-      //carico i commenti
-      if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
-        for(j = 0; j < el.comments.length; j++){
-          $comment_clone = $("#comment_panel").clone();
-          $comment_clone.attr("id", "comment_panel_" + el.comments[j].id_comment);
-          $comment_clone.find("#comm_pic_path").attr('src', el.comments[j].pic_path);
-          $comment_clone.find("#comment_author").text(el.comments[j].auth_name + " " + el.comments[j].auth_surname);
-          $comment_clone.find("#comment_created_at").text(el.comments[j].created_at);
-          $comment_clone.find("#comment_content").text(el.comments[j].content);
-          $comment_clone.insertBefore("#comment_insert_" + el.id_post);
-          $comment_clone.show();
-    }
-  }
-})
-}
-
-function loadOlder(){
-  $prev_post = $("#post").prev();
-  $post_id = $prev_post.attr("id").split("_")[1];
-  $.ajax({
-          method: "GET",
-          url: "/profile/user/{{$page -> id_user}}/loadmore",
-          //url : '/profile/user/loadmore',
-          data: { post_id: $post_id },
-          dataType : "json",
-          success : function (posts)
-          {
-            if(posts.length != 0)
-            {
-              for(var x = posts.length - 1; x >= 0 ; x--)
-              {
-                $post_clone = $("#post").clone();
-                $post_clone.find("#input_panel").attr("id", "input_panel_" + posts[x].id_post);
-                $post_clone.find("#comment_insert").attr("id", "comment_insert_" + posts[x].id_post);
-                $post_clone.find("#creation_date").text(posts[x].created_at);
-                $post_clone.attr("id", "post_" + posts[x].id_post);
-                $post_clone.find("#post_u_name").text(posts[x].auth_name + " " + posts[x].auth_surname);
-                $post_clone.find("#post_pic_path").attr('src', posts[x].pic_path);
-                $post_clone.find("#post_content").text(posts[x].content);
-                $post_clone.find("#like_butt").text(posts[x].likes);
-                $post_clone.find("#insert_after").attr('id', "insert_after" + posts[x].id_post);
-                $post_clone.insertAfter("#post_" + $post_id);
-                $post_clone.show();
-                $("#comment_panel").hide();
-
-                }
-                posts.forEach(function(el) {
-                  //carico i commenti
-                  if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
-                    for(j = 0; j < el.comments.length; j++){
-                      $comment_clone = $("#comment_panel").clone();
-                      $comment_clone.attr("id", "comment_panel_" + el.comments[j].id_comment);
-                      $comment_clone.find("#comm_pic_path").attr('src', el.comments[j].pic_path);
-                      $comment_clone.find("#comment_author").text(el.comments[j].auth_name + " " + el.comments[j].auth_surname);
-                      $comment_clone.find("#comment_created_at").text(el.comments[j].created_at);
-                      $comment_clone.find("#comment_content").text(el.comments[j].content);
-                      $comment_clone.insertBefore("#comment_insert_" + el.id_post);
-                      $comment_clone.show();
-                }
-              }
-            })
-            }
-            else{
-              $("#load").text("Nothing More!");
-            }
-
-          }
-        })
-
-}
-
-//Caricamento dei post
-var pathArray = window.location.pathname.split( '/' );
-var profileId = pathArray[2];
-
-$(document).ready(function(){
-     $.ajax({
-         url : "/profile/user/" + profileId + "/loadmore",
-         //url : '/profile/user/loadmore',
-         method : "GET",
-         dataType : "json",
-         data: { post_id: -1 },
-         success : function (posts)
-         {
-           onLoad(posts);
-         }
-     });
-});
-
-
-$('#reportModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  $('#btnReportPost').click(function(){
-    var motivo = $('#reasonReportPost').find(":selected").text();
-    $.ajax({
-      dataType: 'json',
-      type: 'POST',
-      url: '/home/reportPost',
-      data: { id_post: recipient, motivo: motivo }
-    }).done(function (data) {
-      var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
-      $('#modal-body-post').html(html);
-      $('#btnReportPost').hide();
-    });
-  });
-
-
-  var modal = $(this);
-  modal.find('.modal-title').text('Segnala post');
-});
-
-$('#reportModal').on('hide.bs.modal', function(event){
-  //rimuovo gli eventi una volta che chiudo il modal
-  $('#btnReportPost').unbind();
-});
 </script>
 
 <script>
@@ -373,56 +171,42 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 </script>
 
 <script>
+  function stopFollow(id_page, id_user){
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/profile/page/stopFollow',
+      data: { id_page: id_page, id_user:id_user }
+    }).done(function (data) {
+      $('#stopFollowP').remove();
+      var html = '<p id="followP" style="text-align: center; color: blue;"><a style="cursor: pointer; font-size: 20px;" onclick="follow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: blue;" id="follow" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>';
+      $('#divFollowPage').html(html);
+      var t = $('#totFollowers');
+      $('#totFollowers').html('<i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina');
+    });              
+  }
 
-function commentfocus(id){
-  $("#comment_insert_" + id.split("_")[1]).focus();
-}
+  function follow(id_page, id_user){
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/profile/page/follow',
+      data: { id_page: id_page, id_user:id_user }
+    }).done(function (data) {
+      $('#followP').remove();
+      var html = ' <p id="stopFollowP" style="text-align: center; color: red;"><a style="cursor: pointer; font-size: 20px;" onclick="stopFollow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: red;" id="follow" class="glyphicon glyphicon-thumbs-down"></i>&nbsp;Smetti di seguire la pagina</a></p>';
+      $('#divFollowPage').html(html);
+      var t = $('#totFollowers');
+      $('#totFollowers').html('<i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina');
+    });              
+  }
 
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 
-function reaction(id){
-console.log(id);
-$.ajax({
-  method: "POST",
-  dataType: "json",
-  url: "/home/reaction",
-  data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
-   success : function (data)
-   {
-     console.log(data);
-     switch (data.type) {
-       case "post":
-         $("#like_" + data.id_post).css({ 'color': data.status_like })
-         $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
-         break;
-       case "comm":
-         $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
-         $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
-         break;
-     }
-   }
-})
-}
-
-function createcomment(comment){
-$comment_clone = $("#comment_panel").clone();
-$comment_clone.attr("id", "comment_panel_" + comment.id_comment);
-$comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
-$comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
-$comment_clone.find("#comment_created_at").text(comment.created_at);
-$comment_clone.find("#comment_content").text(comment.content);
-if(comment.userlike == '0'){
-  $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_post);;
-  $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
-}
-else if(comment.userlike == '1'){
-  $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_post);
-  $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
-}
-else{
-  $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
-  $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
-}
-return($comment_clone);
-}
 </script>
+
 @endsection
