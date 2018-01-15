@@ -101,7 +101,7 @@
   </div>
 
 </article>
-<aside class="side">Sidebar</aside>
+<aside class="side">Amici Suggeriti</aside>
 </div>
 
 
@@ -225,7 +225,6 @@
     html +=     '</div>';
     $('#modal-body-post').html(html);
   });
-
 
   $('#reportComment').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
