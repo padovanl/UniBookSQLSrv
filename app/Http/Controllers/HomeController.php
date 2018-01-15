@@ -27,6 +27,7 @@ use Cookie;
 
 class HomeController extends Controller{
 
+  //torna un array monodimensionale da una collezione di array
   function array_flatten($array) {
     $return = array();
     foreach ($array as $key => $value) {
@@ -38,13 +39,15 @@ class HomeController extends Controller{
     }
 
     return $return;
-}
+  }
 
+  //funzione che compara la data di creazione di un post
   public function cmp($a, $b) {
       if ($a->created_at == $b->created_at) return 0;
       return (strtotime($a->created_at) < strtotime($b->created_at)) ? 1 : -1;
   }
 
+  //verifica l'integrità del login
   public function verify_cookie(){
     if (Cookie::has('session')){
       $id = Cookie::get('session');
@@ -59,6 +62,7 @@ class HomeController extends Controller{
     }
   }
 
+  //per ogni id post passato, crea una struttura del tipo 'PostViewModel' con all'interno tutti i dettagli di un post
   public function createPost($logged_user, $post_id){
     $tmp_comm = array();
     $post = Post::where('id_post', $post_id)->first();
@@ -97,6 +101,11 @@ class HomeController extends Controller{
     return($toreturn);
   }
 
+  //gestione dell'inserimento nella tabella dei log
+  public function log($id_user, $action){
+    DB::table('log')->insert(['id_user' => $id_user, 'action' => $action, 'created_at' => now()]);
+  }
+
   //loading dei post
   public function loadMore(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
@@ -131,7 +140,7 @@ class HomeController extends Controller{
     }
     //ordino per data
     usort($toreturn, array($this, 'cmp'));
-    
+
     if($request->input('post_id') == -1){
       $toreturn = array_slice($toreturn, 0, 7);
       return(json_encode($toreturn));
@@ -146,42 +155,45 @@ class HomeController extends Controller{
     }
   }
 
+  //funzione che inserisce notifiche nel db
   public function sendNotification($id, $type, $post_id, $is_like){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     switch($type){
       case "likecomment":
         if(($logged_user['id_user']) != (CommentU::where('id_comment', $id)->first()['id_author'])){
           DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $logged_user['name'] . " " . $logged_user['surname'] . " ha messo " . $is_like . " al tuo commento.", 'new' => 1,
-                                              'id_user' => CommentU::where('id_comment', $id)->first()['id_author'], 'link' => "/post/details/" . $post_id]);
+                                              'id_user' => CommentU::where('id_comment', $id)->first()['id_author'], 'link' => "/details/post/" . $post_id]);
         }
         break;
       case "likepost":
         if(($logged_user['id_user']) != (Post::where('id_post', $id)->first()['id_author'])){
           DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $logged_user['name'] . " " . $logged_user['surname'] . " ha messo " . $is_like . " al tuo post.", 'new' => 1,
-                                              'id_user' => Post::where('id_post', intval($id))->first()['id_author'], 'link' => "/post/details/" . $id]);
+                                              'id_user' => Post::where('id_post', intval($id))->first()['id_author'], 'link' => "/details/post/" . $id]);
         }
         break;
       case "comment":
         if(($logged_user['id_user']) != (Post::where('id_post', $id)->first()['id_author'])){
           DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $logged_user['name'] . " " . $logged_user['surname'] . " ha commentato il al tuo post.", 'new' => 1,
-                                              'id_user' => Post::where('id_post', $id)->first()['id_author'], 'link' => "/post/details/" . $post_id]);
+                                              'id_user' => Post::where('id_post', $id)->first()['id_author'], 'link' => "/details/post/" . $post_id]);
         }
         break;
     }
   }
 
   //funzione richiamata quando viene richiesta la root del nostro sito
-  public function landing()
-  {
+  public function landing(){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      //log
       return view('home', compact('logged_user'));
     }
     else{
+      $this->log($logged_user['id_user'], "Try to log in.");
       return redirect('/login');
     }
   }
 
+  //funzione che imposta le reazioni a commenti e post
   public function reaction(Request $request){
     //manca controllo bontà dei parametri
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
@@ -190,15 +202,19 @@ class HomeController extends Controller{
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
         if(($record) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record ed elimino la notifica
-          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/post/details/' . request('id'))->delete();
+          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/details/post/' . request('id'))->delete();
           DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          //log
+          $this->log($logged_user['id_user'], 'Remove Like Post_' . $record['id_post']);
           return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
         else if(($record) && ($record['like'] == 0)){
           //se il post non è mio, inserisco una notifica
-          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/post/details/' . request('id'))->delete();
+          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/details/post/' . request('id'))->delete();
           $this->sendNotification(request('id'), "likepost", request('id'), 'mipiace');
           DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => 1));
+          //log
+          $this->log($logged_user['id_user'], 'Change Dislike Post in Like_' . $record['id_post']);
           return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         else{
@@ -207,7 +223,10 @@ class HomeController extends Controller{
           $like->like = 1;
           $like->id_user = Cookie::get('session');
           $like->save();
+          //notifica
           $this->sendNotification(request('id'), "likepost", request('id'), 'mi piace');
+          //log
+          $this->log($logged_user['id_user'], 'Like Post_' . request('id'));
           return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         break;
@@ -216,14 +235,18 @@ class HomeController extends Controller{
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
         if(($record) && ($record['like'] == 0)){
           //se premo di nuovo il pulsante elimino il record ed elimino la notifica!!
-          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/post/details/' . request('id'))->delete();
+          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/details/post/' . request('id'))->delete();
           DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          //log
+          $this->log($logged_user['id_user'], 'Remove Dislike Post_' . $record['id_post']);
           return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
         else if(($record) && ($record['like'] == 1)){
-          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/post/details/' . request('id'))->delete();
+          DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/details/post/' . request('id'))->delete();
           $this->sendNotification(request('id'), "likepost", request('id'), 'non mi piace');
           DB::table('like_posts')->where('id_post', request('id'))->update(array('like' => 0));
+          //log
+          $this->log($logged_user['id_user'], 'Change Like Post in Dislike_' . $record['id_post']);
           return(json_encode(array('type' => 'post','id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         else{
@@ -233,6 +256,8 @@ class HomeController extends Controller{
           $like->id_user = Cookie::get('session');
           $like->save();
           $this->sendNotification(request('id'), "likepost", request('id'), 'non mi piace');
+          //log
+          $this->log($logged_user['id_user'], 'Disike Post_' . request('id'));
           return(json_encode(array('type' => 'post', 'id_post' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         break;
@@ -241,14 +266,18 @@ class HomeController extends Controller{
         $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
         if(($record) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record
-          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/post/details/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
+          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'])->where('link', '/details/post/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
           DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          //log
+          $this->log($logged_user['id_user'], 'Remove Comment Like_' . $record['id_comment']);
           return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
         else if(($record) && ($record['like'] == 0)){
-          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/post/details/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
-          $this->sendNotification(request('id'), "likecomm", CommentU::where('id_comment', request('id'))->first()['id_post'], 'mi piace');
+          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/details/post/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
+          $this->sendNotification(request('id'), "likecomment", CommentU::where('id_comment', request('id'))->first()['id_post'], 'mi piace');
           DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => 1));
+          //log
+          $this->log($logged_user['id_user'], 'Change Comment Like in Dislike_' . $record['id_comment']);
           return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         else{
@@ -257,7 +286,9 @@ class HomeController extends Controller{
           $like->like = 1;
           $like->id_user = Cookie::get('session');
           $like->save();
-          $this->sendNotification(request('id'), "likecomm", CommentU::where('id_comment', request('id'))->first()['id_post'], 'mi piace');
+          $this->sendNotification(request('id'), "likecomment", CommentU::where('id_comment', request('id'))->first()['id_post'], 'mi piace');
+          //log
+          $this->log($logged_user['id_user'], 'Comment Like_' . request('id'));
           return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'blue', 'status_dislike' => 'black')));
         }
         break;
@@ -266,14 +297,18 @@ class HomeController extends Controller{
         $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
         if(($record) && ($record['like'] == 0)){
           //se premo di nuovo il pulsante elimino il record
-          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/post/details/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
+          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/details/post/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
           DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
+          //log
+          $this->log($logged_user['id_user'], 'Remove Comment Dislike_' . $record['id_comment']);
           return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'black')));
         }
         else if(($record) && ($record['like'] == 1)){
-          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/post/details/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
-          $this->sendNotification(request('id'), "likecomm", CommentU::where('id_comment', request('id'))->first()['id_post'], ' non mi piace');
+          DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/details/post/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
+          $this->sendNotification(request('id'), "likecomment", CommentU::where('id_comment', request('id'))->first()['id_post'], 'non mi piace');
           DB::table('like_comments')->where('id_comment', request('id'))->update(array('like' => 0));
+          //log
+          $this->log($logged_user['id_user'], 'Changed Comment Dislike in Like_' . $record['id_comment']);
           return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         else{
@@ -282,7 +317,9 @@ class HomeController extends Controller{
           $like->like = 0;
           $like->id_user = Cookie::get('session');
           $like->save();
-          $this->sendNotification(request('id'), "likecomm", CommentU::where('id_comment', request('id'))->first()['id_post'], ' non mi piace');
+          $this->sendNotification(request('id'), "likecomment", CommentU::where('id_comment', request('id'))->first()['id_post'], ' non mi piace');
+          //log
+          $this->log($logged_user['id_user'], 'Comment Dislike_' . request('id'));
           return(json_encode(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => Cookie::get('session'), 'status_like' => 'black', 'status_dislike' => 'red')));
         }
         break;
@@ -290,6 +327,7 @@ class HomeController extends Controller{
 
   }
 
+  //funzione che crea un nuovo post
   public function newPost(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
       //verifica dei campi
@@ -301,9 +339,12 @@ class HomeController extends Controller{
         $post->fixed = $request->input('is_fixed');
         $post->id_author = $logged_user['id_user'];
         $post->save();
+        //chiamata di verifica e di inserimento nella tabella 'posts_user' del record relativo al post
         $post_tmp = Post::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
         DB::table('posts_user')->insert(['id_user' => $logged_user['id_user'], 'id_post' => $post_tmp['id_post']]);
         $post = new PostViewModel($post_tmp['id_post'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'], $post_tmp['content'], $post_tmp['created_at'], $post_tmp['updated_at'], $post_tmp['fixed'], $post_tmp['id_author'], [], [], [], [], $logged_user['ban']);
+        //log
+        $this->log($logged_user['id_user'], 'New Post_' . $post_tmp['id_post']);
         return(json_encode($post));
       }
       else{
@@ -311,6 +352,7 @@ class HomeController extends Controller{
       }
     }
 
+  //funzione che crea un nuovo commento
   public function newComment(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if($logged_user['ban'] != 1){
@@ -321,9 +363,13 @@ class HomeController extends Controller{
       $comment->id_author = $logged_user['id_user'];
       $comment->id_post =  $request->input('id_post');
       $comment->save();
+      //Query di verifica
       $comm_tmp = CommentU::where('id_author', $logged_user['id_user'])->where('content', request('content'))->first();
       DB::table('comments_user')->insert(['id_user' => $logged_user['id_user'], 'id_comment' => $comm_tmp['id_comment']]);
+      $this->sendNotification($request->input('id_post'), "comment", $request->input('id_post'), null);
       $comment = new CommentViewModel($comm_tmp['id_comment'], $logged_user['name'], $logged_user['surname'], $logged_user['pic_path'],$comm_tmp['content'], $comm_tmp['created_at'], $comm_tmp['updated_at'], $comm_tmp['id_post'], NULL, [], [], NULL, $logged_user['id_user'], $logged_user['ban']);
+      //log
+      $this->log($logged_user['id_user'], 'New Comment_' . $comm_tmp['id_comment']);
       return(json_encode($comment));
     }
     else{
@@ -366,6 +412,8 @@ class HomeController extends Controller{
     $report->status = "aperta";
     $report->description = $motivo;
     $report->save();
+    //log
+    $this->log($logged_user['id_user'], 'Report Post_' . $report['id_post']);
     return response()->json(['message' => 'Segnalazione completata!']);
   }
 
@@ -380,6 +428,8 @@ class HomeController extends Controller{
     $report->status = "aperta";
     $report->description = $motivo;
     $report->save();
+    //log
+    $this->log($logged_user['id_user'], 'Report Comment_' . $report['id_comment']);
     return response()->json(['message' => 'Segnalazione completata!']);
   }
 }
