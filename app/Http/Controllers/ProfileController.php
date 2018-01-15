@@ -184,5 +184,15 @@ class ProfileController extends Controller{
       if ($a['created_at'] == $b['created_at']) return 0;
       return (strtotime($a['created_at']) < strtotime($b['created_at'])) ? 1 : -1;
   }
+
+  //profilo pagina
+  public function ShowPage($id){
+    if(!$this->verify_cookie())
+      return view('/');
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    $page = Page::where('id_page', '=', $id)->first();
+    return view('profilePage', compact('logged_user', 'id', 'page'));
+
+  }
 }
 ?>
