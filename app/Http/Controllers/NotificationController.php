@@ -27,15 +27,20 @@ class NotificationController extends Controller
     	if($this->verify_cookie()){
     		$id = Cookie::get('session');
 			$logged_user = User::where('id_user', '=', $id)->first();
-			$notifications = Notification::where('id_user', '=', $logged_user->id_user)->latest()->get();
+			$notificationList = Notification::where('id_user', '=', $logged_user->id_user)->latest()->get();
 			$temp = collect();
-			foreach ($notifications as $n) {
+			foreach ($notificationList as $n) {
 				$user = User::where('id_user', '=', $n->id_sender)->first();
-				$viewModel = new NotificationViewModel($n->id_notification, $n->content, '/' . $user->pic_path, $n->link);
-				$temp.push($viewModel);
+				$viewModel = new NotificationViewModel($n->id_notification, $n->content, '/' . $user->pic_path, $n->link, $n->new);
+				$temp->push($viewModel);
 			}
-			$notifications = $temp;
-    		return view('notifications', compact('logged_user', 'notifications'));
+			$notificationList = $temp;
+    		return view('notifications', compact('logged_user', 'notificationList'));
     	}
+    }
+
+    public function read(Request $request){
+    	$id = $request->input('id');
+    	Notification::where('id_notification', '=', $id)->update(['new' => false]);
     }
 }

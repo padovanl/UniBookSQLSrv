@@ -88,6 +88,7 @@ Route::post('/home/reportComment', 'HomeController@reportComment');
 
 //notifiche
 Route::get('/notification', 'NotificationController@index');
+Route::post('/notification/read', 'NotificationController@read');
 
 //dettagli post (da finire)
 Route::get('/post/details/{id}', 'PostController@details');

@@ -12,7 +12,7 @@ class NotificationViewModel //extends Model
     public $link;
     public $new;
 
-    public function __constructor($id_notification, $content, $picPath, $link, $new){
+    function __construct($id_notification, $content, $picPath, $link, $new){
     	$this->id_notification = $id_notification;
     	$this->content = $content;
     	$this->picPath = $picPath;
