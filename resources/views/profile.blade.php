@@ -26,13 +26,13 @@ background-color: #4285f4!important;
         <div class="w3-display-container">
           <img src="/{{$logged_user ->pic_path}}" style="width:100%" alt="Avatar">
           <div class="w3-display-bottomleft w3-container w3-text-black">
-            <h2>{{$logged_user -> name . " " . $logged_user -> surname}}</h2>
+            <h2>{{$user -> name . " " . $user -> surname}}</h2>
           </div>
         </div>
         <div class="w3-container">
           <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Student</p>
-          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$logged_user -> citta}}</p>
-          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$logged_user -> email}}</p>
+          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
+          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
           <!--<p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p> -->
           <hr>
 
@@ -81,6 +81,7 @@ background-color: #4285f4!important;
     <div class="padding pre-scrollable" style="max-height: 800px;">
             <!-- content -->
                 <!-- main col right -->
+                <?php if ($logged_user->id_user == $user->id_user): ?>
                     <div class="well">
                         <div>
                             <h4>New Post</h4>
@@ -91,6 +92,7 @@ background-color: #4285f4!important;
                             </div>
                         </div>
                     </div>
+                <?php endif; ?>
                     <!--Pannello Post-->
                     <div class="container" id="post">
                       <div class="row">
@@ -102,7 +104,7 @@ background-color: #4285f4!important;
                                             <div class="col-md-10">
                                                 <div class="media">
                                                   <div class="media-left">
-                                                    <a href="#">
+                                                    <a id="name_container" href="">
                                                       <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
                                                     </a>
                                                   </div>
@@ -235,6 +237,7 @@ function newPost(){
             $post_clone.find("#post_content").text(data.content);
             $post_clone.find("#like_butt").text(data.likes);
             $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
+            $post_clone.find("#name_container").attr('id', "name_container_" + data.id_post).attr('href','/profile/'+data.id_author);
             $post_clone.insertAfter(".well");
             $post_clone.show();
             $("#comment_panel").hide();
@@ -297,7 +300,7 @@ function loadOlder(){
   $post_id = $prev_post.attr("id").split("_")[1];
   $.ajax({
           method: "GET",
-          url: "/profile/user/%7B{{$logged_user -> id_user}}%7D/loadmore",
+          url: "/profile/user/{{$user -> id_user}}/loadmore",
           //url : '/profile/user/loadmore',
           data: { post_id: $post_id },
           dataType : "json",
