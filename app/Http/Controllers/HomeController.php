@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \DateTime;
 use App\User;
 use App\Page;
 use App\Post;
@@ -89,7 +90,6 @@ class HomeController extends Controller{
                                                 LikeComment::where('id_user', $logged_user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
                                                 $comment['id_author'], $comm_user['ban']));
     }
-
 
     $toreturn = new PostViewModel($post_id, $user_post['name'], $user_post['surname'], $user_post['pic_path'],
                       $post['content'], $post['created_at'], $post['updated_at'],
@@ -329,6 +329,7 @@ class HomeController extends Controller{
 
   //funzione che crea un nuovo post
   public function newPost(Request $request){
+    date_default_timezone_set('Europe/Rome');
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
       //verifica dei campi
       if($logged_user['ban'] != 1){
@@ -354,6 +355,7 @@ class HomeController extends Controller{
 
   //funzione che crea un nuovo commento
   public function newComment(Request $request){
+    date_default_timezone_set('Europe/Rome');
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if($logged_user['ban'] != 1){
       $comment = new CommentU();

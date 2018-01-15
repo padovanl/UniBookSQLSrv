@@ -52,7 +52,6 @@
                                               <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"></i></a></li>
                                               <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"></i></a></li>
                                               <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                              <li><a><i onclick="share(this.id)" style="cursor:pointer;" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
                                           </ul>
                                      </div>
                                      <div class="post-footer-comment-wrapper">
@@ -77,7 +76,6 @@
                                                 </div>
                                                 </div>
                                               </div>
-
                                          </div>
                                          <hr>
 
@@ -169,25 +167,6 @@
   </div>
 </div>
 
-
-
-<style>
-  .pre-scrollable {
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-</style>
-
-<style>
-  .form-rounded {
-    border-radius: 1rem;
-  }
-</style>
-
-
-
-
-
 <script>
   $('#reportModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
@@ -265,25 +244,44 @@
 
   $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
-</script>
-
-<script>
-
 function commentfocus(id){
     $("#comment_insert_" + id.split("_")[1]).focus();
 }
 
+function getTimeDelta(time){
+  var now = new Date().getTime();
+  var time_past = new Date(time);
+  var minutes = Math.floor((now - time_past) / 60000);
+  var delta = 0;
+  if(minutes == 0){
+    delta = "Adesso";
+  }
+  else if(minutes < 60) {
+    delta = minutes + " minuti fa";
+  }
+  else if((minutes >= 60) && (minutes < 86400)) {
+    delta = Math.floor((minutes / 60)) + " ore fa";
+  }
+  else if((minutes >= 86400) && (minutes < 604800)){
+    delta = Math.floor((minutes / 86400)) + " giorni fa.";
+  }
+  else if((minutes >= 604800) && (minutes < 42033600)){
+    delta = Math.floor((minutes / 604800)) + " settimane fa";
+  }
+  else{
+    delta = "Molto tempo fa"
+  }
+  return(delta);
+}
 
 function reaction(id){
-  console.log(id);
-  $.ajax({
+    $.ajax({
     method: "POST",
     dataType: "json",
     url: "/home/reaction",
     data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
      success : function (data)
      {
-       console.log(data);
        switch (data.type) {
          case "post":
            $("#like_" + data.id_post).css({ 'color': data.status_like })
@@ -308,7 +306,7 @@ function createcomment(comment){
   else{
     $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name);
   }
-  $comment_clone.find("#comment_created_at").text(comment.created_at);
+  $comment_clone.find("#comment_created_at").text(getTimeDelta(comment.created_at));
   $comment_clone.find("#comment_content").text(comment.content);
     //segnalazione
   $comment_clone.find('#reportingComment').attr('data-whatever', comment.id_comment);
@@ -329,11 +327,10 @@ function createcomment(comment){
 }
 
 function createPost(data){
-  console.log(data);
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
-  $post_clone.find("#creation_date").text(data.created_at);
+  $post_clone.find("#creation_date").text(getTimeDelta(data.created_at));
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
   if(data.auth_surname != null){
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
@@ -361,7 +358,6 @@ function createPost(data){
     $post_clone.find("#dislike").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
   }
   $post_clone.find("#comment").attr('id', 'comment_' + data.id_post);
-  $post_clone.find("#share").attr('id', 'share_' + data.id_post);
 
   return($post_clone);
 }
@@ -378,7 +374,6 @@ function newComment(e, id){
              success : function (data)
              {
                if(data.ban != 1){
-                 console.log(data)
                  $("#comment_insert_" + data.id_post).val('');
                  $comment_clone = createcomment(data);
                  $comment_clone.insertBefore("#comment_insert_" + data.id_post);
@@ -430,12 +425,10 @@ function newPost(){
       });
 }
 
-
 function onLoad(data){
   $("#post").hide();
   $("#comment_panel").hide();
   //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
-  console.log(data);
   for(var i = data.length - 1; i >= 0; i--)
   {
     $post_clone = createPost(data[i]);
