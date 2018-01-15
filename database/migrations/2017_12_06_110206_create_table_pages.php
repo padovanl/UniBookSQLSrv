@@ -17,7 +17,7 @@ class CreateTablePages extends Migration
             //increments imposta automaticamente la chiave primaria, non serve usare il metodo primary()
             $table->increments('id_page');
             $table->string('pic_path');
-            $table->string('nome');
+            $table->string('name');
             $table->uuid('id_user');
             $table->boolean('ban')->default(false);
 	    $table->timestamps();

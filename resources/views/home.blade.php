@@ -127,7 +127,7 @@
       </div>
       <div class="modal-footer">
           <div class="col-md-5">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button> 
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
           </div>
           <div class="col-md-5">
             <button type="button" class="btn btn-primary" id="btnReportPost">Segnala</button>
@@ -159,7 +159,7 @@
       </div>
       <div class="modal-footer">
           <div class="col-md-5">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button> 
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
           </div>
           <div class="col-md-5">
             <button type="button" class="btn btn-primary" id="btnReportComment">Segnala</button>
@@ -263,10 +263,9 @@
     html +=     '</div>';
     $('#modal-body-comment').html(html);
   });
-</script>
 
-<script>
   $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
+
 </script>
 
 <script>
@@ -304,23 +303,28 @@ function createcomment(comment){
   $comment_clone = $("#comment_panel").clone();
   $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
   $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
-  $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
+  if(comment.auth_surname != null){
+    $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
+  }
+  else{
+    $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name);
+  }
   $comment_clone.find("#comment_created_at").text(comment.created_at);
   $comment_clone.find("#comment_content").text(comment.content);
     //segnalazione
   $comment_clone.find('#reportingComment').attr('data-whatever', comment.id_comment);
 
   if(comment.userlike == '0'){
-    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_post);;
-    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
+    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_comment);;
+    $comment_clone.find("#likecomm").css({ 'color': 'black'}).attr('id', 'likecomm_' + comment.id_comment);
   }
   else if(comment.userlike == '1'){
-    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_post);
-    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
+    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_comment);
+    $comment_clone.find("#dislikecomm").css({ 'color': 'black'}).attr('id', 'dislikecomm_' + comment.id_comment);
   }
   else{
-    $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
-    $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
+    $comment_clone.find("#likecomm").css({ 'color': 'black'}).attr('id', 'likecomm_' + comment.id_comment);
+    $comment_clone.find("#dislikecomm").css({ 'color': 'black'}).attr('id', 'dislikecomm_' + comment.id_comment);
   }
   return($comment_clone);
 }
@@ -331,7 +335,12 @@ function createPost(data){
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
   $post_clone.find("#creation_date").text(data.created_at);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
-  $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname);
+  if(data.auth_surname != null){
+    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname);
+  }
+  else{
+    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name);
+  }
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
   $post_clone.find("#like_butt").text(data.likes);
@@ -340,8 +349,8 @@ function createPost(data){
 
   $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
   if(data.userlike == '0'){
-    $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'like_' + data.id_post);;
-    $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
+    $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'dislike_' + data.id_post);;
+    $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'like_' + data.id_post);
   }
   else if(data.userlike == '1'){
     $post_clone.find("#like").css({ 'color': 'blue'}).attr('id', 'like_' + data.id_post);
@@ -369,8 +378,9 @@ function newComment(e, id){
              success : function (data)
              {
                if(data.ban != 1){
-                 $("#comment_insert_" + id.split("_")[2]).val('');
-                 createcomment(data);
+                 console.log(data)
+                 $("#comment_insert_" + data.id_post).val('');
+                 $comment_clone = createcomment(data);
                  $comment_clone.insertBefore("#comment_insert_" + data.id_post);
                  $comment_clone.show();
                }
@@ -434,7 +444,7 @@ function onLoad(data){
     }
     data.forEach(function(el) {
       //carico i commenti
-      if(el.comments.length > 0 && el.id_post == el.comments[0].id_post){
+      if(el.comments.length > 0 && (el.id_post == el.comments[0].id_post)){
         for(j = 0; j < el.comments.length; j++){
           $comment_clone = createcomment(el.comments[j]);
           $comment_clone.insertBefore("#comment_insert_" + el.id_post);

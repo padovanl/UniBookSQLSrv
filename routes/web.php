@@ -27,6 +27,7 @@ Route::get('/details/post/{id_post}', 'DetailsController@landing');
 //General App Routes: messaggi, notifiche, richieste di amicizia
 Route::post('/getnotifications', 'GeneralAppController@getNotifications');
 Route::post('/getcountNewMessage', 'GeneralAppController@countNewMessage');
+Route::post('/getcountNewRequest', 'GeneralAppController@getFriendRequest');
 
 //Home Routes
 Route::get('/', 'HomeController@landing');
@@ -87,3 +88,14 @@ Route::post('/home/reportComment', 'HomeController@reportComment');
 
 //notifiche
 Route::get('/notification', 'NotificationController@index');
+
+//dettagli post
+Route::get('/post/details/{id}', 'PostController@details');
+
+//amicizie
+Route::get('/friend/request', 'FriendshipController@index');
+Route::post('/friend/accept', 'FriendshipController@acceptFriend');
+Route::post('/friend/decline', 'FriendshipController@declineFriend');
+//ancora da implementare
+Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
+Route::post('/friend/remove', 'FriendshipController@removeFriend');
