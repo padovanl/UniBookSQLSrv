@@ -26,7 +26,7 @@
                                           <div class="col-md-10">
                                               <div class="media">
                                                 <div class="media-left">
-                                                  <a href="#">
+                                                  <a id="img_container" href="#">
                                                     <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
                                                   </a>
                                                 </div>
@@ -329,6 +329,7 @@ function createcomment(comment){
 }
 
 function createPost(data){
+  console.log(data);
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
@@ -345,7 +346,7 @@ function createPost(data){
   $post_clone.find("#like_butt").text(data.likes);
   //segnalazione
   $post_clone.find('#reportingPost').attr('data-whatever', data.id_post);
-
+  $post_clone.find('#img_container').attr('href', '/profile/user/' + data.id_auth);
   $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
   if(data.userlike == '0'){
     $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'dislike_' + data.id_post);;
