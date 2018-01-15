@@ -19,7 +19,7 @@ class CommentViewModel //extends Model
     public $likes;
     public $dislikes;
     public $userlike;
-    public $id_user;
+    public $id_author;
     public $ban;
 
     public function __construct($id_comment, $auth_name, $auth_surname, $pic_path, $content, $created_at, $updated_at, $id_post, $is_friend, $likes, $dislikes, $userlike, $id_user, $ban) {
@@ -35,7 +35,7 @@ class CommentViewModel //extends Model
        $this->likes = $likes;
        $this->dislikes = $dislikes;
        $this->userlike = $userlike;
-       $this->id_user = $id_user;
+       $this->id_author = $id_user;
        $this->ban = $ban;
    }
 }

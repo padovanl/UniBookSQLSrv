@@ -40,9 +40,9 @@ class HomeController extends Controller{
     return $return;
 }
 
-  function cmp($a, $b) {
-      if ($a['created_at'] == $b['created_at']) return 0;
-      return (strtotime($a['created_at']) < strtotime($b['created_at'])) ? 1 : -1;
+  public function cmp($a, $b) {
+      if ($a->created_at == $b->created_at) return 0;
+      return (strtotime($a->created_at) < strtotime($b->created_at)) ? 1 : -1;
   }
 
   public function verify_cookie(){
@@ -59,118 +59,91 @@ class HomeController extends Controller{
     }
   }
 
+  public function createPost($logged_user, $post_id){
+    $tmp_comm = array();
+    $post = Post::where('id_post', $post_id)->first();
+    $post_comments = CommentU::where('id_post', $post_id)->get();
+    if(!is_numeric($post['id_author'])){
+      $user_post = User::where('id_user', $post['id_author'])->first();
+    }
+    else{
+      $user_post = Page::where('id_page', $post['id_author'])->first();
+    }
+    foreach($post_comments as $comment){
+      if(!is_numeric($comment['id_author'])){
+        $comm_user = User::where('id_user', $comment['id_author'])->first();
+      }
+      else{
+        $comm_user = Page::where('id_page', $comment['id_author'])->first();
+      }
+      array_push($tmp_comm, new CommentViewModel($comment['id_comment'], $comm_user['name'],
+                                                $comm_user['surname'], $comm_user['pic_path'],
+                                                $comment['content'], $comment['created_at'], $comment['updated_at'],
+                                                $comment['id_post'], '0',
+                                                LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
+                                                LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
+                                                LikeComment::where('id_user', $logged_user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
+                                                $comment['id_author'], $comm_user['ban']));
+    }
+
+
+    $toreturn = new PostViewModel($post_id, $user_post['name'], $user_post['surname'], $user_post['pic_path'],
+                      $post['content'], $post['created_at'], $post['updated_at'],
+                      $post['is_fixed'], $post['id_author'], $tmp_comm,
+                      LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
+                      LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
+                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
+                      $user_post['ban']);
+    return($toreturn);
+  }
+
   //loading dei post
   public function loadMore(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    $friends = $logged_user::friends($logged_user['id_user']);     //Torna un array con gli amici
+
+    $friends = User::friends($logged_user['id_user']);     //Torna un array con gli amici
     $followed_pages_id = Users_follow_pages::where('id_user', $logged_user['id_user'])->get();
 
     //Caricamento dei post degli amici e delle pagine
-    $posts = array();
+    $posts_ids = array();
     $list_comments = array();
     $likes = array();
 
-    //inserisco anche i miei posts
-    array_push($posts, Post::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
-    array_push($list_comments, CommentU::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
+    //inserisco i miei posts
+    array_push($posts_ids, PostUser::where('id_user', $logged_user['id_user'])->pluck('id_post')->toArray());
 
-    //per ogni elemento di friends devo andare nella tabella post_users e tirare fuori tutti gli id dei post di ogni mio amico
-    foreach ($friends as $friend){
-      $id_posts = PostUser::where('id_user', $friend['id_user'])->get();
-      foreach ($id_posts as $post){
-        //post
-        array_push($posts, Post::where('id_post', $post['id_post'])->orderBy('created_at','asc')->get());
-        //commenti
-        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
-      }
-    }
+    //id post delle pagine seguite
     foreach ($followed_pages_id as $id_page){
-      $id_page_post = PostPage::where('id_page', $id_page['id_page'])->get();
-      foreach ($id_page_post as $post_page){
-        array_push($posts, Post::where('id_post', $post_page['id_post'])->get());
-      }
+      array_push($posts_ids, PostPage::where('id_page', $id_page['id_page'])->pluck('id_post')->toArray());
     }
 
-    $posts = array_flatten($posts);
-    $list_comments = array_flatten($list_comments);
-
-    foreach($posts as $post){
-      array_push($likes, LikePost::where('id_post', $post['id_post'])->get());
+    //ids post amici
+    foreach ($friends as $friend){
+      array_push($posts_ids, PostUser::where('id_user', $friend['id_user'])->pluck('id_post')->toArray());
     }
-    $likes = array_flatten($likes);
 
-    //ordino per data
-    usort($posts, array($this, 'cmp'));
-    usort($list_comments, array($this, 'cmp'));
-
+    //faccio la flatten dell'array, adesso ho i post tutti uguali
+    $posts_ids = array_flatten($posts_ids);
     $toreturn = array();
-
-    foreach($posts as $post){
-      $tmp_comm = array();
-      foreach($list_comments as $comment){
-        if($comment['id_post'] === $post['id_post']){
-          if(!is_numeric($comment['id_author'])){
-            //TODO:manca is_friend
-            array_push($tmp_comm, new CommentViewModel($comment['id_comment'], User::where('id_user', $comment['id_author'])->first()->name,
-                                                      User::where('id_user', $comment['id_author'])->first()->surname,
-                                                      User::where('id_user', $comment['id_author'])->first()->pic_path,
-                                                      $comment['content'], $comment['created_at'], $comment['updated_at'],
-                                                      $comment['id_post'], '0',
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $logged_user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
-                                                      $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
-          }
-          else{
-            array_push($tmp_comm, new CommentViewModel($comment['id_comment'], Page::where('id_page', $comment['id_author'])->first()->nome,
-                                                      '',
-                                                      Page::where('id_page', $comment['id_author'])->first()->pic_path,
-                                                      $comment['content'], $comment['created_at'], $comment['updated_at'],
-                                                      $comment['id_post'], '0',
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      null, //bisogna capire se la pagina può mettere like
-                                                      $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
-          }
-
-        }
-      }
-      if(!is_numeric($post['id_author'])){
-        array_push($toreturn, new PostViewModel($post['id_post'], User::where('id_user', $post['id_author'])->first()->name,
-                                      User::where('id_user', $post['id_author'])->first()->surname,
-                                      User::where('id_user', $post['id_author'])->first()->pic_path,
-                                      $post['content'], $post['created_at'], $post['updated_at'],
-                                      $post['is_fixed'], $post['id_author'], $tmp_comm,
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
-                                      User::where('id_user', $post['id_author'])->first()['ban']));
-      }
-      else{
-        array_push($toreturn, new PostViewModel($post['id_post'], Page::where('id_page', $post['id_author'])->first()->nome,
-                                      '',
-                                      Page::where('id_page', $post['id_author'])->first()->pic_path,
-                                      $post['content'], $post['created_at'], $post['updated_at'],
-                                      $post['is_fixed'], $post['id_author'], $tmp_comm,
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
-                                      User::where('id_user', $post['id_author'])->first()['ban']));
-      }
+    foreach ($posts_ids as $post_id){
+      //recupero tutte le informazioni di un post e me le restituisco in un array complesso
+      array_push($toreturn, $this->createPost($logged_user, $post_id));
     }
-    if($request->input('post_id') == '-1'){
-      $asd = array_slice($toreturn, 0, 5);
+    //ordino per data
+    usort($toreturn, array($this, 'cmp'));
+    
+    if($request->input('post_id') == -1){
+      $toreturn = array_slice($toreturn, 0, 7);
+      return(json_encode($toreturn));
     }
     else{
       for($i = 0; $i < count($toreturn); $i++){
         if($toreturn[$i]->id_post == $request->input('post_id')){
-            $asd = array_slice($toreturn, $i + 1, $i + 3);
-            return(json_encode($asd));
+            $toreturn = array_slice($toreturn, $i + 1, $i + 5);
+            return(json_encode($toreturn));
         }
       }
     }
-    return(json_encode($asd));
-
   }
 
   public function sendNotification($id, $type, $post_id, $is_like){
@@ -215,7 +188,7 @@ class HomeController extends Controller{
     switch(request('action')){
       case "like":
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == 1)){
+        if(($record) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record ed elimino la notifica
           DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/post/details/' . request('id'))->delete();
           DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
@@ -241,7 +214,7 @@ class HomeController extends Controller{
 
       case "dislike":
         $record = LikePost::where('id_post', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == 0)){
+        if(($record) && ($record['like'] == 0)){
           //se premo di nuovo il pulsante elimino il record ed elimino la notifica!!
           DB::table('notifications')->where('id_user', Post::where('id_post', request('id'))->first()['id_author'] )->where('link', '/post/details/' . request('id'))->delete();
           DB::table('like_posts')->where('id_post', request('id'))->where('id_user', Cookie::get('session'))->delete();
@@ -266,7 +239,7 @@ class HomeController extends Controller{
 
       case "likecomm":
         $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == 1)){
+        if(($record) && ($record['like'] == 1)){
           //se premo di nuovo il pulsante elimino il record
           DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/post/details/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
           DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
@@ -291,7 +264,7 @@ class HomeController extends Controller{
 
       case "dislikecomm":
         $record = LikeComment::where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->first();
-        if(($request) && ($record['like'] == 0)){
+        if(($record) && ($record['like'] == 0)){
           //se premo di nuovo il pulsante elimino il record
           DB::table('notifications')->where('id_user', CommentU::where('id_comment', request('id'))->first()['id_author'] )->where('link', '/post/details/' . CommentU::where('id_comment', request('id'))->first()['id_post'])->delete();
           DB::table('like_comments')->where('id_comment', request('id'))->where('id_user', Cookie::get('session'))->delete();
