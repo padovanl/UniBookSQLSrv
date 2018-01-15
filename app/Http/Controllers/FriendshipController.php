@@ -8,6 +8,7 @@ use Cookie;
 use App\Users_make_friends;
 use App\User;
 use App\Notification;
+use App\FriendRequestViewModel;
 
 class FriendshipController extends Controller
 {
@@ -71,11 +72,34 @@ class FriendshipController extends Controller
     	return response()->json(['message' => 'Richiesta accettata.']);
     }
 
+ 	public function declineFriend(Request $request){
+    	$sender_user = User::where('id_user', '=', $request->input('id_user'))->first();
+    	$logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
+    	$id_request = $request->input('id_request');
+    	$friendRequest = Users_make_friends::where('id_request', '=', $id_request)->first();
+    	if(!$friendRequest)
+    		return response()->json(['message' => 'Richiesta di amicizia non trovata.']);
+		Users_make_friends::where('id_request', '=', $id_request)->delete();
+    	//creo la notifica da inviare all'utente
+
+    	return response()->json(['message' => 'Richiesta rifiutata.']);
+    }
+
+
+
     public function index(){
     	if(!$this->controllaAutorizzazione())
     		return view('/');
     	$logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
     	$requestList = Users_make_friends::where([['id_user', '=', $logged_user->id_user], ['status', '=', true]])->get();
+    	$temp = collect();
+    	foreach ($requestList as $r) {
+    		$requestUser = User::where('id_user', '=', $r->id_request_user)->first();
+    		$viewModel = new FriendRequestViewModel($r->id_request, $r->id_user, $r->id_request_user, $r->new, $requestUser->name . ' ' . $requestUser->surname . ' ti ha inviato una richiesta di amicizia.', $r->link, $requestUser);
+    		$temp->push($viewModel);
+    	}
+    	$requestList = $temp;
+
     	return view('requestFriendList', compact('logged_user', 'requestList'));
     }
 }
