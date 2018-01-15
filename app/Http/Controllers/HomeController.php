@@ -162,19 +162,19 @@ class HomeController extends Controller{
       case "likecomment":
         if(($logged_user['id_user']) != (CommentU::where('id_comment', $id)->first()['id_author'])){
           DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $logged_user['name'] . " " . $logged_user['surname'] . " ha messo " . $is_like . " al tuo commento.", 'new' => 1,
-                                              'id_user' => CommentU::where('id_comment', $id)->first()['id_author'], 'link' => "/details/post/" . $post_id]);
+                                              'id_user' => CommentU::where('id_comment', $id)->first()['id_author'], 'link' => "/details/post/" . $post_id, 'id_sender' => $logged_user['id_user']]);
         }
         break;
       case "likepost":
         if(($logged_user['id_user']) != (Post::where('id_post', $id)->first()['id_author'])){
           DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $logged_user['name'] . " " . $logged_user['surname'] . " ha messo " . $is_like . " al tuo post.", 'new' => 1,
-                                              'id_user' => Post::where('id_post', intval($id))->first()['id_author'], 'link' => "/details/post/" . $id]);
+                                              'id_user' => Post::where('id_post', intval($id))->first()['id_author'], 'link' => "/details/post/" . $id, 'id_sender' => $logged_user['id_user']]);
         }
         break;
       case "comment":
         if(($logged_user['id_user']) != (Post::where('id_post', $id)->first()['id_author'])){
           DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $logged_user['name'] . " " . $logged_user['surname'] . " ha commentato il al tuo post.", 'new' => 1,
-                                              'id_user' => Post::where('id_post', $id)->first()['id_author'], 'link' => "/details/post/" . $post_id]);
+                                              'id_user' => Post::where('id_post', $id)->first()['id_author'], 'link' => "/details/post/" . $post_id, 'id_sender' => $logged_user['id_user']]);
         }
         break;
     }
