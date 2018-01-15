@@ -21,9 +21,11 @@ class CreateTableNotifications extends Migration
             $table->boolean('new')->default(true);
             $table->uuid('id_user');
             $table->string('link');
+	    $table->uuid('id_sender');
 
             //foreign key
             $table->foreign('id_user')->references('id_user')->on('users');
+            $table->foreign('id_sender')->references('id_user')->on('users');
          });
     }
 

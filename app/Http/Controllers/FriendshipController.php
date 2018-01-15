@@ -67,6 +67,7 @@ class FriendshipController extends Controller
     	$notifica->content = $logged_user->name . ' ' . $logged_user->surname . ' ha accettato la tua richiesta di amicizia';
     	$notifica->id_user = $sender_user->id_user;
     	$notifica->link = '/profile/user/' . $logged_user->id_user;
+        $notifica->id_sender = $logged_user->id_user;
     	$notifica->save();
 
     	return response()->json(['message' => 'Richiesta accettata.']);

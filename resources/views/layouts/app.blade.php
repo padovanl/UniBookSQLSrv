@@ -47,14 +47,12 @@
           </div>
 
           <div id="notifiche">
-            <a href="/friend/request" id="navBarFriend"><span class="fa-stack fa-1x has-badge" id="spanNewFriend"><i class="fa fa-user fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
+            <a href="{{url('friend/request')}}" id="navBarFriend"><span class="fa-stack fa-1x has-badge" id="spanNewFriend"><i class="fa fa-user fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
             <a href="/notification" id="navBarNotification"><span class="fa-stack fa-1x has-badge" id="spanNewNotifications"><i class="fa fa-bell fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
             <a href="/message" id="navBarMessages"><span class="fa-stack fa-1x has-badge" id="spanNewMessages"><i class="fa fa-commenting fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
           </div>
         </div>
-        <?php
-        echo "<a href=\"profile/user/{{$logged_user -> id_user}}\">"
-        ?>
+        <a href="profile/user/<?php echo "$logged_user->id_user" ?>">
           <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="/{{$logged_user ->pic_path}}" alt="Avatar"></div>
         </a>
       </header>

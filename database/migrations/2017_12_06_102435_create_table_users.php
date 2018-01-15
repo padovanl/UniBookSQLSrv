@@ -29,6 +29,7 @@ class CreateTableUsers extends Migration
            //true = male, false = female
 	         $table->boolean('gender');
            $table->string('citta');
+	   $table->boolean('profiloPubblico')->default(false);
            //primary key
            $table->primary('id_user');
         });

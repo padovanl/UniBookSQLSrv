@@ -38,29 +38,34 @@ class ProfileController extends Controller{
 
     if($this->verify_cookie()){
 
-      $controller = $this;
-      $list_comments = array();
+      #$controller = $this;
+      #$list_comments = array();
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
-      $userprofile = User::where('id_user', request('id'))->first();
-      $posts = Post::where('id_author' , $userprofile['id_user'])->get();
-      foreach($posts as $post){
-        array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
-      }
-      return view('profile', compact('logged_user', 'list_comments', 'userprofile', 'posts','controller'));
+      #$userprofile = User::where('id_user', request('id'))->first();
+      #$posts = Post::where('id_author' , $userprofile['id_user'])->get();
+      #foreach($posts as $post){
+      #  array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
+      #}
+      return view('profile', compact('logged_user'));
+      #return view('profile', compact('logged_user', 'list_comments', 'userprofile', 'posts','controller'));
     }
     else{
       return view('login');
     }
+
   }
 
+
   public function ShowUser($id){
-    if(is_numeric($id)){
-      $user = Page::where('id_page', $id)->first();
+    if($this->verify_cookie()){
+      $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      $controller = $this;
+      $user = User::where('id_user', $id)->first();
+      return view('profile', compact('logged_user', 'controller', 'user'));
     }
     else{
-      $user = User::where('id_user', $id)->first();
+      return view('login');
     }
-    return $user;
   }
 
   public function PrintName($id){
@@ -74,8 +79,6 @@ class ProfileController extends Controller{
     }
 
   }
-
-
 
   //Impostazioni account
   public function settings(){

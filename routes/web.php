@@ -42,10 +42,10 @@ Route::get('/home/loadmore', 'HomeController@loadMore');
 Route::get('/search/{search_term}', 'SearchController@search');
 
 //Profiles
-Route::get('/profile/user/{id}', 'ProfileController@show');
+Route::get('/profile/user/{id}', 'ProfileController@ShowUser');
 Route::get('/profile/user/settings', 'ProfileController@settings');
 Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
-#Route::get('/profile/user/loadmore', 'ProfileController@loadMore');
+
 
 //Admin Routes
 Route::get('/admin', 'AdminController@dashboard');
@@ -88,8 +88,9 @@ Route::post('/home/reportComment', 'HomeController@reportComment');
 
 //notifiche
 Route::get('/notification', 'NotificationController@index');
+Route::post('/notification/read', 'NotificationController@read');
 
-//dettagli post
+//dettagli post (da finire)
 Route::get('/post/details/{id}', 'PostController@details');
 
 //amicizie

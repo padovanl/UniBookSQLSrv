@@ -686,7 +686,7 @@ class AdminController extends Controller
     if($id_page != -1){
         $c = collect();
         foreach ($pages as $p) {
-            if(strpos(strtolower($p->nome), strtolower($id_page)) !== false)
+            if(strpos(strtolower($p->name), strtolower($id_page)) !== false)
                 $c->push($p);
         }
         $pages = $c;  
@@ -714,7 +714,7 @@ class AdminController extends Controller
     foreach ($pageList as $p) {
         $viewModel = new DetailsPageAdminViewModel();
         $viewModel->id_page = $p->id_page;
-        $viewModel->nome = $p->nome;
+        $viewModel->name = $p->name;
         $viewModel->ban = $p->ban;
         $viewModel->created_at = $p->created_at->format('M j, Y H:i');
         $viewModel->picPath = $p->pic_path;
@@ -733,7 +733,7 @@ class AdminController extends Controller
 
     $viewModel = new DetailsPageAdminViewModel();
     $viewModel->id_page = $p->id_page;
-    $viewModel->nome = $p->nome;
+    $viewModel->name = $p->name;
     $viewModel->ban = $p->ban;
     $admin = User::where('id_user', '=', $p->id_user)->first();
     $viewModel->linkAdmin = '/profile/user/' . $admin->id_user;

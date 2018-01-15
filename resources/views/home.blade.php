@@ -26,7 +26,7 @@
                                           <div class="col-md-10">
                                               <div class="media">
                                                 <div class="media-left">
-                                                  <a href="#">
+                                                  <a id="img_container" href="#">
                                                     <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
                                                   </a>
                                                 </div>
@@ -101,7 +101,7 @@
   </div>
 
 </article>
-<aside class="side">Sidebar</aside>
+<aside class="side">Amici Suggeriti</aside>
 </div>
 
 
@@ -226,7 +226,6 @@
     $('#modal-body-post').html(html);
   });
 
-
   $('#reportComment').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
@@ -330,13 +329,14 @@ function createcomment(comment){
 }
 
 function createPost(data){
+  console.log(data);
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
   $post_clone.find("#creation_date").text(data.created_at);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
   if(data.auth_surname != null){
-    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname);
+    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
   }
   else{
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name);
@@ -346,7 +346,7 @@ function createPost(data){
   $post_clone.find("#like_butt").text(data.likes);
   //segnalazione
   $post_clone.find('#reportingPost').attr('data-whatever', data.id_post);
-
+  $post_clone.find('#img_container').attr('href', '/profile/user/' + data.id_auth);
   $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
   if(data.userlike == '0'){
     $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'dislike_' + data.id_post);;
