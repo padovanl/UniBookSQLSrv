@@ -188,7 +188,7 @@ class HomeController extends Controller{
       return view('home', compact('logged_user'));
     }
     else{
-      $this->log($logged_user['id_user'], "Try to log in.");
+      //$this->log($logged_user['id_user'], "Try to log in.");
       return redirect('/login');
     }
   }

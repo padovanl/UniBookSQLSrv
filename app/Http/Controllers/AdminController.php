@@ -686,7 +686,7 @@ class AdminController extends Controller
     if($id_page != -1){
         $c = collect();
         foreach ($pages as $p) {
-            if(strpos(strtolower($p->nome), strtolower($id_page)) !== false)
+            if(strpos(strtolower($p->name), strtolower($id_page)) !== false)
                 $c->push($p);
         }
         $pages = $c;  
