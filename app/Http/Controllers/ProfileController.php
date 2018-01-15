@@ -61,6 +61,10 @@ class ProfileController extends Controller{
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
       $user = User::where('id_user', $id)->first();
+      #$friends = Users_make_friends::where([['id_user', $user['id_user']],['status', '=', '0']])->get();
+      #foreach ($friends as $friend) {
+      #  array_push($user_friends, User::where('id_user', $friend['id_request'])->get());
+      #}
       return view('profile', compact('logged_user', 'controller', 'user'));
     }
     else{
