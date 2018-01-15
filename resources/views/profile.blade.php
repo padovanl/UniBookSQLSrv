@@ -348,9 +348,12 @@ function loadOlder(){
 }
 
 //Caricamento dei post
+var pathArray = window.location.pathname.split( '/' );
+var profileId = pathArray[2];
+
 $(document).ready(function(){
      $.ajax({
-         url : "/profile/user/%7B{{$logged_user -> id_user}}%7D/loadmore",
+         url : "/profile/user/" + profileId + "/loadmore",
          //url : '/profile/user/loadmore',
          method : "GET",
          dataType : "json",

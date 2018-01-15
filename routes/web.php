@@ -96,3 +96,6 @@ Route::get('/post/details/{id}', 'PostController@details');
 Route::get('/friend/request', 'FriendshipController@index');
 Route::post('/friend/accept', 'FriendshipController@acceptFriend');
 Route::post('/friend/decline', 'FriendshipController@declineFriend');
+//ancora da implementare
+Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
+Route::post('/friend/remove', 'FriendshipController@removeFriend');

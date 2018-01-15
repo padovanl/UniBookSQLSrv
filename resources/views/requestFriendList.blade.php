@@ -68,6 +68,13 @@
     cursor: pointer;
     border-radius: 50%;
   }
+
+  .buttonPersonal:hover {
+    background-color: #1C8C21;
+  }
+  .buttonPersonalRed:hover {
+    background-color: #CB3125;
+  }
 </style>
 <script>
   function accetta(id_request, id_request_user){
@@ -77,9 +84,10 @@
       url: '/friend/accept',
       data: { id_request: id_request, id_user: id_request_user }
     }).done(function (data) {
+      totRichieste--;
       $('#' + id_request).remove();
       $('#br' + id_request).remove();
-      if($('#requestContainer').children.length = 0){
+      if(totRichieste == 0){
         var html = '';
         html += '<div class="alert alert-success" role="alert" style="text-align: center;">';
         html += ' <strong>Al momento non hai nessuna richiesta di amicizia in sospeso</strong>';
@@ -90,6 +98,8 @@
     });
   }
 
+  var totRichieste = {{count($requestList)}};
+
 
     function rifiuta(id_request, id_request_user){
     $.ajax({
@@ -98,9 +108,10 @@
       url: '/friend/decline',
       data: { id_request: id_request, id_user: id_request_user }
     }).done(function (data) {
+      totRichieste--;
       $('#' + id_request).remove();
       $('#br' + id_request).remove();
-      if($('#requestContainer').children.length = 0){
+      if(totRichieste == 0){
         var html = '';
         html += '<div class="alert alert-success" role="alert" style="text-align: center;">';
         html += ' <strong>Al momento non hai nessuna richiesta di amicizia in sospeso</strong>';

@@ -90,7 +90,7 @@
           $.ajax({
             dataType: 'json',
             type: 'POST',
-            url: 'getcountNewMessage',
+            url: '/getcountNewMessage',
             data: { id_user: '{{$logged_user->id_user}}' }
           }).done(function (data) {
             if(data.newMessages > 0){
