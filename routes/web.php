@@ -78,9 +78,6 @@ Route::post('/message/newMessage', 'MessageController@newMessage');
 
 
 
-// Route::post('/login',           'loginController@login');
-Route::get('/page/{view}', 		 	 'pageController@page');
-#Route::get('/registrazione', 		 'utentiController@registrazione');
 
 //segnalazioni
 Route::post('/home/reportPost', 'HomeController@reportPost');
@@ -100,3 +97,8 @@ Route::post('/friend/decline', 'FriendshipController@declineFriend');
 //ancora da implementare
 Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
 Route::post('/friend/remove', 'FriendshipController@removeFriend');
+
+//pagine
+Route::get('/page/mypage', 'PageController@index');
+Route::post('/page/create', 'PageController@create')->name('createPage');
+Route::get('/profile/page/{id}', 'ProfileController@ShowPage');
