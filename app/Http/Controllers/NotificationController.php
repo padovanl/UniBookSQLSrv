@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Cookie;
 use App\User;
 use App\Notification;
+use App\NotificationViewModel;
 
 class NotificationController extends Controller
 {
@@ -27,6 +28,13 @@ class NotificationController extends Controller
     		$id = Cookie::get('session');
 			$logged_user = User::where('id_user', '=', $id)->first();
 			$notifications = Notification::where('id_user', '=', $logged_user->id_user)->latest()->get();
+			$temp = collect();
+			foreach ($notifications as $n) {
+				$user = User::where('id_user', '=', $n->id_sender)->first();
+				$viewModel = new NotificationViewModel($n->id_notification, $n->content, '/' . $user->pic_path, $n->link);
+				$temp.push($viewModel);
+			}
+			$notifications = $temp;
     		return view('notifications', compact('logged_user', 'notifications'));
     	}
     }
