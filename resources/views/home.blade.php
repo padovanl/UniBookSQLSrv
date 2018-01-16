@@ -250,7 +250,12 @@ function commentfocus(id){
 
 function getTimeDelta(time){
   var now = new Date().getTime();
-  var time_past = new Date(time);
+  if (navigator.userAgent.indexOf("Chrome") !== -1){
+    var time_past = new Date(time);
+  }
+  else {
+    var time_past = new Date(time.replace(/\s+/g, 'T').concat('.000+01:00')).getTime();
+  }
   var minutes = Math.floor((now - time_past) / 60000);
   var delta = 0;
   if(minutes == 0){
