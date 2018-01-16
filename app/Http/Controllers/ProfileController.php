@@ -87,8 +87,10 @@ class ProfileController extends Controller{
   public function settings(){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
-      return view('settings', compact('logged_user'));
-    }else{
+      $controller = $this;
+      return view('settings', compact('logged_user', 'controller'));
+    }
+    else{
       return view('login');
     }
   }

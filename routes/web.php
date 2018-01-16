@@ -43,7 +43,7 @@ Route::get('/search/{search_term}', 'SearchController@search');
 
 //Profiles
 Route::get('/profile/user/{id}', 'ProfileController@ShowUser');
-Route::get('/profile/user/settings', 'ProfileController@settings');
+Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
 Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
 Route::post('/friend/Addfriend', 'FriendshipController@Addfriend');
