@@ -45,6 +45,8 @@ Route::get('/search/{search_term}', 'SearchController@search');
 Route::get('/profile/user/{id}', 'ProfileController@ShowUser');
 Route::get('/profile/user/settings', 'ProfileController@settings');
 Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
+Route::get('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
+Route::get('/profile/user/{id}/Addfriend', 'ProfileController@Addfriend');
 
 
 //Admin Routes
