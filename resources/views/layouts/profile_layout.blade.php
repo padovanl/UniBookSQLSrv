@@ -17,10 +17,11 @@
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'></style>
-  <link href="/assets/css/home.css" rel="stylesheet">
+  <link href="{{ asset('assets/css/home.css') }}" rel="stylesheet">
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  
   <meta name="_token" content="{{ csrf_token() }}">
 
   <!-- CSS per profile page-->

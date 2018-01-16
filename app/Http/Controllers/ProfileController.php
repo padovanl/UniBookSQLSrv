@@ -225,16 +225,7 @@ class ProfileController extends Controller{
     return response()->json(['message' => 'Operazione completata!', 'tot_followers' => $tot_followers]);
   }
 
-  public function Addfriend(Request $request){
 
-    $id = request("id");
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
-
-    DB::table('users_make_friends')->insert(['id_user' => $id,'id_request' => $logged_user->id_user, 'status' => 1]);
-
-    return response()->json(['message' => 'Operazione completata!']);
-
-  }
 
 
 }

@@ -33,7 +33,7 @@ background-color: #4285f4!important;
         <div class="w3-container">
           <?php if ($logged_user->id_user != $user->id_user): ?>
             <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal" ></i>
-              <button type="button" id='{{$user -> id_user}}' onclick='Addfriend(this.id)'>Add Friend</button>
+              <button type="button"  onclick='Addfriend()'>Add Friend</button>
             </p>
             <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal" ></i>
               <button cursor='pointer'  data-toggle="modal" data-target="#messageUserModal">Message</button>
@@ -207,15 +207,14 @@ background-color: #4285f4!important;
 
 <script>
 
-  function Addfriend(id_user){
+  function Addfriend(){
     var id = document.URL.split("/")[5];
     console.log(id);
     $.ajax({
        dataType: "json",
-       type: "POST",
-       url: '/profile/user/'+id+'/Addfriend',
+       method: "POST",
+       url: "/friend/Addfriend",
        data: {id:id, _token: '{{csrf_token()}}'},
-
        success: function(data) {
          console.log(data.message);
        }
