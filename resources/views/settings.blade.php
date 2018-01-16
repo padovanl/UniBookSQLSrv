@@ -30,8 +30,8 @@ background-color: #4285f4!important;
     <hr>
     <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Privacy</b></p>
     <div class = "radio">
-      <input type = "radio" name = "privacy" value = "1" /> Private</br>
-      <input type = "radio" name = "privacy" value = "0" /> Public</br>
+      <input type = "radio" name = "privacy" value = "1" <?php if($privacy == 1){ echo "checked";}?>/> Private </br>
+      <input type = "radio" name = "privacy" value = "0" <?php if($privacy == 0){ echo "checked";}?>/> Public </br>
     </div>
     <!--p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b></p>
     <p>English</p>
@@ -62,9 +62,6 @@ background-color: #4285f4!important;
 		}
 	</style>
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 
 <script>
 function readURL(input) {
@@ -85,16 +82,19 @@ function readURL(input) {
     $(document).ready(function(){
           $('input[type="radio"]').click(function(){
             var privacy = $(this).val();
+            console.log(privacy);
             $.ajax({
               url:"/privacy",
               method: "POST",
-              data: {provacy:privacy},
+              data: {privacy:privacy},
+              dataType: 'json',
               success:function(data){
-                $('#result').html(data);
+                console.log(data.message);
               }
             });
           })
         })
+
 </script>
 
 

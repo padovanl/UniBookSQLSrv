@@ -61,10 +61,6 @@ class ProfileController extends Controller{
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
       $user = User::where('id_user', $id)->first();
-      #$friends = Users_make_friends::where([['id_user', $user['id_user']],['status', '=', '0']])->get();
-      #foreach ($friends as $friend) {
-      #  array_push($user_friends, User::where('id_user', $friend['id_request'])->get());
-      #}
       return view('profile', compact('logged_user', 'controller', 'user'));
     }
     else{
@@ -88,7 +84,8 @@ class ProfileController extends Controller{
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
-      return view('settings', compact('logged_user', 'controller'));
+      $privacy = $logged_user->profiloPubblico;
+      return view('settings', compact('logged_user', 'controller','privacy'));
     }
     else{
       return view('login');
@@ -227,7 +224,12 @@ class ProfileController extends Controller{
     return response()->json(['message' => 'Operazione completata!', 'tot_followers' => $tot_followers]);
   }
 
-
+  public function Privacy(Request $request){
+    $data = request("privacy");
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['profiloPubblico' => $data]);
+    return response()->json(['message' => 'Done']);
+  }
 
 
 }

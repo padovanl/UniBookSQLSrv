@@ -47,6 +47,7 @@ Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
 Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
 Route::post('/friend/Addfriend', 'FriendshipController@Addfriend');
+Route::post('/privacy','ProfileController@Privacy');
 
 
 //Admin Routes
