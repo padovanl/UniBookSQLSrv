@@ -102,3 +102,6 @@ Route::post('/friend/remove', 'FriendshipController@removeFriend');
 Route::get('/page/mypage', 'PageController@index');
 Route::post('/page/create', 'PageController@create')->name('createPage');
 Route::get('/profile/page/{id}', 'ProfileController@ShowPage');
+Route::post('/profile/page/comment', 'ProfileController@newCommentPage');
+Route::post('/profile/page/stopFollow', 'ProfileController@stopFollow');
+Route::post('/profile/page/follow', 'ProfileController@follow');
