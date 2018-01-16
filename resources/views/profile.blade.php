@@ -24,7 +24,7 @@ background-color: #4285f4!important;
 
       <div class="w3-white w3-text-grey w3-card-4">
         <div class="w3-display-container">
-          <img src="/{{$logged_user ->pic_path}}" style="width:100%" alt="Avatar">
+          <img src="/{{$user->pic_path}}" style="width:100%" alt="Avatar">
           <div class="w3-display-bottomleft w3-container w3-text-black">
             <h2>{{$user -> name . " " . $user -> surname}}</h2>
           </div>

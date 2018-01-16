@@ -76,9 +76,6 @@ Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
 
-
-
-
 //segnalazioni
 Route::post('/home/reportPost', 'HomeController@reportPost');
 Route::post('/home/reportComment', 'HomeController@reportComment');

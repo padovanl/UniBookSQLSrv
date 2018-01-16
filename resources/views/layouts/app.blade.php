@@ -31,7 +31,7 @@
 <body>
 <div class="wrapper">
       <header class="main-head">
-        <div class="name">
+        <div class="name" onclick="window.location='/';" style="cursor: pointer;">
           <div class="marcato">UNI</div><div class="fino">BOOK</div>
         </div>
         <div class="middle-nav">

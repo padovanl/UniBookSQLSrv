@@ -38,7 +38,9 @@ background-color: #4285f4!important;
               <p id="followP" style="text-align: center; color: blue;"><a style="cursor: pointer; font-size: 20px;" onclick="follow({{$page->id_page}}, '{{$logged_user->id_user}}')"><i style="cursor:pointer; color: blue;" id="follow" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>
             @endif
             <br />
-             <p id="totFollowers" style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;{{$tot_followers}}&nbsp;persone seguono questa pagina</p>
+            <div id="totFollowers">
+             <p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;{{$tot_followers}}&nbsp;persone seguono questa pagina</p>
+            </div>
           </div>
           <!--<p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p> -->
           <hr>
@@ -182,7 +184,7 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
       var html = '<p id="followP" style="text-align: center; color: blue;"><a style="cursor: pointer; font-size: 20px;" onclick="follow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: blue;" id="follow" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>';
       $('#divFollowPage').html(html);
       var t = $('#totFollowers');
-      $('#totFollowers').html('<i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina');
+      $('#totFollowers').html('<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>');
     });              
   }
 
@@ -197,7 +199,7 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
       var html = ' <p id="stopFollowP" style="text-align: center; color: red;"><a style="cursor: pointer; font-size: 20px;" onclick="stopFollow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: red;" id="follow" class="glyphicon glyphicon-thumbs-down"></i>&nbsp;Smetti di seguire la pagina</a></p>';
       $('#divFollowPage').html(html);
       var t = $('#totFollowers');
-      $('#totFollowers').html('<i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina');
+      $('#totFollowers').html('<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>');
     });              
   }
 
