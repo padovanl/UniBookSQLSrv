@@ -56,12 +56,15 @@ class ProfileController extends Controller{
 
   }
 
-
   public function ShowUser($id){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
       $user = User::where('id_user', $id)->first();
+      #$friends = Users_make_friends::where([['id_user', $user['id_user']],['status', '=', '0']])->get();
+      #foreach ($friends as $friend) {
+      #  array_push($user_friends, User::where('id_user', $friend['id_request'])->get());
+      #}
       return view('profile', compact('logged_user', 'controller', 'user'));
     }
     else{
@@ -80,20 +83,22 @@ class ProfileController extends Controller{
     }
 
   }
-
   //Impostazioni account
   public function settings(){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
-      return view('settings', compact('logged_user'));
-    }else{
+      $controller = $this;
+      return view('settings', compact('logged_user', 'controller'));
+    }
+    else{
       return view('login');
     }
   }
-
   //loading dei post
   public function loadMore(Request $request){
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+
+    $id = request("id");
+    $user = User::where('id_user', $id)->first();
 
     //Caricamento dei post degli amici e delle pagine
     $posts = array();
@@ -101,8 +106,8 @@ class ProfileController extends Controller{
     $likes = array();
 
     //inserisco anche i miei posts
-    array_push($posts, Post::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
-    array_push($list_comments, CommentU::where('id_author', $logged_user['id_user'])->orderBy('created_at', 'asc')->get());
+    array_push($posts, Post::where('id_author', $user['id_user'])->orderBy('created_at', 'asc')->get());
+    array_push($list_comments, CommentU::where('id_author', $user['id_user'])->orderBy('created_at', 'asc')->get());
 
     $posts = array_flatten($posts);
     $list_comments = array_flatten($list_comments);
@@ -126,7 +131,7 @@ class ProfileController extends Controller{
                                                       $comment['id_post'], '0',
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
                                                       LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $logged_user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
+                                                      LikeComment::where('id_user', $user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
                                                       $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
           }
           else{
@@ -151,7 +156,7 @@ class ProfileController extends Controller{
                                       $post['is_fixed'], $post['id_author'], $tmp_comm,
                                       LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
                                       LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
+                                      LikePost::where('id_user', $user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
                                       User::where('id_user', $post['id_author'])->first()['ban']));
       }
       else{
@@ -162,7 +167,7 @@ class ProfileController extends Controller{
                                       $post['is_fixed'], $post['id_author'], $tmp_comm,
                                       LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
                                       LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
+                                      LikePost::where('id_user', $user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
                                       User::where('id_user', $post['id_author'])->first()['ban']));
       }
     }
@@ -221,6 +226,7 @@ class ProfileController extends Controller{
     $tot_followers = Users_follow_pages::where('id_page', '=', $id_page)->count();
     return response()->json(['message' => 'Operazione completata!', 'tot_followers' => $tot_followers]);
   }
+
 
 
 

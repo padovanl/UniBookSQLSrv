@@ -1,107 +1,128 @@
 @extends('layouts.app')
-
 @section('content')
-  <article class="content">
-  <div class="padding pre-scrollable" style="max-height: 800px;">
-          <!-- content -->
-              <!-- main col right -->
-                  <div class="well">
-                      <div>
-                          <h4>Nuovo post</h4>
-                          <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                            <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                              <textarea class="form-control input-lg form-rounded" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
-                              <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                          </div>
+<article class="content">
+    <div class="padding pre-scrollable" style="max-height: 800px;">
+            <!-- content -->
+                <!-- main col right -->
+                    <div class="well">
+                        <div>
+                            <h4>Nuovo post</h4>
+                            <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+                              <input id="_token" type="hidden" value="{{ csrf_token() }}">
+                                <textarea class="form-control input-lg form-rounded" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
+                                <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Pannello Post-->
+                    <div class="container" id="post">
+                      <div class="row">
+                          <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                   <section class="post-heading">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="media">
+                                                  <div class="media-left">
+                                                    <a id="img_container" href="#">
+                                                      <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
+                                                    </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                    <a href="#" id="post_u_name" class="anchor-username"><h4 class="media-heading">User_name</h4></a>
+                                                    <a href="#" id="creation_date" class="anchor-time">time</a>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                              <a id="reportingPost" href="#reportModal" data-toggle="modal" data-whatever="5" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                            </div>
+
+                                        </div>
+                                   </section>
+                                   <section class="post-body">
+                                       <p id="post_content">content</p>
+                                   </section>
+                                   <section class="post-footer">
+                                       <hr>
+                                       <div class="post-footer-option container">
+                                            <ul id="option_" class="list-unstyled">
+                                                <li>
+                                                  <a>
+                                                    <i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="dropbtn glyphicon glyphicon-thumbs-up"></i>
+                                                  </a>
+                                                </li>
+                                                <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"></i></a></li>
+                                                <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                                            </ul>
+                                       </div>
+                                       <div class="post-footer-comment-wrapper">
+                                           <div id="comment_panel" class="comment">
+                                                <div class="media">
+                                                  <div class="media-left">
+                                                    <a href="#">
+                                                      <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="..." style="border-radius: 50%;">
+                                                    </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                    <a href="#" id="comment_author" class="anchor-username"><h4 class="media-heading">Media heading</h4></a>
+                                                    <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                    <br>
+                                                    <span id="comment_content"></span>
+                                                  </div>
+                                                  <div class="row">
+                                                    <div class="col-md-12">
+                                                      <a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up"></i></a>
+                                                      <a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down"></i></a>
+                                                      <a style="cursor: pointer;" id="reportingComment" href="#reportComment" data-toggle="modal" data-whatever="5"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i></a>
+                                                  </div>
+                                                  </div>
+                                                </div>
+                                           </div>
+                                           <hr>
+
+                                           <div class="comment-form">
+                                             <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control form-rounded" placeholder="Add a comment.." type="text"></textarea>
+                                           </div>
+                                       </div>
+                                   </section>
+                                </div>
+                            </div>
                       </div>
-                  </div>
-                  <!--Pannello Post-->
-                  <div class="container" id="post">
-                    <div class="row">
-                        <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
-                          <div class="panel panel-default">
-                              <div class="panel-body">
-                                 <section class="post-heading">
-                                      <div class="row">
-                                          <div class="col-md-10">
-                                              <div class="media">
-                                                <div class="media-left">
-                                                  <a id="img_container" href="#">
-                                                    <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
-                                                  </a>
-                                                </div>
-                                                <div class="media-body">
-                                                  <a href="#" id="post_u_name" class="anchor-username"><h4 class="media-heading">User_name</h4></a>
-                                                  <a href="#" id="creation_date" class="anchor-time">time</a>
-                                                </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-2">
-                                            <a id="reportingPost" href="#reportModal" data-toggle="modal" data-whatever="5" style="font-size: 15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
-                                          </div>
+                      </div>
 
-                                      </div>
-                                 </section>
-                                 <section class="post-body">
-                                     <p id="post_content">content</p>
-                                 </section>
-                                 <section class="post-footer">
-                                     <hr>
-                                     <div class="post-footer-option container">
-                                          <ul id="option_" class="list-unstyled">
-                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"></i></a></li>
-                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"></i></a></li>
-                                              <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                          </ul>
-                                     </div>
-                                     <div class="post-footer-comment-wrapper">
-                                         <div id="comment_panel" class="comment">
-                                              <div class="media">
-                                                <div class="media-left">
-                                                  <a href="#">
-                                                    <img id="comm_pic_path" class="media-object photo-profile" src="" width="32" height="32" alt="..." style="border-radius: 50%;">
-                                                  </a>
-                                                </div>
-                                                <div class="media-body">
-                                                  <a href="#" id="comment_author" class="anchor-username"><h4 class="media-heading">Media heading</h4></a>
-                                                  <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
-                                                  <br>
-                                                  <span id="comment_content"></span>
-                                                </div>
-                                                <div class="row">
-                                                  <div class="col-md-12">
-                                                    <a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up"></i></a>
-                                                    <a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down"></i></a>
-                                                    <a style="cursor: pointer;" id="reportingComment" href="#reportComment" data-toggle="modal" data-whatever="5"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i></a>
-                                                </div>
-                                                </div>
-                                              </div>
-                                         </div>
-                                         <hr>
-
-                                         <div class="comment-form">
-                                           <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control form-rounded" placeholder="Add a comment.." type="text"></textarea>
-                                         </div>
-                                     </div>
-                                 </section>
-                              </div>
-                          </div>
                     </div>
-                    </div>
+    </div><!-- /padding -->
 
-                  </div>
-
-  </div><!-- /padding -->
-  <div class="row">
-    <div class="col-md-12" style="text-align:center;">
-        <button id="load" onclick="loadOlder()" type="button" class="button btn-primary" style="border-radius: 5px;">Carica post più vecchi...</button>
+    <div class="row">
+      <div class="col-md-12" style="text-align:center;">
+          <button id="load" onclick="loadOlder()" type="button" class="button btn-primary" style="border-radius: 5px;">Carica post più vecchi...</button>
+      </div>
     </div>
-  </div>
 
 </article>
-<aside class="side">Amici Suggeriti</aside>
-</div>
 
+<article class="side">Amici Suggeriti
+  @foreach($suggested_friends as $suggested)
+    <a href="/profile/user/{{$suggested->id_user}}">
+      <div class="container">
+      	<div class="row">
+              <div class="profile-header-container">
+          		<div class="profile-header-img">
+                      <img class="img-circle" src="{{$suggested->pic_path}}" />
+                      <!-- badge -->
+                      <div class="rank-label-container">
+                          <span class="label label-default rank-label">{{$suggested->name . " " . $suggested->surname}}</span>
+                      </div>
+                  </div>
+              </div>
+      	</div>
+      </div>
+    </a>
+
+@endforeach
+</article>
 
 <!--Report modal-->
 <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -168,6 +189,7 @@
 </div>
 
 <script>
+
   $('#reportModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
@@ -244,13 +266,41 @@
 
   $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
+function createTooltipData(data){
+    if(data.length > 0 && data.length <= 4){
+      var toreturn = '<ul>';
+      data.forEach(function(el){
+          toreturn += "<li><a href='/profile/user/" + el.id_user + "'>" + el.name + " " + el.surname + "</a></li>";
+      });
+      toreturn += '</ul>';
+     return toreturn;
+    }
+    else if(data.length > 4){
+      var toreturn = '<ul>';
+      for(i = 0; i < 4; i++){
+        toreturn += "<li><a href='/profile/user/" + data[i].id_user + "'>" + data[i].name + " " + data[i].surname + "</a></li>";
+      }
+      toreturn += "<li>e altri " + (data.length - 3) + "</li>";
+      toreturn += '</ul>';
+      return toreturn;
+    }
+    else{
+      return "Ancora niente";
+    }
+  }
+
 function commentfocus(id){
     $("#comment_insert_" + id.split("_")[1]).focus();
 }
 
 function getTimeDelta(time){
   var now = new Date().getTime();
-  var time_past = new Date(time);
+  if (navigator.userAgent.indexOf("Chrome") !== -1){
+    var time_past = new Date(time);
+  }
+  else {
+    var time_past = new Date(time.replace(/\s+/g, 'T').concat('.000+01:00')).getTime();
+  }
   var minutes = Math.floor((now - time_past) / 60000);
   var delta = 0;
   if(minutes == 0){
@@ -323,6 +373,16 @@ function createcomment(comment){
     $comment_clone.find("#likecomm").css({ 'color': 'black'}).attr('id', 'likecomm_' + comment.id_comment);
     $comment_clone.find("#dislikecomm").css({ 'color': 'black'}).attr('id', 'dislikecomm_' + comment.id_comment);
   }
+  $comment_clone.find('#likecomm_' + comment.id_comment).data('powertip', createTooltipData(comment.likes));
+  $comment_clone.find('#likecomm_' + comment.id_comment).powerTip({
+                                      placement: 's',
+                                      mouseOnToPopup: true
+                                      });
+  $comment_clone.find('#dislikecomm_' + comment.id_comment).data('powertip', createTooltipData(comment.dislikes));
+  $comment_clone.find('#dislikecomm_' + comment.id_comment).powerTip({
+                                      placement: 's',
+                                      mouseOnToPopup: true
+                                      });
   return($comment_clone);
 }
 
@@ -330,7 +390,7 @@ function createPost(data){
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
-  $post_clone.find("#creation_date").text(getTimeDelta(data.created_at));
+  $post_clone.find("#creation_date").text(getTimeDelta(data.created_at)).attr('href', '/post/details/' + data.id_post);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
   if(data.auth_surname != null){
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
@@ -340,11 +400,21 @@ function createPost(data){
   }
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
-  $post_clone.find("#like_butt").text(data.likes);
   //segnalazione
   $post_clone.find('#reportingPost').attr('data-whatever', data.id_post);
   $post_clone.find('#img_container').attr('href', '/profile/user/' + data.id_auth);
   $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
+  //Mostro il numero di like
+  $post_clone.find('#like').data('powertip', createTooltipData(data.likes));
+  $post_clone.find('#like').powerTip({
+                                      placement: 's',
+                                      mouseOnToPopup: true
+                                      });
+  $post_clone.find('#dislike').data('powertip', createTooltipData(data.dislike));
+  $post_clone.find('#dislike').powerTip({
+                                      placement: 's',
+                                      mouseOnToPopup: true
+                                      });
   if(data.userlike == '0'){
     $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'dislike_' + data.id_post);;
     $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'like_' + data.id_post);
