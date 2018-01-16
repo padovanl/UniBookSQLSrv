@@ -87,7 +87,7 @@ background-color: #4285f4!important;
                                             <div class="col-md-10">
                                                 <div class="media">
                                                   <div class="media-left">
-                                                    <a id="name_container" href="">
+                                                    <a id="img_container" href="#">
                                                       <img id="post_pic_path" class="media-object photo-profile" src="" width="40" height="40" alt="..." style="border-radius: 50%;">
                                                     </a>
                                                   </div>
@@ -113,7 +113,6 @@ background-color: #4285f4!important;
                                                 <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="like" class="glyphicon glyphicon-thumbs-up"></i></a></li>
                                                 <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike" class="glyphicon glyphicon-thumbs-down"></i></a></li>
                                                 <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
-                                                <li><a><i onclick="share(this.id)" style="cursor:pointer;" id="share" class="glyphicon glyphicon-share-alt"></i> Share</a></li>
                                             </ul>
                                        </div>
                                        <div class="post-footer-comment-wrapper">
@@ -127,21 +126,22 @@ background-color: #4285f4!important;
                                                   <div class="media-body">
                                                     <a href="#" id="comment_author" class="anchor-username"><h4 class="media-heading">Media heading</h4></a>
                                                     <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                    <br>
                                                     <span id="comment_content"></span>
                                                   </div>
-                                                  <div class="post-footer-option-container">
-                                                  <ul class="list-unstyled">
-                                                    <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up"></i></a></li>
-                                                    <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down"></i></a></li>
-                                                  </ul>
+                                                  <div class="row">
+                                                    <div class="col-md-12">
+                                                      <a><i onclick="reaction(this.id)" style="cursor:pointer;" id="likecomm" class="glyphicon glyphicon-thumbs-up"></i></a>
+                                                      <a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislikecomm" class="glyphicon glyphicon-thumbs-down"></i></a>
+                                                      <a style="cursor: pointer;" id="reportingComment" href="#reportComment" data-toggle="modal" data-whatever="5"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i></a>
+                                                  </div>
+                                                  </div>
                                                 </div>
-                                                </div>
-
                                            </div>
                                            <hr>
 
                                            <div class="comment-form">
-                                             <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control" placeholder="Add a comment.." type="text"></textarea>
+                                             <textarea onkeypress="newComment(event, this.id)" id="comment_insert" class="form-control form-rounded" placeholder="Add a comment.." type="text"></textarea>
                                            </div>
                                        </div>
                                    </section>
@@ -194,8 +194,212 @@ background-color: #4285f4!important;
 
 
 <script>
+$('#show_details').click(function(){
+    $('button').toggleClass('active');
+    $('.title').toggleClass('active');
+    $('nav').toggleClass('active');
+  });
 
-  function Addfriend(){
+$('#reportModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  $('#btnReportPost').click(function(){
+    var motivo = $('#reasonReportPost').find(":selected").text();
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/home/reportPost',
+      data: { id_post: recipient, motivo: motivo }
+    }).done(function (data) {
+      var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
+      $('#modal-body-post').html(html);
+      $('#btnReportPost').hide();
+    });
+  });
+
+
+  var modal = $(this);
+  modal.find('.modal-title').text('Segnala post');
+});
+
+$('#reportModal').on('hidden.bs.modal', function(event){
+  //rimuovo gli eventi una volta che chiudo il modal
+  $('#btnReportPost').unbind();
+  $('#btnReportPost').show();
+  var html =  '<div class="form-group">';
+  html +=     ' <label for="reasonReportPost">Selezione il motivo della segnalazione:</label>';
+  html +=     ' <select class="form-control" id="reasonReportPost">';
+  html +=     '   <option selected>Incita all\'odio</option>';
+  html +=     '   <option>È una minaccia</option>';
+  html +=     '   <option>È una notizia falsa</option>';
+  html +=     ' </select>';
+  html +=     '</div>';
+  $('#modal-body-post').html(html);
+});
+
+$('#reportComment').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  $('#btnReportComment').click(function(){
+    var motivo = $('#reasonReportComment').find(":selected").text();
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/home/reportComment',
+      data: { id_comment: recipient, motivo: motivo }
+    }).done(function (data) {
+      var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
+      $('#modal-body-comment').html(html);
+      $('#btnReportComment').hide();
+    });
+  });
+
+
+  var modal = $(this);
+  modal.find('.modal-title').text('Segnala commento');
+});
+
+$('#reportComment').on('hidden.bs.modal', function(event){
+  //rimuovo gli eventi una volta che chiudo il modal
+  $('#btnReportComment').unbind();
+  $('#btnReportComment').show();
+  var html =  '<div class="form-group">';
+  html +=     ' <label for="reasonReportComment">Selezione il motivo della segnalazione:</label>';
+  html +=     ' <select class="form-control" id="reasonReportComment">';
+  html +=     '   <option selected>Incita all\'odio</option>';
+  html +=     '   <option>È una minaccia</option>';
+  html +=     '   <option>È una notizia falsa</option>';
+  html +=     ' </select>';
+  html +=     '</div>';
+  $('#modal-body-comment').html(html);
+});
+
+$('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
+
+function commentfocus(id){
+    $("#comment_insert_" + id.split("_")[1]).focus();
+  }
+
+function getTimeDelta(time){
+  var now = new Date().getTime();
+  if (navigator.userAgent.indexOf("Chrome") !== -1){
+    var time_past = new Date(time);
+  }
+  else {
+    var time_past = new Date(time.replace(/\s+/g, 'T').concat('.000+01:00')).getTime();
+  }
+  var minutes = Math.floor((now - time_past) / 60000);
+  var delta = 0;
+  if(minutes == 0){
+    delta = "Adesso";
+  }
+  else if(minutes < 60) {
+    delta = minutes + " minuti fa";
+  }
+  else if((minutes >= 60) && (minutes < 86400)) {
+    delta = Math.floor((minutes / 60)) + " ore fa";
+  }
+  else if((minutes >= 86400) && (minutes < 604800)){
+    delta = Math.floor((minutes / 86400)) + " giorni fa.";
+  }
+  else if((minutes >= 604800) && (minutes < 42033600)){
+    delta = Math.floor((minutes / 604800)) + " settimane fa";
+  }
+  else{
+    delta = "Molto tempo fa"
+  }
+  return(delta);
+  }
+
+function reaction(id){
+    $.ajax({
+    method: "POST",
+    dataType: "json",
+    url: "/home/reaction",
+    data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
+     success : function (data)
+     {
+       switch (data.type) {
+         case "post":
+           $("#like_" + data.id_post).css({ 'color': data.status_like })
+           $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
+           break;
+         case "comm":
+           $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
+           $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
+           break;
+       }
+     }
+  })
+  }
+
+function createcomment(comment){
+  $comment_clone = $("#comment_panel").clone();
+  $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
+  $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
+  if(comment.auth_surname != null){
+    $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
+  }
+  else{
+    $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name);
+  }
+  $comment_clone.find("#comment_created_at").text(getTimeDelta(comment.created_at));
+  $comment_clone.find("#comment_content").text(comment.content);
+    //segnalazione
+  $comment_clone.find('#reportingComment').attr('data-whatever', comment.id_comment);
+
+  if(comment.userlike == '0'){
+    $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_comment);;
+    $comment_clone.find("#likecomm").css({ 'color': 'black'}).attr('id', 'likecomm_' + comment.id_comment);
+  }
+  else if(comment.userlike == '1'){
+    $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_comment);
+    $comment_clone.find("#dislikecomm").css({ 'color': 'black'}).attr('id', 'dislikecomm_' + comment.id_comment);
+  }
+  else{
+    $comment_clone.find("#likecomm").css({ 'color': 'black'}).attr('id', 'likecomm_' + comment.id_comment);
+    $comment_clone.find("#dislikecomm").css({ 'color': 'black'}).attr('id', 'dislikecomm_' + comment.id_comment);
+  }
+  return($comment_clone);
+  }
+
+function createPost(data){
+  $post_clone = $("#post").clone();
+  $post_clone.attr("id", "post_" + data.id_post);
+  $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
+  $post_clone.find("#creation_date").text(getTimeDelta(data.created_at)).attr('href', '/post/details/' + data.id_post);
+  $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
+  if(data.auth_surname != null){
+    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
+  }
+  else{
+    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name);
+  }
+  $post_clone.find("#post_pic_path").attr('src', data.pic_path);
+  $post_clone.find("#post_content").text(data.content);
+  $post_clone.find("#like_butt").text(data.likes);
+  //segnalazione
+  $post_clone.find('#reportingPost').attr('data-whatever', data.id_post);
+  $post_clone.find('#img_container').attr('href', '/profile/user/' + data.id_auth);
+  $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
+  if(data.userlike == '0'){
+    $post_clone.find("#dislike").css({ 'color': 'red'}).attr('id', 'dislike_' + data.id_post);;
+    $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'like_' + data.id_post);
+  }
+  else if(data.userlike == '1'){
+    $post_clone.find("#like").css({ 'color': 'blue'}).attr('id', 'like_' + data.id_post);
+    $post_clone.find("#dislike").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
+  }
+  else{
+    $post_clone.find("#like").css({ 'color': 'black'}).attr('id', 'like_' + data.id_post);
+    $post_clone.find("#dislike").css({ 'color': 'black'}).attr('id', 'dislike_' + data.id_post);
+  }
+  $post_clone.find("#comment").attr('id', 'comment_' + data.id_post);
+
+  return($post_clone);
+  }
+
+function Addfriend(){
     var id = document.URL.split("/")[5];
     console.log(id);
     $.ajax({
@@ -209,7 +413,7 @@ background-color: #4285f4!important;
      });
     }
 
-  function newComment(e, id){
+function newComment(e, id){
     //manca controllo campo vuoto!!
     if(e.keyCode === 13){
             e.preventDefault();
@@ -223,7 +427,7 @@ background-color: #4285f4!important;
                  $("#comment_insert_" + id.split("_")[2]).val('');
                  $comment_clone = $("#comment_panel").clone();
                  $comment_clone.attr("id", "comment_panel_" + data.id_comment);
-                 $comment_clone.find("#comm_pic_path").attr('src', data.pic_path);
+                 $comment_clone.find("#comm_pic_path").attr('src',"/"+ data.pic_path);
                  $comment_clone.find("#comment_author").text(data.auth_name + " " + data.auth_surname);
                  $comment_clone.find("#comment_created_at").text(data.created_at);
                  $comment_clone.find("#comment_content").text(data.content);
@@ -234,7 +438,7 @@ background-color: #4285f4!important;
         }
     }
 
-  function newPost(){
+function newPost(){
     //manca controllo che il campo non sia vuoto!
     $.ajax({
             method: "POST",
@@ -282,7 +486,7 @@ background-color: #4285f4!important;
         });
   }
 
-  function onLoad(data){
+function onLoad(data){
       $("#post").hide();
       $("#comment_panel").hide();
       //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
@@ -294,7 +498,7 @@ background-color: #4285f4!important;
         $post_clone.find("#creation_date").text(data[i].created_at);
         $post_clone.attr("id", "post_" + data[i].id_post);
         $post_clone.find("#post_u_name").text(data[i].auth_name + " " + data[i].auth_surname);
-        $post_clone.find("#post_pic_path").attr('src', data[i].pic_path);
+        $post_clone.find("#post_pic_path").attr('src', "/"+data[i].pic_path);
         $post_clone.find("#post_content").text(data[i].content);
         $post_clone.find("#like_butt").text(data[i].likes);
         $post_clone.find("#insert_after").attr('id', "insert_after" + data[i].id_post);
@@ -307,7 +511,7 @@ background-color: #4285f4!important;
             for(j = 0; j < el.comments.length; j++){
               $comment_clone = $("#comment_panel").clone();
               $comment_clone.attr("id", "comment_panel_" + el.comments[j].id_comment);
-              $comment_clone.find("#comm_pic_path").attr('src', el.comments[j].pic_path);
+              $comment_clone.find("#comm_pic_path").attr('src',"/"+ el.comments[j].pic_path);
               $comment_clone.find("#comment_author").text(el.comments[j].auth_name + " " + el.comments[j].auth_surname);
               $comment_clone.find("#comment_created_at").text(el.comments[j].created_at);
               $comment_clone.find("#comment_content").text(el.comments[j].content);
@@ -318,7 +522,7 @@ background-color: #4285f4!important;
     })
   }
 
-  function loadOlder(){
+function loadOlder(){
     $prev_post = $("#post").prev();
     $post_id = $prev_post.attr("id").split("_")[1];
     var id = document.URL.split("/")[5];
@@ -371,11 +575,11 @@ background-color: #4285f4!important;
             }
           })
   }
-  //Caricamento dei post
-  var pathArray = window.location.pathname.split( '/' );
-  var profileId = pathArray[3];
-  //console.log(profileId);
-  $(document).ready(function(){
+//Caricamento dei post
+var pathArray = window.location.pathname.split( '/' );
+var profileId = pathArray[3];
+//console.log(profileId);
+$(document).ready(function(){
          $.ajax({
              url : "/profile/user/" + profileId + "/loadmore",
              //url : '/profile/user/loadmore',
@@ -389,89 +593,13 @@ background-color: #4285f4!important;
          });
     });
 
-  $('#reportModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var recipient = button.data('whatever') // Extract info from data-* attributes
-    $('#btnReportPost').click(function(){
-      var motivo = $('#reasonReportPost').find(":selected").text();
-      $.ajax({
-        dataType: 'json',
-        type: 'POST',
-        url: '/home/reportPost',
-        data: { id_post: recipient, motivo: motivo }
-      }).done(function (data) {
-        var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
-        $('#modal-body-post').html(html);
-        $('#btnReportPost').hide();
-      });
-    });
-    var modal = $(this);
-    modal.find('.modal-title').text('Segnala post');
-    });
-
-  $('#reportModal').on('hide.bs.modal', function(event){
-    //rimuovo gli eventi una volta che chiudo il modal
-    $('#btnReportPost').unbind();
+$('#messageUserModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  //var recipient = button.data('whatever') // Extract info from data-* attributes
+  var post;
   });
 
-  $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
-
-  function commentfocus(id){
-    $("#comment_insert_" + id.split("_")[1]).focus();
-  }
-
-  function reaction(id){
-    //console.log(id);
-    $.ajax({
-      method: "POST",
-      dataType: "json",
-      url: "/home/reaction",
-      data: {action: id.split("_")[0], id: id.split("_")[1], _token: '{{csrf_token()}}'},
-       success : function (data)
-       {
-         console.log(data);
-         switch (data.type) {
-           case "post":
-             $("#like_" + data.id_post).css({ 'color': data.status_like })
-             $("#dislike_" + data.id_post).css({ 'color': data.status_dislike });
-             break;
-           case "comm":
-             $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
-             $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
-             break;
-         }
-       }
-    })
-  }
-
-  function createcomment(comment){
-    $comment_clone = $("#comment_panel").clone();
-    $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
-    $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
-    $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
-    $comment_clone.find("#comment_created_at").text(comment.created_at);
-    $comment_clone.find("#comment_content").text(comment.content);
-    if(comment.userlike == '0'){
-      $comment_clone.find("#dislikecomm").css({ 'color': 'red'}).attr('id', 'dislikecomm_' + comment.id_post);;
-      $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
-    }
-    else if(comment.userlike == '1'){
-      $comment_clone.find("#likecomm").css({ 'color': 'blue'}).attr('id', 'likecomm_' + comment.id_post);
-      $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
-    }
-    else{
-      $comment_clone.find("#likecomm").attr('id', 'likecomm_' + comment.id_post);
-      $comment_clone.find("#dislikecomm").attr('id', 'dislikecomm_' + comment.id_post);
-    }
-    return($comment_clone);
-  }
-
-  $('#messageUserModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    //var recipient = button.data('whatever') // Extract info from data-* attributes
-    var post;
-
-    $('#bthSendMessageUser').click(function(){
+$('#bthSendMessageUser').click(function(){
       var message = $('#messageUser').val();
       var recipient = document.URL.split("/")[5];
       console.log(recipient);
@@ -486,7 +614,7 @@ background-color: #4285f4!important;
       });
     });
 
-    $('#messageUser').keyup(function(event){
+$('#messageUser').keyup(function(event){
       var text = $('#messageUser').val();
       if(text == ''){
         $('#bthSendMessageUser').attr('disabled', true);
@@ -495,11 +623,7 @@ background-color: #4285f4!important;
       }
     });
 
-
-
-  });
-
-  $('#messageUserModal').on('hide.bs.modal', function(event){
+$('#messageUserModal').on('hide.bs.modal', function(event){
     //rimuovo gli eventi una volta che chiudo il modal
     $('#bthSendMessageUser').unbind();
     $('#messageUser').unbind();
