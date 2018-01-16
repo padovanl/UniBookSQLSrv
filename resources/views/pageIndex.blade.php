@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-
-
 <article>
 	<div class="container-full">
 	  <br />
@@ -40,8 +37,8 @@
 <!--<aside class="side">
    <div class="pre-scrollable">
       <div class="list-group" id="sidebar">
-       
-      </div> 
+
+      </div>
     </div>
 </aside>-->
 
@@ -59,7 +56,7 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	             
+
 				  <div class="form-group row">
 				    <label for="nomePagina" class="col-sm-2 col-form-label">Nome:</label>
 				    <div class="col-sm-10">
@@ -74,7 +71,7 @@
 					    </label>
 
 					    <input name="image" id="image" type="file" onchange="readURL(this);" />
-					</div>	
+					</div>
 				  </div>
 
 	      </div>
@@ -82,7 +79,7 @@
 	         <div class="row">
 	          <div class="col-md-12">
 	           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-	           <button type="submit" class="btn btn-primary" id="btnCreatePage">Crea</button>          
+	           <button type="submit" class="btn btn-primary" id="btnCreatePage">Crea</button>
 	          </div>
 	        </div>
 	      </div>
@@ -94,6 +91,8 @@
 
 
 <script>
+
+
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -108,7 +107,7 @@
 	});
 
 
-  var options = { 
+  var options = {
     complete: function(response){
 		    	if($.isEmptyObject(response.responseJSON.error)){
 		    		$("input[name='title']").val('');
@@ -132,6 +131,8 @@
 	}
 </style>
 
+
+
 <script>
 	function readURL(input) {
     if (input.files && input.files[0]) {
@@ -147,12 +148,8 @@
         reader.readAsDataURL(input.files[0]);
     }
 }
+
 </script>
 
-
-
-
-
-  
 
 @endsection
