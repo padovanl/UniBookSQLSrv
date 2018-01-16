@@ -9,6 +9,7 @@
 	    <div class="col-md-10" id="pageContainer">
 	      @if(count($userspages) > 0)
 	        @foreach($userspages as $u)
+	        <a href="/profile/page/{{$u->id_page}}">
 	          <div id="{{$u->id_page}}" class="row" style="border-style: solid; border-width: 1px; border-color: #008CBA; border-radius: 25px; padding: 10px;">
 	            <div class="col-md-1">
 	              <img src="/{{$u->pic_path}}" height="55px" width="55px" style="border-radius: 50%;">
@@ -20,6 +21,7 @@
 	            </div>
 	          </div>
 	          <br id='br{{$u->id_page}}'/>
+	        </a>
 	        @endforeach
 	      @else
 	        <div class="alert alert-success" role="alert" style="text-align: center;">
@@ -92,6 +94,14 @@
 
 <script>
 
+<<<<<<< HEAD
+=======
+  $('#btnTimeline').addClass('btn-border');
+  $('#btnMessage').addClass('btn-border');
+  $('#btnAdmin').addClass('btn-border');
+  $('#btnLogout').addClass('btn-border');
+  $('#btnPage').removeClass('btn-border');
+>>>>>>> 7cb5e2a7711e8abf8e0908634dbc30628cd23b42
 
   $.ajaxSetup({
     headers: {

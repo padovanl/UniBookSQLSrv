@@ -183,9 +183,15 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
       $('#stopFollowP').remove();
       var html = '<p id="followP" style="text-align: center; color: blue;"><a style="cursor: pointer; font-size: 20px;" onclick="follow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: blue;" id="follow" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>';
       $('#divFollowPage').html(html);
+<<<<<<< HEAD
       var t = $('#totFollowers');
       $('#totFollowers').html('<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>');
     });
+=======
+      var html2 = '<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>';
+      $('#totFollowers').html(html2);
+    });              
+>>>>>>> 7cb5e2a7711e8abf8e0908634dbc30628cd23b42
   }
 
   function follow(id_page, id_user){
@@ -198,6 +204,7 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
       $('#followP').remove();
       var html = ' <p id="stopFollowP" style="text-align: center; color: red;"><a style="cursor: pointer; font-size: 20px;" onclick="stopFollow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: red;" id="follow" class="glyphicon glyphicon-thumbs-down"></i>&nbsp;Smetti di seguire la pagina</a></p>';
       $('#divFollowPage').html(html);
+<<<<<<< HEAD
       var t = $('#totFollowers');
       $('#totFollowers').html('<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>');
     });
@@ -259,6 +266,11 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
       delta = "Molto tempo fa"
     }
     return(delta);
+=======
+      var html2 = '<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>';
+      $('#totFollowers').html(html2);
+    });              
+>>>>>>> 7cb5e2a7711e8abf8e0908634dbc30628cd23b42
   }
 
   $.ajaxSetup({
