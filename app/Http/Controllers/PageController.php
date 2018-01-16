@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Cookie;
 use App\User;
 use App\Page;
+use App\Users_make_friends;
+use App\Users_follow_pages;
+use App\Notification;
 
 use App\PageListViewModel;
 
@@ -62,5 +65,41 @@ class PageController extends Controller
          Page::where('id_page', '=', $pageId)->update(['pic_path' => 'assets/images/' . $pageId . '.jpg']);
          //$page->save();
          return redirect('/page/mypage');
+	}
+
+	public function inviteFriends(Request $request){
+		$id_page = $request->input('id_page');
+		$page = Page::where('id_page', '=', $id_page)->first();
+		$logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
+		$friendships = Users_make_friends::where('id_request_user', '=', $logged_user->id_user)->get();
+		$cnt = 0;
+		foreach ($friendships as $f){
+			$alreadyFollowPage = Users_follow_pages::where('id_user', '=', $f->id_user)->first();
+			if(!$alreadyFollowPage){
+				$notification = new Notification();
+				$notification->content = $logged_user->name . ' ' . $logged_user->surname . ' ti ha invitato a mettere mi piace alla sua pagina "' .  $page->name . '".';
+				$notification->id_user = $f->id_user;
+				$notification->id_sender = $logged_user->id_user;
+				$notification->new = true;
+				$notification->link = '/profile/page/' . $id_page;
+				$notification->save();
+				$cnt++;
+			}
+		}
+		$friendships = Users_make_friends::where('id_user', '=', $logged_user->id_user)->get();
+		foreach ($friendships as $f){
+			$alreadyFollowPage = Users_follow_pages::where('id_user', '=', $f->id_request_user)->first();
+			if(!$alreadyFollowPage){
+				$notification = new Notification();
+				$notification->content = $logged_user->name . ' ' . $logged_user->surname . ' ti ha invitato a mettere mi piace alla sua pagina "' .  $page->name . '".';
+				$notification->id_user = $f->id_request_user;
+				$notification->id_sender = $logged_user->id_user;
+				$notification->new = true;
+				$notification->link = '/profile/page/' . $id_page;
+				$notification->save();
+				$cnt++;
+			}
+		}
+		return response()->json(['totInviti' => $cnt]);
 	}
 }

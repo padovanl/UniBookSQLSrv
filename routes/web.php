@@ -94,12 +94,13 @@ Route::get('/friend/request', 'FriendshipController@index');
 Route::post('/friend/accept', 'FriendshipController@acceptFriend');
 Route::post('/friend/decline', 'FriendshipController@declineFriend');
 //ancora da implementare
-Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
+//Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
 Route::post('/friend/remove', 'FriendshipController@removeFriend');
 
 //pagine
 Route::get('/page/mypage', 'PageController@index');
 Route::post('/page/create', 'PageController@create')->name('createPage');
+Route::post('/page/invite', 'PageController@inviteFriends');
 Route::get('/profile/page/{id}', 'ProfileController@ShowPage');
 Route::post('/profile/page/comment', 'ProfileController@newCommentPage');
 Route::post('/profile/page/stopFollow', 'ProfileController@stopFollow');

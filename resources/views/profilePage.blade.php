@@ -47,9 +47,11 @@ background-color: #4285f4!important;
           @if($logged_user->id_user == $page->id_user)
             <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Opzioni</b></p>
             <p>Invita i tuoi amici a mettere mi piace alla tua pagina!</p>
-            <div>
-              <button type="button" class="btn btn-primary" style="display: block; margin: 0 auto;">Invita</button>
-            </div>
+            <div style="text-align: center;">
+              <button type="button" class="btn btn-primary" style="display: block; margin: 0 auto;" onclick="InvitaAmici({{$page->id_page}});">Invita</button>
+              <br />
+              <span id="spanInviti"></span>
+            </div> 
             <br>
             @endif
         </div>
@@ -208,6 +210,18 @@ $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+
+  function InvitaAmici(id_page){
+    $.ajax({
+      dataType: 'json',
+      type: 'POST',
+      url: '/page/invite',
+      data: { id_page: id_page }
+    }).done(function (data) {
+      var html = '<i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;' + data.totInviti + ' inviti inviati!';
+      $('#spanInviti').html(html);
+    });      
+  }
 
 </script>
 
