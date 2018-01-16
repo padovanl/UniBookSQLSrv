@@ -43,8 +43,12 @@ Route::get('/search/{search_term}', 'SearchController@search');
 
 //Profiles
 Route::get('/profile/user/{id}', 'ProfileController@ShowUser');
-Route::get('/profile/user/settings', 'ProfileController@settings');
+Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
+Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
 Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
+Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
+Route::post('/friend/Addfriend', 'FriendshipController@Addfriend');
+Route::post('/privacy','ProfileController@Privacy');
 
 
 //Admin Routes
@@ -76,9 +80,6 @@ Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
 
-
-
-
 //segnalazioni
 Route::post('/home/reportPost', 'HomeController@reportPost');
 Route::post('/home/reportComment', 'HomeController@reportComment');
@@ -95,12 +96,18 @@ Route::get('/friend/request', 'FriendshipController@index');
 Route::post('/friend/accept', 'FriendshipController@acceptFriend');
 Route::post('/friend/decline', 'FriendshipController@declineFriend');
 //ancora da implementare
-Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
+//Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
 Route::post('/friend/remove', 'FriendshipController@removeFriend');
 
 //pagine
 Route::get('/page/mypage', 'PageController@index');
 Route::post('/page/create', 'PageController@create')->name('createPage');
+
+Route::post('/page/invite', 'PageController@inviteFriends');
+
+Route::get('/page/loadmore', 'PageController@loadmore');
+Route::post('/page/newpost', 'PageController@newPost');
+
 Route::get('/profile/page/{id}', 'ProfileController@ShowPage');
 Route::post('/profile/page/comment', 'ProfileController@newCommentPage');
 Route::post('/profile/page/stopFollow', 'ProfileController@stopFollow');

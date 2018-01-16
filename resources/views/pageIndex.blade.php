@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-
-
 <article>
 	<div class="container-full">
 	  <br />
@@ -12,6 +9,7 @@
 	    <div class="col-md-10" id="pageContainer">
 	      @if(count($userspages) > 0)
 	        @foreach($userspages as $u)
+	        <a href="/profile/page/{{$u->id_page}}">
 	          <div id="{{$u->id_page}}" class="row" style="border-style: solid; border-width: 1px; border-color: #008CBA; border-radius: 25px; padding: 10px;">
 	            <div class="col-md-1">
 	              <img src="/{{$u->pic_path}}" height="55px" width="55px" style="border-radius: 50%;">
@@ -23,6 +21,7 @@
 	            </div>
 	          </div>
 	          <br id='br{{$u->id_page}}'/>
+	        </a>
 	        @endforeach
 	      @else
 	        <div class="alert alert-success" role="alert" style="text-align: center;">
@@ -40,8 +39,8 @@
 <!--<aside class="side">
    <div class="pre-scrollable">
       <div class="list-group" id="sidebar">
-       
-      </div> 
+
+      </div>
     </div>
 </aside>-->
 
@@ -59,7 +58,7 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	             
+
 				  <div class="form-group row">
 				    <label for="nomePagina" class="col-sm-2 col-form-label">Nome:</label>
 				    <div class="col-sm-10">
@@ -74,7 +73,7 @@
 					    </label>
 
 					    <input name="image" id="image" type="file" onchange="readURL(this);" />
-					</div>	
+					</div>
 				  </div>
 
 	      </div>
@@ -82,7 +81,7 @@
 	         <div class="row">
 	          <div class="col-md-12">
 	           <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-	           <button type="submit" class="btn btn-primary" id="btnCreatePage">Crea</button>          
+	           <button type="submit" class="btn btn-primary" id="btnCreatePage">Crea</button>
 	          </div>
 	        </div>
 	      </div>
@@ -94,6 +93,16 @@
 
 
 <script>
+
+<<<<<<< HEAD
+=======
+  $('#btnTimeline').addClass('btn-border');
+  $('#btnMessage').addClass('btn-border');
+  $('#btnAdmin').addClass('btn-border');
+  $('#btnLogout').addClass('btn-border');
+  $('#btnPage').removeClass('btn-border');
+>>>>>>> 7cb5e2a7711e8abf8e0908634dbc30628cd23b42
+
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -108,7 +117,7 @@
 	});
 
 
-  var options = { 
+  var options = {
     complete: function(response){
 		    	if($.isEmptyObject(response.responseJSON.error)){
 		    		$("input[name='title']").val('');
@@ -132,6 +141,8 @@
 	}
 </style>
 
+
+
 <script>
 	function readURL(input) {
     if (input.files && input.files[0]) {
@@ -147,12 +158,8 @@
         reader.readAsDataURL(input.files[0]);
     }
 }
+
 </script>
 
-
-
-
-
-  
 
 @endsection

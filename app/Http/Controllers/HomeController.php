@@ -81,21 +81,44 @@ class HomeController extends Controller{
       else{
         $comm_user = Page::where('id_page', $comment['id_author'])->first();
       }
+
+      $dislikes = LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get();
+      $users_dislike = array();
+      foreach($dislikes as $dislike){
+        array_push($users_dislike, User::where('id_user', $dislike['id_user'])->first());
+      }
+      $likes = LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get();
+      $users_like = array();
+      foreach($likes as $like){
+        array_push($users_like, User::where('id_user', $like['id_user'])->first());
+      }
+
       array_push($tmp_comm, new CommentViewModel($comment['id_comment'], $comm_user['name'],
                                                 $comm_user['surname'], $comm_user['pic_path'],
                                                 $comment['content'], $comment['created_at'], $comment['updated_at'],
                                                 $comment['id_post'], '0',
-                                                LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
-                                                LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
+                                                $users_like,
+                                                $users_dislike,
                                                 LikeComment::where('id_user', $logged_user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
                                                 $comment['id_author'], $comm_user['ban']));
     }
-
+    //Prendo gli user che hanno like
+    $post_like = LikePost::where('id_post', $post['id_post'])->where('like', 1)->get();
+    $users_like = array();
+    foreach($post_like as $like){
+      array_push($users_like, User::where('id_user', $like['id_user'])->first());
+    }
+    //Prendo gli user che hanno dislike
+    $post_dislike = LikePost::where('id_post', $post['id_post'])->where('like', 0)->get();
+    $users_dislike = array();
+    foreach($post_dislike as $dislike){
+      array_push($users_dislike, User::where('id_user', $dislike['id_user'])->first());
+    }
     $toreturn = new PostViewModel($post_id, $user_post['name'], $user_post['surname'], $user_post['pic_path'],
                       $post['content'], $post['created_at'], $post['updated_at'],
                       $post['is_fixed'], $post['id_author'], $tmp_comm,
-                      LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
-                      LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
+                      $users_like,
+                      $users_dislike,
                       LikePost::where('id_user', $logged_user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
                       $user_post['ban']);
     return($toreturn);
@@ -184,8 +207,9 @@ class HomeController extends Controller{
   public function landing(){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      $suggested_friends = User::Suggestedfriends($logged_user['id_user']);
       //log
-      return view('home', compact('logged_user'));
+      return view('home', compact('logged_user', 'suggested_friends'));
     }
     else{
       //$this->log($logged_user['id_user'], "Try to log in.");
