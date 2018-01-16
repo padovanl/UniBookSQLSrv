@@ -25,7 +25,7 @@ background-color: #4285f4!important;
         <div class="w3-container">
           <?php if ($logged_user->id_user != $user->id_user): ?>
             <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal" ></i>
-              <button type="button"  onclick='Addfriend()'>Add Friend</button>
+              <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Add Friend</button>
             </p>
             <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal" ></i>
               <button cursor='pointer'  data-toggle="modal" data-target="#messageUserModal">Message</button>
@@ -38,9 +38,11 @@ background-color: #4285f4!important;
           <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
           <br>
           <p class="w3-large w3-text-theme">
-            <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
-                <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
-            </b>
+            <?php if ($logged_user->id_user == $user->id_user): ?>
+              <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
+                  <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
+              </b>
+            <?php endif; ?>
           </p>
           <br>
         </div>
@@ -387,16 +389,24 @@ function createPost(data){
   return($post_clone);
   }
 
-function Addfriend(){
+function Addfriend(data){
     var id = document.URL.split("/")[5];
     console.log(id);
     $.ajax({
        method: "POST",
        url: "/friend/Addfriend",
-       data: {id:id},
+       data: {id:id,data:data},
        dataType: "json",
        success: function(data) {
-         console.log(data.message);
+         console.log(data.value);
+         if(data.value == 1){
+           $(".submit-btn").html("Annulla Richiesta");
+           $(".submit-btn").val(0);
+         }
+         else{
+           $(".submit-btn").html("Invia Richiesta");
+           $(".submit-btn").val(1);
+         }
        }
      });
     }
