@@ -13,17 +13,9 @@ background-color: #4285f4!important;
 }
 
 </style>
-
-<!-- Page Container -->
-<div class="w3-content w3-margin-top" style="max-width:1400px;">
-
-  <!-- The Grid -->
-  <div class="w3-row-padding">
-
+<nav class="main-nav">
+  <div class="side-sec">
     <!-- Left Column -->
-    <div class="w3-third">
-
-      <div class="w3-white w3-text-grey w3-card-4">
         <div class="w3-display-container">
           <img src="/{{$user->pic_path}}" style="width:100%" alt="Avatar">
           <div class="w3-display-bottomleft w3-container w3-text-black">
@@ -66,7 +58,8 @@ background-color: #4285f4!important;
         </div>
       </div><br>
     <!-- End Left Column -->
-    </div>
+</nav>
+  <article class="content">
     <!-- Right Column -->
     <div class="padding pre-scrollable" style="max-height: 800px;">
             <!-- content -->
@@ -160,19 +153,14 @@ background-color: #4285f4!important;
                     </div>
 
     </div><!-- /padding -->
+
     <div class="row">
       <div class="col-md-12" style="text-align:center;">
           <button id="load" onclick="loadOlder()" type="button" class="button btn-primary" style="border-radius: 5px;">Carica post più vecchi...</button>
       </div>
     </div>
     <!-- End Right Column -->
-    </div>
-  <!-- End Grid -->
-  </div>
-  <!-- End Page Container -->
-</div>
-
-
+</article>
 <!-- Message user modal -->
 <div class="modal fade bd-example-modal-lg" id="messageUserModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -211,10 +199,10 @@ background-color: #4285f4!important;
     var id = document.URL.split("/")[5];
     console.log(id);
     $.ajax({
-       dataType: "json",
        method: "POST",
        url: "/friend/Addfriend",
-       data: {id:id, _token: '{{csrf_token()}}'},
+       data: {id:id},
+       dataType: "json",
        success: function(data) {
          console.log(data.message);
        }
