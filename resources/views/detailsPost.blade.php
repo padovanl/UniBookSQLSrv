@@ -20,7 +20,7 @@
 																			</div>
 																			<div class="media-body">
 																				<a href="#" id="post_u_name" class="anchor-username"><h4 class="media-heading">{{$post->auth_name . " " . $post->auth_surname}}</h4></a>
-																				<a href="#" id="creation_date" class="anchor-time">{{$post->created_at}}</a>
+																				<a href="#" id="creation_date_{{$post->id_post}}" class="anchor-time">{{$post->created_at}}</a>
 																			</div>
 																		</div>
 																</div>
@@ -37,8 +37,8 @@
 													 <hr>
 													 <div class="post-footer-option container">
 																<ul id="option_" class="list-unstyled">
-																		<li><a><i onclick="reaction(this.id)" style="cursor:pointer; @if($post->userlike == 1) color:blue; @endif " id="like_{{$post->id_post}}" class="glyphicon glyphicon-thumbs-up"></i></a></li>
-																		<li><a><i onclick="reaction(this.id)" style="cursor:pointer; @if($post->userlike == 0) color:red; @endif " id="dislike_{{$post->id_post}}" class="glyphicon glyphicon-thumbs-down"></i></a></li>
+																		<li><a><i onclick="reaction(this.id)" style="cursor:pointer; @if(($post->userlike === 1)) color:blue; @endif " id="like_{{$post->id_post}}" class="glyphicon glyphicon-thumbs-up"></i></a></li>
+																		<li><a><i onclick="reaction(this.id)" style="cursor:pointer; @if($post->userlike === 0) color:red; @endif " id="dislike_{{$post->id_post}}" class="glyphicon glyphicon-thumbs-down"></i></a></li>
 																		<li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;" id="comment" class="glyphicon glyphicon-comment"></i> Comment</a></li>
 																</ul>
 													 </div>
@@ -81,8 +81,8 @@
 																			</div>
 																			<div class="row">
 																				<div class="col-md-12">
-																					<a><i onclick="reaction(this.id)" style="cursor:pointer; @if($comment->userlike == 1) color:blue; @endif " id="likecomm_{{ $comment->id_comment }}"  class="glyphicon glyphicon-thumbs-up"></i></a>
-																					<a><i onclick="reaction(this.id)" style="cursor:pointer; @if($comment->userlike == 0) color:red; @endif " id="dislikecomm_{{ $comment->id_comment }}" class="glyphicon glyphicon-thumbs-down"></i></a>
+																					<a><i onclick="reaction(this.id)" style="cursor:pointer; @if($comment->userlike === 1) color:blue; @endif " id="likecomm_{{ $comment->id_comment }}"  class="glyphicon glyphicon-thumbs-up"></i></a>
+																					<a><i onclick="reaction(this.id)" style="cursor:pointer; @if($comment->userlike === 0) color:red; @endif " id="dislikecomm_{{ $comment->id_comment }}" class="glyphicon glyphicon-thumbs-down"></i></a>
 																					<a style="cursor: pointer;" id="reportingComment" href="#reportComment" data-toggle="modal" data-whatever="5"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i></a>
 																			</div>
 																			</div>
@@ -107,10 +107,43 @@
 	</div>
 
 	<script>
+
+	function getTimeDelta(time){
+	  var now = new Date().getTime();
+	  if (navigator.userAgent.indexOf("Chrome") !== -1){
+	    var time_past = new Date(time);
+	  }
+	  else {
+	    var time_past = new Date(time.replace(/\s+/g, 'T').concat('.000+01:00')).getTime();
+	  }
+	  var minutes = Math.floor((now - time_past) / 60000);
+	  var delta = 0;
+	  if(minutes == 0){
+	    delta = "Adesso";
+	  }
+	  else if(minutes < 60) {
+	    delta = minutes + " minuti fa";
+	  }
+	  else if((minutes >= 60) && (minutes < 86400)) {
+	    delta = Math.floor((minutes / 60)) + " ore fa";
+	  }
+	  else if((minutes >= 86400) && (minutes < 604800)){
+	    delta = Math.floor((minutes / 86400)) + " giorni fa.";
+	  }
+	  else if((minutes >= 604800) && (minutes < 42033600)){
+	    delta = Math.floor((minutes / 604800)) + " settimane fa";
+	  }
+	  else{
+	    delta = "Molto tempo fa"
+	  }
+	  return(delta);
+	}
+
 	function commentfocus(id){
 			$("#comment_insert_" + id.split("_")[1]).focus();
 	}
-	  $('#reportModal').on('show.bs.modal', function (event) {
+
+		$('#reportModal').on('show.bs.modal', function (event) {
 	    var button = $(event.relatedTarget) // Button that triggered the modal
 	    var recipient = button.data('whatever') // Extract info from data-* attributes
 	    $('#btnReportPost').click(function(){
@@ -186,31 +219,10 @@
 
 	  $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
-		function getTimeDelta(time){
-		  var now = new Date().getTime();
-		  var time_past = new Date(time);
-		  var minutes = Math.floor((now - time_past) / 60000);
-		  var delta = 0;
-		  if(minutes == 0){
-		    delta = "Adesso";
-		  }
-		  else if(minutes < 60) {
-		    delta = minutes + " minuti fa";
-		  }
-		  else if((minutes >= 60) && (minutes < 86400)) {
-		    delta = Math.floor((minutes / 60)) + " ore fa";
-		  }
-		  else if((minutes >= 86400) && (minutes < 604800)){
-		    delta = Math.floor((minutes / 86400)) + " giorni fa.";
-		  }
-		  else if((minutes >= 604800) && (minutes < 42033600)){
-		    delta = Math.floor((minutes / 604800)) + " settimane fa";
-		  }
-		  else{
-		    delta = "Molto tempo fa"
-		  }
-		  return(delta);
-		}
+		$('.anchor-time').each(function() {
+				var time = $(this).html();
+				$(this).html( getTimeDelta(time) );
+				});
 
 		function createcomment(comment){
 		  $comment_clone = $("#comment_panel").clone();

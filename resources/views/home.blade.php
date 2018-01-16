@@ -335,7 +335,7 @@ function createPost(data){
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
-  $post_clone.find("#creation_date").text(getTimeDelta(data.created_at));
+  $post_clone.find("#creation_date").text(getTimeDelta(data.created_at)).attr('href', '/post/details/' + data.id_post);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
   if(data.auth_surname != null){
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);

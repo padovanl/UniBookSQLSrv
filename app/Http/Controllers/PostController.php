@@ -16,6 +16,20 @@ use App\CommentU;
 
 class PostController extends Controller
 {
+	protected function verify_cookie(){
+		if (Cookie::has('session')){
+			$id = Cookie::get('session');
+			$user = User::where('id_user', '=', $id)->first();
+			if(!$user)
+				return false;
+			else
+				return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 	public function createPost($logged_user, $post_id){
 		$tmp_comm = array();
 		$post = Post::where('id_post', $post_id)->first();
@@ -54,26 +68,24 @@ class PostController extends Controller
 		return($toreturn);
 	}
 
-	protected function verify_cookie(){
-    if (Cookie::has('session')){
-      $id = Cookie::get('session');
-      $user = User::where('id_user', '=', $id)->first();
-      if(!$user)
-        return false;
-      else
-        return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-    public function details($id){
+  public function details($id){
     	if(!$this->verify_cookie())
-    		return view('/');
-    	$logged_user = User::where('id_user', Cookie::get('session'))->first();
-			$post = $this->createPost($logged_user, $id);
+    		return redirect('/');
 
-    	return view('detailsPost', compact('logged_user', 'post'));
+			$logged_user = User::where('id_user', Cookie::get('session'))->first();
+			//se il profilo dell'utente è pubblico allora posso vedere il post
+			$post_author = User::where('id_user', Post::where('id_post', $id)->first()['id_author'])->first();
+			$logged_user_friends = User::friends($logged_user['id_user']);
+			if($post_author->profiloPubblico == 0){
+				$post = $this->createPost($logged_user, $id);
+				return view('detailsPost', compact('logged_user', 'post'));
+			}
+			else if(in_array($post_author, $logged_user_friends)){
+				$post = $this->createPost($logged_user, $id);
+				return view('detailsPost', compact('logged_user', 'post'));
+			}
+			else{
+				return redirect('/');
+			}
     }
 }
