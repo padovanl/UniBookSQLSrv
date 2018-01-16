@@ -24,7 +24,7 @@
   <link href="{{ asset('assets/css/home.css') }}" rel="stylesheet">
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+  <link href="../../assets/css/profile_badge.css" rel="stylesheet">
   <meta name="_token" content="{{ csrf_token() }}">
   <link rel="icon" href="../../assets/img/icon2.png">
 </head>

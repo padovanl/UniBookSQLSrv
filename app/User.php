@@ -41,6 +41,22 @@ class User extends Authenticatable
     }
     return $requests;
   }
+
+  //Questa funzione ritorna un numero di suggerimenti random basato sulla città
+  public function scopeSuggestedfriends($query, $user){
+    $toreturn = array();
+    $friends = User::friends($user);
+    $suggested = User::where('citta', User::where('id_user', $user)->first()['citta'])->get();
+    $size = sizeof($suggested);
+    foreach($suggested as $suggestion){
+      if(!in_array($suggestion, $friends)){
+        array_push($toreturn, $suggestion);
+      }
+    }
+    $random = rand(0, ($size - 4));
+    $toreturn = array_slice($toreturn, $random, 4);
+    return($toreturn);
+  }
   /*
     use Notifiable;
     public $timestamps=False;

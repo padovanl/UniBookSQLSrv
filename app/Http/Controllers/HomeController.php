@@ -184,8 +184,9 @@ class HomeController extends Controller{
   public function landing(){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      $suggested_friends = User::Suggestedfriends($logged_user['id_user']);
       //log
-      return view('home', compact('logged_user'));
+      return view('home', compact('logged_user', 'suggested_friends'));
     }
     else{
       //$this->log($logged_user['id_user'], "Try to log in.");
