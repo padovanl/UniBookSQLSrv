@@ -336,7 +336,7 @@ function createPost(data){
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
   }
   else{
-    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name);
+    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name).attr('href', '/profile/page/' + data.id_auth);
   }
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
