@@ -17,7 +17,7 @@ $('#detailModal').on('show.bs.modal', function (event) {
     modal.find('.modal-body input').val(recipient);
     var td = $("td." + recipient).text();
     modal.find('#testoPost').val(data.content);
-
+    $('#btnViewPost').attr('onclick', 'window.location="/post/details/' + data.id_post + '";')
     $('#linkProfilo').attr("href", data.linkProfiloAutore);
     $('#linkProfilo').text(data.nomeAutore)
     if(data.tipoAutore == 1)

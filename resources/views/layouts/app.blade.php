@@ -31,7 +31,7 @@
 <body>
 <div class="wrapper">
       <header class="main-head">
-        <div class="name">
+        <div class="name" onclick="window.location='/';" style="cursor: pointer;">
           <div class="marcato">UNI</div><div class="fino">BOOK</div>
         </div>
         <div class="middle-nav">
@@ -64,7 +64,7 @@
           <ul class="nav-links">
               <li><button class="btn btn-round color-1 material-design" data-color="#ffffff" id="btnTimeline" onclick="window.location='/'"><span class="fa fa-home" aria-hidden="true"></span> Timeline</button></li>
               <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnMessage" onclick="window.location='/message'"><span class="fa fa-commenting" aria-hidden="true"></span> Messaggi</button></li>
-              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnPage"><span class="fa fa-book" aria-hidden="true"></span> Pagine</button></li>
+              <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnPage" onclick="window.location='/page/mypage'"><span class="fa fa-book" aria-hidden="true"></span> Pagine</button></li>
               @if($logged_user->admin)
               <li><button class="btn btn-border btn-round color-1 material-design" data-color="#426FC5" id="btnAdmin" onclick="window.location='/admin'"><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Dashboard</button></li>
               @endif

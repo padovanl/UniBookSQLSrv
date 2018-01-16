@@ -14,6 +14,7 @@ use App\CommentViewModel;
 use App\LikeComment;
 use App\LikePost;
 use App\PostViewModel;
+use App\Users_follow_pages;
 
 use Illuminate\Support\Facades\DB;
 use Cookie;
@@ -188,6 +189,7 @@ class ProfileController extends Controller{
       return (strtotime($a['created_at']) < strtotime($b['created_at'])) ? 1 : -1;
   }
 
+<<<<<<< HEAD
   public function Addfriend(Request $request){
 
     $id = request("id");
@@ -199,5 +201,45 @@ class ProfileController extends Controller{
 
   }
 
+=======
+  //profilo pagina
+  public function ShowPage($id){
+    if(!$this->verify_cookie())
+      return view('/');
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    $page = Page::where('id_page', '=', $id)->first();
+    $alreadyFollow = Users_follow_pages::where([['id_user', '=', $logged_user->id_user], ['id_page', '=', $page->id_page]])->first();
+    if($alreadyFollow)
+      $alreadyFollow = true;
+    else
+      $alreadyFollow = false;
+    $tot_followers = Users_follow_pages::where('id_page', '=', $page->id_page)->count();
+    return view('profilePage', compact('logged_user', 'id', 'page', 'alreadyFollow', 'tot_followers'));
+
+  }
+
+  public function follow(Request $request){
+    $id_page = $request->input('id_page');
+    $id_user = $request->input('id_user');
+
+    $newRecord = new Users_follow_pages();
+    $newRecord->id_user = $id_user;
+    $newRecord->id_page = $id_page;
+    $newRecord->save();
+    $tot_followers = Users_follow_pages::where('id_page', '=', $id_page)->count();
+    return response()->json(['message' => 'Operazione completata!', 'tot_followers' => $tot_followers]);
+  }
+
+  public function stopFollow(Request $request){
+    $id_page = $request->input('id_page');
+    $id_user = $request->input('id_user');
+    Users_follow_pages::where([['id_user', '=', $id_user], ['id_page', '=', $id_page]])->delete();
+    $tot_followers = Users_follow_pages::where('id_page', '=', $id_page)->count();
+    return response()->json(['message' => 'Operazione completata!', 'tot_followers' => $tot_followers]);
+  }
+
+
+
+>>>>>>> cf40f5ef8f8d020f2716df056ffa292dfb0c0af3
 }
 ?>

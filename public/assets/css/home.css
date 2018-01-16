@@ -13,7 +13,14 @@ body{
     font-family:'helvetica';
 }
 
+.form-rounded {
+  border-radius: 1rem;
+}
 
+.pre-scrollable {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 
 /*-- Bootstrap Override Style --*/
 .fa-stack[data-count]:after{

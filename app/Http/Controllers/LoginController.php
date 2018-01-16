@@ -59,18 +59,21 @@ class LoginController extends Controller{
     if(!password_verify($pwd, $user->pwd_hash)){
       #return redirect('/login'); //e stampo un errore
       //controllo se ha richiesto il reset password
-      $tmp = ResetPassword::where([['id_user', '=', $user->id_user], ['valid', '=', true]])->first();
-      if(!$tmp){
+      $list = ResetPassword::where([['id_user', '=', $user->id_user], ['valid', '=', true]])->get();
+      $pwdOk = false;
+      for($x = 0; $x < count($list) && !$pwdOk; $x++) {
+        $tmp = $list[$x];
+        if(password_verify($pwd, $tmp->pwd_hash) && ($tmp->expire_at > date("Y-m-d H:i:s")))
+          $pwdOk = true;
+      }
+      if($pwdOk)
+        return redirect()->route('resetPassword', ['id_user' => $user->id_user]);
+      else{        
         $errors = new MessageBag(['password' => ['Password invalida.']]);
         return Redirect::back()->withErrors($errors)->withInput(Input::except('password'));
-      }else{
-        if(password_verify($pwd, $tmp->pwd_hash))
-          return redirect()->route('resetPassword', ['id_user' => $user->id_user]);
-        else{
-          $errors = new MessageBag(['password' => ['Password invalida.']]);
-          return Redirect::back()->withErrors($errors)->withInput(Input::except('password'));
-        }
       }
+
+
     }
 
     if(!$user->confirmed)

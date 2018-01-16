@@ -15,13 +15,13 @@ class CreateTableResetPassword extends Migration
     {
         Schema::create('reset_password', function (Blueprint $table) {
             $table->uuid('id_user');
+	    $table->increments('id_reset_password');
             $table->string('pwd_hash');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('expire_at')->nullable();
 	    $table->boolean('valid')->default(true);
 
-            $table->primary('id_user');
 
             //foreign key
             //se fa riferimento solo agli utenti, allora le pagine non possono creare post e commenti

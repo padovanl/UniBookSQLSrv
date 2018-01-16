@@ -36,6 +36,8 @@ class NotificationController extends Controller
 			}
 			$notificationList = $temp;
     		return view('notifications', compact('logged_user', 'notificationList'));
+    	}else{
+    		return view('/');
     	}
     }
 

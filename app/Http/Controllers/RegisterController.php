@@ -109,7 +109,7 @@ class RegisterController extends Controller
     $user = User::where('email', '=', $email)->first();
     if($user){
       $tmp = ResetPassword::where('id_user', '=', $user->id_user)->first();
-      if(!$tmp || ($tmp->expire_at < date("Y-m-d H:i:s") && !$tmp->valid)){
+      if(!$tmp || ($tmp->expire_at < date("Y-m-d H:i:s")) || !$tmp->valid){
         $newPassword = $this->generateRandomPassword();
         $resetPassword = new ResetPassword();
         $resetPassword->id_user = $user->id_user;

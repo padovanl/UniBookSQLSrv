@@ -78,12 +78,6 @@ Route::get('/message', 'MessageController@index');
 Route::post('/message/changeChat', 'MessageController@changeChat');
 Route::post('/message/newMessage', 'MessageController@newMessage');
 
-
-
-// Route::post('/login',           'loginController@login');
-Route::get('/page/{view}', 		 	 'pageController@page');
-#Route::get('/registrazione', 		 'utentiController@registrazione');
-
 //segnalazioni
 Route::post('/home/reportPost', 'HomeController@reportPost');
 Route::post('/home/reportComment', 'HomeController@reportComment');
@@ -102,3 +96,11 @@ Route::post('/friend/decline', 'FriendshipController@declineFriend');
 //ancora da implementare
 Route::post('/friend/sendRequest', 'FriendshipController@sendRequest');
 Route::post('/friend/remove', 'FriendshipController@removeFriend');
+
+//pagine
+Route::get('/page/mypage', 'PageController@index');
+Route::post('/page/create', 'PageController@create')->name('createPage');
+Route::get('/profile/page/{id}', 'ProfileController@ShowPage');
+Route::post('/profile/page/comment', 'ProfileController@newCommentPage');
+Route::post('/profile/page/stopFollow', 'ProfileController@stopFollow');
+Route::post('/profile/page/follow', 'ProfileController@follow');
