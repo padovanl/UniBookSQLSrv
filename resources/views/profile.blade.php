@@ -213,7 +213,7 @@ background-color: #4285f4!important;
     $.ajax({
        dataType: "json",
        type: "POST",
-       url: '/home/Addfriend',
+       url: '/profile/user/'+id+'/Addfriend',
        data: {id:id, _token: '{{csrf_token()}}'},
 
        success: function(data) {

@@ -189,19 +189,6 @@ class ProfileController extends Controller{
       return (strtotime($a['created_at']) < strtotime($b['created_at'])) ? 1 : -1;
   }
 
-<<<<<<< HEAD
-  public function Addfriend(Request $request){
-
-    $id = request("id");
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
-
-    DB::table('users_make_friends')->insert(['id_user' => $id,'id_request' => $logged_user->id_user, 'status' => 1]);
-
-    return response()->json(['message' => 'Operazione completata!']);
-
-  }
-
-=======
   //profilo pagina
   public function ShowPage($id){
     if(!$this->verify_cookie())
@@ -238,8 +225,17 @@ class ProfileController extends Controller{
     return response()->json(['message' => 'Operazione completata!', 'tot_followers' => $tot_followers]);
   }
 
+  public function Addfriend(Request $request){
+
+    $id = request("id");
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+
+    DB::table('users_make_friends')->insert(['id_user' => $id,'id_request' => $logged_user->id_user, 'status' => 1]);
+
+    return response()->json(['message' => 'Operazione completata!']);
+
+  }
 
 
->>>>>>> cf40f5ef8f8d020f2716df056ffa292dfb0c0af3
 }
 ?>
