@@ -239,4 +239,15 @@ class PageController extends Controller
 		}
 		return response()->json(['totInviti' => $cnt]);
 	}
+
+  public function changeImage(Request $request){
+    $id_page = $request->input('id_page');
+    $page = Page::where('id_page', '=', $id_page)->first();
+
+    $file = Input::file('image');
+    //unlink('assets/images' . $page->id_page . '.jpg');
+    $file->move('assets/images', $page->id_page . '.jpg');
+    Page::where('id_page', '=', $page->id_page)->update(['pic_path' => 'assets/images/' . $page->id_page . '.jpg']);
+    return redirect('/profile/page/' . $page->id_page);
+  }
 }

@@ -54,6 +54,10 @@
         <br />
         <span id="spanInviti"></span>
       </div>
+      <div style="text-align: center;">
+        <button type="button" class="btn btn-secondary" style="display: block; margin: 0 auto;" data-toggle="modal" data-target="#changeImageModal">Cambia immagine</button>
+        <br />
+      </div>
       <br> @endif
     </div>
   </div>
@@ -191,13 +195,109 @@
   </div>
   <!-- /padding -->
   <!-- End Right Column -->
-</article>SSS
+</article>
+
+
+<!-- change image modal -->
+<form action="{{ route('changeImage') }}" method="POST" enctype="multipart/form-data">
+  {{ csrf_field() }}
+  <div class="modal fade bd-example-modal-lg" id="changeImageModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="titleReportComment">Cambia immagine della pagina</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group row">
+            <label for="profilePic" class="col-sm-5 col-form-label">Immagine della pagina:</label>
+            <div class="image-upload">
+              <label for="image">
+                  <img src="/{{$page->pic_path}}" id="profilePic" width="250px" height="250px" />
+              </label>
+
+              <input name="image" id="image" type="file" onchange="readURL(this);" />
+              <input type="hidden" name="id_page" id="id_page" value="{{$page->id_page}}">
+          </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+           <div class="row">
+            <div class="col-md-12">
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+             <button type="submit" class="btn btn-primary" id="btnChange" disabled>Cambia</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<style type="text/css">
+  .image-upload > input
+  {
+      display: none;
+  }
+  img:hover {
+      cursor: pointer;
+  }
+</style>
+
+
+
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#profilePic')
+                .attr('src', e.target.result)
+                .width(300)
+                .height(300);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+        $('#btnChange').removeAttr('disabled');
+    }
+}
+
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+
+
+
+  $("body").on("click","#btnChange",function(e){
+      $(this).parents("form").ajaxForm(options);
+  });
+
+
+  var options = {
+    complete: function(response){
+          window.location.href = response.redirect;
+        }
+  };
+
+
+</script>
+
 
 <script>
   $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 </script>
 
 <script>
+
+
   function stopFollow(id_page, id_user) {
     $.ajax({
       dataType: 'json',
