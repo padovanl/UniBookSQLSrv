@@ -30,8 +30,8 @@ background-color: #4285f4!important;
     <hr>
     <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Privacy</b></p>
     <div class = "radio">
-      <input type = "radio" name = "privacy" value = "1" <?php if($privacy == 1){ echo "checked";}?>/> Private </br>
-      <input type = "radio" name = "privacy" value = "0" <?php if($privacy == 0){ echo "checked";}?>/> Public </br>
+      <input type = "radio" name = "privacy" value = "1" <?php if($logged_user->profiloPubblico == 1){ echo "checked";}?>/> Private </br>
+      <input type = "radio" name = "privacy" value = "0" <?php if($logged_user->profiloPubblico == 0){ echo "checked";}?>/> Public </br>
     </div>
     <!--p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b></p>
     <p>English</p>
@@ -49,6 +49,7 @@ background-color: #4285f4!important;
     <br>
   </div>
 </div><br>
+<a href="/profile/user/<?php echo "$logged_user->id_user" ?>">Back</a>
 </article>
 
 

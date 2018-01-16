@@ -35,33 +35,26 @@ class ProfileController extends Controller{
     }
   }
 
-  public function show(){
-
-    if($this->verify_cookie()){
-
-      #$controller = $this;
-      #$list_comments = array();
-      $logged_user = User::where('id_user', Cookie::get('session'))->first();
-      #$userprofile = User::where('id_user', request('id'))->first();
-      #$posts = Post::where('id_author' , $userprofile['id_user'])->get();
-      #foreach($posts as $post){
-      #  array_push($list_comments, CommentU::where('id_post', $post['id_post'])->get());
-      #}
-      return view('profile', compact('logged_user'));
-      #return view('profile', compact('logged_user', 'list_comments', 'userprofile', 'posts','controller'));
-    }
-    else{
-      return view('login');
-    }
-
-  }
 
   public function ShowUser($id){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
       $user = User::where('id_user', $id)->first();
-      return view('profile', compact('logged_user', 'controller', 'user'));
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0){
+        $user->gender = null;
+        $user->citta = null;
+        $user->ban = null;
+        $user->email = null;
+        $user->birth_date = null;
+        $user->admin = null;
+        $user->pwd_hash = null;
+
+        return view('profile', compact('logged_user', 'controller', 'user'));
+      }
+      else{
+        return view('profile', compact('logged_user', 'controller', 'user'));
+      }
     }
     else{
       return view('login');
@@ -84,8 +77,7 @@ class ProfileController extends Controller{
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
-      $privacy = $logged_user->profiloPubblico;
-      return view('settings', compact('logged_user', 'controller','privacy'));
+      return view('settings', compact('logged_user', 'controller'));
     }
     else{
       return view('login');
