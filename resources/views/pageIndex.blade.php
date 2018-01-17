@@ -94,14 +94,11 @@
 
 <script>
 
-<<<<<<< HEAD
-=======
   $('#btnTimeline').addClass('btn-border');
   $('#btnMessage').addClass('btn-border');
   $('#btnAdmin').addClass('btn-border');
   $('#btnLogout').addClass('btn-border');
   $('#btnPage').removeClass('btn-border');
->>>>>>> 7cb5e2a7711e8abf8e0908634dbc30628cd23b42
 
   $.ajaxSetup({
     headers: {
