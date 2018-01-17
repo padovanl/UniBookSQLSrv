@@ -71,8 +71,8 @@
           </div>-->
           <div class="row">
             <div class="col-md-8">
-              <label for="area-chart">Qualcos'altro degli utenti:</label>
-              <div id="area-chart"></div>
+              <label for="donut-chart-2">Et&agrave; degli utenti:</label>
+              <div id="donut-chart-2"></div>
             </div>
 
             <div class="col-md-4">
@@ -1559,84 +1559,33 @@
     $(document).ready(function() {
       //barChart();
       //lineChart();
-      areaChart();
+      //areaChart();
       donutChart();
+      donutChart2();
 
       $(window).resize(function() {
         //window.barChart.redraw();
         //window.lineChart.redraw();
-        window.areaChart.redraw();
+        window.donutChart2.redraw();
         window.donutChart.redraw();
       });
     });
 
-    function barChart() {
-      window.barChart = Morris.Bar({
-        element: 'bar-chart',
+
+    function donutChart2(){
+      window.donutChart = Morris.Donut({
+        element: 'donut-chart-2',
         data: [
-          { y: '2006', a: 100, b: 90 },
-          { y: '2007', a: 75,  b: 65 },
-          { y: '2008', a: 50,  b: 40 },
-          { y: '2009', a: 75,  b: 65 },
-          { y: '2010', a: 50,  b: 40 },
-          { y: '2011', a: 75,  b: 65 },
-          { y: '2012', a: 100, b: 90 }
+          @foreach($donutChartEta as $dc)
+            {label: "{{$dc->citta}}", value: {{$dc->count}} },
+          @endforeach
         ],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
-        lineColors: ['#1e88e5','#ff3321'],
-        lineWidth: '3px',
         resize: true,
         redraw: true
       });
     }
 
-    function lineChart() {
-      window.lineChart = Morris.Line({
-        element: 'line-chart',
-        data: [
-          { y: '2006', a: 100, b: 90 },
-          { y: '2007', a: 75,  b: 65 },
-          { y: '2008', a: 50,  b: 40 },
-          { y: '2009', a: 75,  b: 65 },
-          { y: '2010', a: 50,  b: 40 },
-          { y: '2011', a: 75,  b: 65 },
-          { y: '2012', a: 100, b: 90 }
-        ],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
-        lineColors: ['#1e88e5','#ff3321'],
-        lineWidth: '3px',
-        resize: true,
-        redraw: true
-      });
-    }
-
-    function areaChart() {
-      window.areaChart = Morris.Area({
-        element: 'area-chart',
-        data: [
-          { y: '2006', a: 100, b: 90 },
-          { y: '2007', a: 75,  b: 65 },
-          { y: '2008', a: 50,  b: 40 },
-          { y: '2009', a: 75,  b: 65 },
-          { y: '2010', a: 50,  b: 40 },
-          { y: '2011', a: 75,  b: 65 },
-          { y: '2012', a: 100, b: 90 }
-        ],
-        xkey: 'y',
-        ykeys: ['a', 'b'],
-        labels: ['Series A', 'Series B'],
-        lineColors: ['#1e88e5','#ff3321'],
-        lineWidth: '3px',
-        resize: true,
-        redraw: true
-      });
-    }
-
-    function donutChart(){
+        function donutChart(){
       window.donutChart = Morris.Donut({
         element: 'donut-chart',
         data: [
