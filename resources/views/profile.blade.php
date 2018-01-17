@@ -222,6 +222,10 @@ background-color: #4285f4!important;
 </div>
 <?php endif; ?>
 
+
+
+@include('reportModal')
+
 <script>
 
 //Caricamento dei post

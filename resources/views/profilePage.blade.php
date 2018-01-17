@@ -252,6 +252,9 @@
 
 
 
+
+@include('reportModal')
+
 <script>
 var options = {
   complete: function(response){
