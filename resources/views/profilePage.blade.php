@@ -18,7 +18,7 @@
   <div class="side-sec">
     <!-- Left Column -->
     <div class="w3-display-container">
-      <img src="{{$page->pic_path}}" style="width:100%" alt="Avatar">
+      <img src="/{{$page->pic_path}}" style="width:100%" alt="Avatar">
       <div class="w3-display-bottomleft w3-container w3-text-black">
         <h2>{{$page -> name}}</h2>
       </div>
@@ -55,6 +55,7 @@
         <br />
         <span id="spanInviti"></span>
       </div>
+      <br />
       <div style="text-align: center;">
         <button type="button" class="btn btn-secondary" style="display: block; margin: 0 auto;" data-toggle="modal" data-target="#changeImageModal">Cambia immagine</button>
         <br />
@@ -216,7 +217,7 @@
             <label for="profilePic" class="col-sm-5 col-form-label">Immagine della pagina:</label>
             <div class="image-upload">
               <label for="image">
-                  <img src="{{$page->pic_path}}" id="profilePic" width="250px" height="250px" />
+                  <img src="/{{$page->pic_path}}" id="profilePic" width="250px" height="250px" />
               </label>
 
               <input name="image" id="image" type="file" onchange="readURL(this);" />
