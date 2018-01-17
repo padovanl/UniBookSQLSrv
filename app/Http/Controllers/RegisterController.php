@@ -72,10 +72,6 @@ class RegisterController extends Controller
 
     $user -> save();
 
-    #sarebbe da fare la redirect con l'utente già loggato
-    //Daniele: non credo sia una buona idea, dobbiamo mandare una mail e confermare l'utente
-    #io farei fare l'auto login e poi una notifica standard che dice di validare account con email
-      //Cookie::queue('session', $user->id_user);
     $path = route('activeAccount', ['id_user' => $user->id_user]);
     Mail::to($user)->send(new ConfirmEmail($path));
     return redirect('/register/confirm');

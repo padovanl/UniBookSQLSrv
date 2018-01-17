@@ -76,7 +76,7 @@
         <div class="group">
           <p>Foto profilo</p>
           <div>
-            <input type="file" name="file" id="file" required>
+            <input type="file" name="file" id="file" >
             <span class="highlight"></span>
             <span class="bar"></span>
           </div>
@@ -85,7 +85,6 @@
         <div class="lg-btn">
           <button type="submit" class="button" value="Register">Registrati</button>
         </div>
-
       </form>
 
     </div>
