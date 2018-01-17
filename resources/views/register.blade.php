@@ -67,18 +67,16 @@
             </br>
 
 
-            <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline" id="genderDiv">
+                Sesso:&nbsp;
                 <input class="form-check-input" type="radio" name="gender" class="gender" value="0" checked>
                 <label class="form-check-label" for="gender">Donna</label>
-            </div>
-            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="gender" class="gender" value="1">
                 <label class="form-check-label" for="gender">Uomo</label>
-            </div>
-            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="gender" class="gender" value="3">
                 <label class="form-check-label" for="gender">Altro</label>
             </div>
+
             </br>
 
             <div class="group">

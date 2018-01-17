@@ -58,6 +58,12 @@ class RegisterController extends Controller
     $user -> surname = request("surname");
     $user -> birth_date = request("birth_date");
     $user -> email = request("email");
+    $pwd = $request->input('pwd_hash');
+    $rePwd = $request->input('re_pwd_hash');
+    if($rePwd != $pwd){
+      $error = "Le password non coincidono";
+      return view('/register', compact('error'));
+    }
     $user->pwd_hash = password_hash($request->input('pwd_hash'), PASSWORD_DEFAULT);
     $user -> citta = request("citta");
     $user -> gender = request("gender");
