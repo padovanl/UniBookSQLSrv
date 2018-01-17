@@ -66,7 +66,7 @@ class Comment extends Model
     }
     else if(is_numeric($author)){
       $page = Page::where('id_page', $author)->first();
-      if(!$user['ban']){
+      if(!$page['ban']){
         $comment = new Comment();
         $comment->created_at = now();
         $comment->updated_at = now();

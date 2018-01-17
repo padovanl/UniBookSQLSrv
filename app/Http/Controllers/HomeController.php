@@ -129,7 +129,15 @@ class HomeController extends Controller{
     //manca controllo bontà dei parametri
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if((request('action') == 'like') || (request('action') == 'dislike')){
-      $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
+      if(!request('id_page')){
+        $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
+      }
+      else if((request('id_page')) && ($logged_user['id_user'] === Page::where('id_page', request('id_page'))->first()['id_user'])){
+        $toreturn = LikePost::SetPostReaction(request('action'), request('id') , request('id_page'));
+      }
+      else{
+        $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
+      }
       return(json_encode($toreturn));
     }
     else{
@@ -140,7 +148,12 @@ class HomeController extends Controller{
   //funzione che crea un nuovo post
   public function newPost(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    $post = Post::InsertPost(request('content'), $logged_user['id_user']);
+    if(!request('id_page')){
+      $post = Post::InsertPost(request('content'), $logged_user['id_user']);
+    }
+    else{
+      $post = Post::InsertPost(request('content'), request('id_page'));
+    }
     if($post){
       //log
       $this->log($logged_user['id_user'], 'New Post_' . $post->id_post);
@@ -155,9 +168,24 @@ class HomeController extends Controller{
   //funzione che crea un nuovo commento
   public function newComment(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    $comment = Comment::InsertComment(request('content'), $logged_user['id_user'], request('id_post'));
+    if(!request('id_page')){
+      $comment = Comment::InsertComment(request('content'), $logged_user['id_user'], request('id_post'));
+    }
+    else if((request('id_page')) && ($logged_user['id_user'] === Page::where('id_page', request('id_page'))->first()['id_user'])) {
+      $comment = Comment::InsertComment(request('content'), request('id_page'), request('id_post'));
+    }
+    else{
+      $comment = Comment::InsertComment(request('content'), $logged_user['id_user'], request('id_post'));
+    }
     if($comment){
-      Notification::SendNotification($comment->id_post, $logged_user, "comment", $comment->id_post, null);
+      if(!is_numeric(Post::where('id_post', request('id_post'))->first()['id_author'])){
+        Notification::SendNotification($comment->id_post, $logged_user, "comment", $comment->id_post, null);
+      }
+      // else{
+      //   //mando la notifica all'owner della Pagina
+      //   $id_user = Post::where('id_post', request('id_post'))->first()['id_author'];
+      //   Notification::SendNotification($comment->id_post, $id_user, "commentpage", $comment->id_post, null);
+      // }
       //log
       $this->log($logged_user['id_user'], 'New Comment_' . $comment->id_comment);
       return(json_encode($comment));

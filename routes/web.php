@@ -33,7 +33,7 @@ Route::post('/getcountNewRequest', 'GeneralAppController@getFriendRequest');
 Route::get('/', 'HomeController@landing');
 Route::post('/home/post', 'HomeController@newPost');
 Route::post('/home/comment', 'HomeController@newComment');
-Route::post('/home/reaction', 'HomeController@reaction');
+Route::get('/home/reaction', 'HomeController@reaction');
 Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
@@ -102,10 +102,8 @@ Route::post('/friend/remove', 'FriendshipController@removeFriend');
 //pagine
 Route::get('/page/mypage', 'PageController@index');
 Route::post('/page/create', 'PageController@create')->name('createPage');
-
 Route::post('/page/invite', 'PageController@inviteFriends');
 Route::post('/page/changeImage', 'PageController@changeImage')->name('changeImage');
-
 Route::get('/page/loadmore', 'PageController@loadmore');
 Route::post('/page/newpost', 'PageController@newPost');
 

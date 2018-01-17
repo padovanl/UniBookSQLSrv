@@ -1,79 +1,3 @@
-$('#reportModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  $('#btnReportPost').click(function(){
-    var motivo = $('#reasonReportPost').find(":selected").text();
-    $.ajax({
-      dataType: 'json',
-      type: 'POST',
-      url: '/home/reportPost',
-      data: { id_post: recipient, motivo: motivo }
-    }).done(function (data) {
-      var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
-      $('#modal-body-post').html(html);
-      $('#btnReportPost').hide();
-    });
-  });
-
-
-  var modal = $(this);
-  modal.find('.modal-title').text('Segnala post');
-});
-
-$('#reportModal').on('hidden.bs.modal', function(event){
-  //rimuovo gli eventi una volta che chiudo il modal
-  $('#btnReportPost').unbind();
-  $('#btnReportPost').show();
-  var html =  '<div class="form-group">';
-  html +=     ' <label for="reasonReportPost">Selezione il motivo della segnalazione:</label>';
-  html +=     ' <select class="form-control" id="reasonReportPost">';
-  html +=     '   <option selected>Incita all\'odio</option>';
-  html +=     '   <option>È una minaccia</option>';
-  html +=     '   <option>È una notizia falsa</option>';
-  html +=     ' </select>';
-  html +=     '</div>';
-  $('#modal-body-post').html(html);
-});
-
-$('#reportComment').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  $('#btnReportComment').click(function(){
-    var motivo = $('#reasonReportComment').find(":selected").text();
-    $.ajax({
-      dataType: 'json',
-      type: 'POST',
-      url: '/home/reportComment',
-      data: { id_comment: recipient, motivo: motivo }
-    }).done(function (data) {
-      var html = '<h3>La segnalazione è stata inviata con successo agli amministratori di UniBook, grazie per la tua collaborazione!</h3>';
-      $('#modal-body-comment').html(html);
-      $('#btnReportComment').hide();
-    });
-  });
-
-
-  var modal = $(this);
-  modal.find('.modal-title').text('Segnala commento');
-});
-
-$('#reportComment').on('hidden.bs.modal', function(event){
-  //rimuovo gli eventi una volta che chiudo il modal
-  $('#btnReportComment').unbind();
-  $('#btnReportComment').show();
-  var html =  '<div class="form-group">';
-  html +=     ' <label for="reasonReportComment">Selezione il motivo della segnalazione:</label>';
-  html +=     ' <select class="form-control" id="reasonReportComment">';
-  html +=     '   <option selected>Incita all\'odio</option>';
-  html +=     '   <option>È una minaccia</option>';
-  html +=     '   <option>È una notizia falsa</option>';
-  html +=     ' </select>';
-  html +=     '</div>';
-  $('#modal-body-comment').html(html);
-});
-
-$('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
-
 function createTooltipData(data){
     if(data.length > 0 && data.length <= 4){
       var toreturn = '<ul>';
@@ -132,17 +56,20 @@ function getTimeDelta(time){
   return(delta);
 }
 
-function reaction(id){
+function reaction(id, page=null){
+  if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
+    var id_page = location.href.match(/([^\/]*)\/*$/)[1];
+  }
     $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
     $.ajax({
-    method: "POST",
+    method: "get",
     dataType: "json",
     url: "/home/reaction",
-    data: {action: id.split("_")[0], id: id.split("_")[1]},
+    data: {action: id.split("_")[0], id: id.split("_")[1], id_page: id_page},
      success : function (data)
      {
        console.log(data);
@@ -248,9 +175,13 @@ function createPost(data){
   return($post_clone);
 }
 
-function newComment(e, id){
+function newComment(e, id, page=null){
   //manca controllo campo vuoto!!
+  if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
+    var id_page = location.href.match(/([^\/]*)\/*$/)[1];
+  }
   if(e.keyCode === 13){
+          console.log(id.split("_")[2]);
           e.preventDefault();
           $.ajaxSetup({
                       headers: {
@@ -261,7 +192,7 @@ function newComment(e, id){
             method: "POST",
             url: "/home/comment",
             dataType : "json",
-            data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2]},
+            data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], id_page: id_page},
              success : function (data)
              {
                if(data.ban != 1){
@@ -278,8 +209,12 @@ function newComment(e, id){
       }
   }
 
-function newPost(){
+function newPost(id_page = null){
   //manca controllo che il campo non sia vuoto!
+  if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
+    var id_page = location.href.match(/([^\/]*)\/*$/)[1];
+  }
+
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -288,7 +223,7 @@ function newPost(){
   $.ajax({
           method: "POST",
           url: "/home/post",
-          data: {content: $("#new_post_content").val(), is_fixed: 0},
+          data: {content: $("#new_post_content").val(), id_page: id_page},
           dataType : "json",
           success : function (data)
           {
@@ -314,14 +249,19 @@ function newPost(){
       });
 }
 
-function onLoad(data){
+function onLoad(data, page=null){
   $("#post").hide();
   $("#comment_panel").hide();
   //ciclo su tutti i post, al contrario perchè prendo dal più recente al più vecchio
   for(var i = data.length - 1; i >= 0; i--)
   {
     $post_clone = createPost(data[i]);
-    $post_clone.insertAfter(".well");
+    if(!page){
+        $post_clone.insertAfter(".well");
+    }
+    else{
+      $post_clone.insertAfter(".insert_after_me");
+    }
     $post_clone.show();
     }
     data.forEach(function(el) {

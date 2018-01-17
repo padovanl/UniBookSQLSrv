@@ -15,6 +15,8 @@
   <link href="../../assets/css/admin/bootstrap.min.css" rel="stylesheet">
 
   <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/page.js"></script>
+
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'></style>
