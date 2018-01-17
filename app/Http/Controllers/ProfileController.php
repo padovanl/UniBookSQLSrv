@@ -35,7 +35,6 @@ class ProfileController extends Controller{
     }
   }
 
-
   public function ShowUser($id){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();

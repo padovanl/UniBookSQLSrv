@@ -69,7 +69,7 @@ background-color: #4285f4!important;
               <div class="columnI">
                 @foreach($friends_array as $array)
                   <a href="/profile/user/{{ $array->id_user }}">
-                    <img src="/{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
+                    <img src="{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
                   </a>
                 @endforeach
               </div>

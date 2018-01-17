@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
         'citta' => 'Ferrara',
         'ban' => 0,
         'id_user' => uniqid(),
-        'pic_path' => 'assets/images/facebook1.jpg',
+        'pic_path' => '/assets/images/facebook1.jpg',
         'confirmed' => 1,
 	'created_at' => now(),
 	'updated_at' => now(),
