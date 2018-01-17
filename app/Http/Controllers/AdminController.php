@@ -155,7 +155,7 @@ class AdminController extends Controller
         $viewModel->tipoAutore = 1;
     }else{
         $author = Page::where('id_page', '=', $tmp->id_page)->first();
-        $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+        $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
         $viewModel->nomeAutore = $author->name;
         $viewModel->tipoAutore = 2;
     }
@@ -364,7 +364,7 @@ class AdminController extends Controller
         $viewModel->tipoAutore = 1;
     }else{
         $author = Page::where('id_page', '=', $tmp->id_page)->first();
-        $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+        $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
         $viewModel->nomeAutore = $author->name;
         $viewModel->tipoAutore = 2;
     }
@@ -463,7 +463,7 @@ class AdminController extends Controller
             $viewModel->tipoAutore = 1;
         }else{
             $author = Page::where('id_page', '=', $tmp->id_page)->first();
-            $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+            $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
             $viewModel->nomeAutore = $author->nome;
             $viewModel->tipoAutore = 2;
         }
