@@ -12,6 +12,30 @@ background-color: #4285f4!important;
     color: #4285f4!important;
 }
 
+
+.rowI {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  width: 100%;
+}
+
+/* Create four equal columns that sits next to each other */
+.columnI {
+  flex: 25%;
+  max-width: 100%;
+  padding: 0 4px;
+  width: 100%;
+}
+
+.columnI img {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 20%;
+
+}
+
+}
 </style>
 
 <nav class="main-nav">
@@ -23,6 +47,7 @@ background-color: #4285f4!important;
             <h2>{{$user -> name . " " . $user -> surname}}</h2>
           </div>
         </div>
+        <!--Add Friend and Message-->
         <div class="w3-container">
             <?php if ($logged_user->id_user != $user->id_user): ?>
               <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal" ></i>
@@ -38,10 +63,18 @@ background-color: #4285f4!important;
             <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
             <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
             <hr>
+            <!--grid images friends-->
             <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+            <div class="rowI">
+              <div class="columnI">
+                <?php foreach ($friends_array as $array): ?>
+                  <?php echo '<a href="/profile/user/<?php echo "array->id_user" ?>"><img src="/{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}"></a>'?>
+                <?php endforeach; ?>
+              </div>
+            </div>
             <br>
+            <!--Settings-->
             <p class="w3-large w3-text-theme">
-
               <?php if ($logged_user->id_user == $user->id_user): ?>
                 <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
                     <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
