@@ -651,7 +651,7 @@ class AdminController extends Controller
      $viewModel->email = $u->email;
      $viewModel->created_at = $u->created_at->format('M j, Y H:i');
      $viewModel->admin = $u->admin;
-     $viewModel->picPath = '../' . $u->pic_path;
+     $viewModel->picPath = '..' . $u->pic_path;
      $viewModel->totPage = 1;
 
     return response()->json($viewModel);
@@ -786,7 +786,7 @@ class AdminController extends Controller
     $viewModel->linkAdmin = '/profile/user/' . $admin->id_user;
     $viewModel->nomeAdmin = $admin->name . ' ' . $admin->surname;
     $viewModel->created_at = $p->created_at->format('M j, Y H:i');
-    $viewModel->picPath = '../' . $p->pic_path;
+    $viewModel->picPath = '..' . $p->pic_path;
     $viewModel->totPage = 1;
 
     return response()->json($viewModel);
