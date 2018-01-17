@@ -49,6 +49,12 @@
                 <label>Password</label>
             </div>
             <div class="group">
+                <input type="password" name="re_pwd_hash" id="re_password" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Conferma password</label>
+            </div>
+            <div class="group">
                 <input type="text" name="citta" required>
                 <span class="highlight"></span>
                 <span class="bar"></span>
