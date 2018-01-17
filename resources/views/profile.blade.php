@@ -59,22 +59,25 @@ background-color: #4285f4!important;
             <?php endif; ?>
             <?php if (($logged_user->id_user != $user->id_user && $user->profiloPubblico == 1) || ($logged_user->id_user == $user->id_user)): ?>
               <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
-            <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Student</p>
             <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
             <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
+            <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> birth_date}}</p>
             <hr>
             <!--grid images friends-->
             <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
             <div class="rowI">
               <div class="columnI">
-                <?php foreach ($friends_array as $array): ?>
-                  <?php echo '<a href="/profile/user/<?php echo "array->id_user" ?>"><img src="/{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}"></a>'?>
-                <?php endforeach; ?>
+                @foreach($friends_array as $array)
+                  <a href="/profile/user/{{ $array->id_user }}">
+                    <img src="/{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
+                  </a>
+                @endforeach
               </div>
             </div>
             <br>
             <!--Settings-->
             <p class="w3-large w3-text-theme">
+
               <?php if ($logged_user->id_user == $user->id_user): ?>
                 <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
                     <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>

@@ -41,7 +41,7 @@ class ProfileController extends Controller{
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
       $user = User::where('id_user', $id)->first();
-      $friends_array = User::friends($logged_user->id_user);
+      $friends_array = User::friends($user["id_user"]);
       if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0){
         $user->gender = null;
         $user->citta = null;
@@ -53,7 +53,7 @@ class ProfileController extends Controller{
         return view('profile', compact('logged_user', 'controller', 'user'));
       }
       else{
-        return view('profile', compact('logged_user', 'controller', 'user'))->with(compact('friends_array'));
+        return view('profile', compact('logged_user', 'controller', 'user','friends_array'));
       }
     }
     else{
