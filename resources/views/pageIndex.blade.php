@@ -94,7 +94,6 @@
 
 <script>
 
-
   $('#btnTimeline').addClass('btn-border');
   $('#btnMessage').addClass('btn-border');
   $('#btnAdmin').addClass('btn-border');

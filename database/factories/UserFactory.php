@@ -20,6 +20,7 @@ $factory->define(App\User::class, function (Faker $faker) {
       'confirmed' => 1,
       //per creare date di iscrizione diverse
       'created_at' => $faker->date($format = 'Y-m-d', $max = 'now'),
-      'updated_at' => $faker->date($format = 'Y-m-d', $max = 'now')
+      'updated_at' => $faker->date($format = 'Y-m-d', $max = 'now'),
+      'profiloPubblico' => $faker->randomElement(['0', '1']),
     ];
 });

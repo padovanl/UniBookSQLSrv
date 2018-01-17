@@ -13,6 +13,7 @@ background-color: #4285f4!important;
 }
 
 </style>
+
 <nav class="main-nav">
   <div class="side-sec">
     <!-- Left Column -->
@@ -23,31 +24,34 @@ background-color: #4285f4!important;
           </div>
         </div>
         <div class="w3-container">
-          <?php if ($logged_user->id_user != $user->id_user): ?>
-            <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal" ></i>
-              <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Add Friend</button>
-            </p>
-            <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal" ></i>
-              <button cursor='pointer'  data-toggle="modal" data-target="#messageUserModal">Message</button>
-            </p>
-          <?php endif; ?>
-          <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Student</p>
-          <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
-          <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
-          <hr>
-          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
-          <br>
-          <p class="w3-large w3-text-theme">
-            <?php if ($logged_user->id_user == $user->id_user): ?>
-              <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
-                  <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
-              </b>
+            <?php if ($logged_user->id_user != $user->id_user): ?>
+              <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal" ></i>
+                <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Add Friend</button>
+              </p>
+              <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal" ></i>
+                <button cursor='pointer'  data-toggle="modal" data-target="#messageUserModal">Message</button>
+              </p>
             <?php endif; ?>
-          </p>
-          <br>
-        </div>
-      </div><br>
-    <!-- End Left Column -->
+            <?php if (($logged_user->id_user != $user->id_user && $user->profiloPubblico == 1) || ($logged_user->id_user == $user->id_user)): ?>
+              <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
+            <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Student</p>
+            <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
+            <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
+            <hr>
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+            <br>
+            <p class="w3-large w3-text-theme">
+
+              <?php if ($logged_user->id_user == $user->id_user): ?>
+                <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
+                    <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
+                </b>
+              <?php endif; ?>
+            </p>
+            <br>
+          </div>
+        </div><br>
+      <!-- End Left Column -->
 </nav>
   <article class="content">
     <!-- Right Column -->
@@ -181,7 +185,7 @@ background-color: #4285f4!important;
     </div>
   </div>
 </div>
-
+<?php endif; ?>
 
 <script>
 $('#show_details').click(function(){
@@ -326,7 +330,7 @@ function reaction(id){
 function createcomment(comment){
   $comment_clone = $("#comment_panel").clone();
   $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
-  $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
+  $comment_clone.find("#comm_pic_path").attr('src',"/"+ comment.pic_path);
   if(comment.auth_surname != null){
     $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
   }
@@ -365,7 +369,7 @@ function createPost(data){
   else{
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name);
   }
-  $post_clone.find("#post_pic_path").attr('src', data.pic_path);
+  $post_clone.find("#post_pic_path").attr('src',"/"+ data.pic_path);
   $post_clone.find("#post_content").text(data.content);
   $post_clone.find("#like_butt").text(data.likes);
   //segnalazione
@@ -459,7 +463,7 @@ function newPost(){
               $post_clone.find("#creation_date").text(data.created_at);
               $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
               $post_clone.find("#post_u_name").text(data.auth_name + " " + data.auth_surname);
-              $post_clone.find("#post_pic_path").attr('src', data.pic_path);
+              $post_clone.find("#post_pic_path").attr('src',"/"+ data.pic_path);
               $post_clone.find("#post_content").text(data.content);
               $post_clone.find("#like_butt").text(data.likes);
               $post_clone.find("#insert_after").attr('id', "insert_after" + data.id_post);
@@ -472,7 +476,7 @@ function newPost(){
                 for(j = 0; j < data.comments.length; j++){
                   $comment_clone = $("#comment_panel").clone();
                   $comment_clone.attr("id", "comment_panel_" + data.comments[j].id_comment);
-                  $comment_clone.find("#comm_pic_path").attr('src', data.comments[j].pic_path);
+                  $comment_clone.find("#comm_pic_path").attr('src',"/"+ data.comments[j].pic_path);
                   $comment_clone.find("#comment_author").text(data.comments[j].auth_name + " " + data.comments[j].auth_surname);
                   $comment_clone.find("#comment_created_at").text(data.comments[j].created_at);
                   $comment_clone.find("#comment_content").text(data.comments[j].content);
@@ -557,7 +561,7 @@ function loadOlder(){
                       for(j = 0; j < el.comments.length; j++){
                         $comment_clone = $("#comment_panel").clone();
                         $comment_clone.attr("id", "comment_panel_" + el.comments[j].id_comment);
-                        $comment_clone.find("#comm_pic_path").attr('src', el.comments[j].pic_path);
+                        $comment_clone.find("#comm_pic_path").attr('src',"/"+ el.comments[j].pic_path);
                         $comment_clone.find("#comment_author").text(el.comments[j].auth_name + " " + el.comments[j].auth_surname);
                         $comment_clone.find("#comment_created_at").text(el.comments[j].created_at);
                         $comment_clone.find("#comment_content").text(el.comments[j].content);
