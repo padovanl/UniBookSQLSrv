@@ -14,6 +14,7 @@
 
   <link href="../../assets/css/admin/bootstrap.min.css" rel="stylesheet">
 
+  <script src="../../assets/js/common.js"></script>
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'></style>
@@ -59,7 +60,7 @@
             </div>
           </div>
           <a href="/profile/user/<?php echo "$logged_user->id_user" ?>">
-            <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="/{{$logged_user ->pic_path}}" alt="Avatar"></div>
+            <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="{{$logged_user ->pic_path}}" alt="Avatar"></div>
           </a>
         </header>
           @yield('content')

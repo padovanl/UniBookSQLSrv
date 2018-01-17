@@ -29,11 +29,10 @@ Route::post('/getnotifications', 'GeneralAppController@getNotifications');
 Route::post('/getcountNewMessage', 'GeneralAppController@countNewMessage');
 Route::post('/getcountNewRequest', 'GeneralAppController@getFriendRequest');
 
-//Home Routes
+//Home e Profile Routes
 Route::get('/', 'HomeController@landing');
 Route::post('/home/post', 'HomeController@newPost');
 Route::post('/home/comment', 'HomeController@newComment');
-Route::resource('/comment', 'CommentController');
 Route::post('/home/reaction', 'HomeController@reaction');
 Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
@@ -44,8 +43,7 @@ Route::get('/search/{search_term}', 'SearchController@search');
 //Profiles
 Route::get('/profile/user/{id}', 'ProfileController@ShowUser');
 Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
-Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
-Route::get('/profile/user/{id}/loadmore', 'ProfileController@loadMore');
+Route::get('/profile/user/{id}/loadmore', 'HomeController@loadMore');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
 Route::post('/friend/Addfriend', 'FriendshipController@Addfriend');
 Route::post('/privacy','ProfileController@Privacy');

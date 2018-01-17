@@ -10,11 +10,14 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 
+  <!--TOKEN PER LARAVEL-->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="../../assets/js/jquery.powertip.js"></script>
   <link href="../../assets/css/jquery.powertip.css" rel="stylesheet">
+
+  <script src="../../assets/js/common.js"></script>
 
   <script src="../assets/js/admin/popper.min.js"></script>
   <script src="../../assets/js/admin/bootstrap.min.js"></script>
@@ -27,7 +30,7 @@
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="../../assets/css/profile_badge.css" rel="stylesheet">
-  <meta name="_token" content="{{ csrf_token() }}">
+
   <link rel="icon" href="../../assets/img/icon2.png">
 </head>
 <body>
@@ -55,12 +58,12 @@
           </div>
         </div>
         <a href="/profile/user/<?php echo "$logged_user->id_user" ?>">
-          <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="/{{$logged_user ->pic_path}}" alt="Avatar"></div>
+          <div id="avatar"><div id="name-nav">{{$logged_user -> name . " " . $logged_user -> surname}}</div><img src="{{$logged_user ->pic_path}}" alt="Avatar"></div>
         </a>
       </header>
       <nav class="main-nav">
         <div class="side-sec">
-          <img id="main_avatar" src="/{{$logged_user -> pic_path}}" alt="Avatar">
+          <img id="main_avatar" src="{{$logged_user -> pic_path}}" alt="Avatar">
           <span id="side-name">{{$logged_user -> name . " " . $logged_user -> surname}}</span>
           <hr>
           <ul class="nav-links">

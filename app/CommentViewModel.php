@@ -14,7 +14,6 @@ class CommentViewModel //extends Model
     public $created_at;
     public $updated_at;
     public $id_post;
-    public $is_friend;
     public $is_blocked;
     public $likes;
     public $dislikes;
@@ -22,7 +21,7 @@ class CommentViewModel //extends Model
     public $id_author;
     public $ban;
 
-    public function __construct($id_comment, $auth_name, $auth_surname, $pic_path, $content, $created_at, $updated_at, $id_post, $is_friend, $likes, $dislikes, $userlike, $id_user, $ban) {
+    public function __construct($id_comment, $auth_name, $auth_surname, $pic_path, $content, $created_at, $updated_at, $id_post, $likes, $dislikes, $userlike, $id_user, $ban) {
        $this->id_comment = $id_comment;
        $this->auth_name = $auth_name;
        $this->auth_surname = $auth_surname;
@@ -31,7 +30,6 @@ class CommentViewModel //extends Model
        $this->created_at = $created_at;
        $this->updated_at = $updated_at;
        $this->id_post = $id_post;
-       $this->is_friend = $is_friend;
        $this->likes = $likes;
        $this->dislikes = $dislikes;
        $this->userlike = $userlike;
