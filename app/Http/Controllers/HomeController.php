@@ -110,7 +110,6 @@ class HomeController extends Controller{
     }
   }
 
-
   //funzione richiamata quando viene richiesta la root del nostro sito
   public function landing(){
     if($this->verify_cookie()){
@@ -136,7 +135,6 @@ class HomeController extends Controller{
     else{
       return(json_encode(LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user['id_user'])));
     }
-
   }
 
   //funzione che crea un nuovo post
@@ -179,18 +177,6 @@ class HomeController extends Controller{
       $user = User::where('id_user', $id)->first();
     }
     return $user;
-  }
-
-  public function PrintName($id){
-    if(is_numeric($id)){
-      $user = Page::where('id_page', $id)->first();
-      return ($user['nome']);
-    }
-    else{
-      $user = User::where('id_user', $id)->first();
-      return ($user['name'] . ' ' . $user['surname']);
-    }
-
   }
 
   public function reportPost(Request $request){
