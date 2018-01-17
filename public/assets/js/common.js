@@ -333,7 +333,7 @@ function onLoad(data){
           $comment_clone.show();
     }
   }
-})
+  })
 }
 
 function loadOlder(){

@@ -42,11 +42,16 @@ class User extends Authenticatable
     return $requests;
   }
 
+
   //Questa funzione ritorna un numero di suggerimenti random basato sulla città
   public function scopeSuggestedfriends($query, $user){
     $toreturn = array();
+    $friends_id = array();
     $friends = User::friends($user);
-    $suggested = User::where('citta', User::where('id_user', $user)->first()['citta'])->get();
+    foreach($friends as $friend){
+      array_push($friends_id, $friend['id_user']);
+    }
+    $suggested = User::whereNotIn('id_user', $friends_id)->get();
     $size = sizeof($suggested);
     foreach($suggested as $suggestion){
       if(!in_array($suggestion, $friends)){
