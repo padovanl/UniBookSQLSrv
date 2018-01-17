@@ -1,4 +1,4 @@
-@extends('layouts.profile_layout')
+@extends('layouts.settings_layout')
 
 @section('content')
 
@@ -13,22 +13,37 @@
   }
 
 </style>
+<style type="text/css">
+  .image-upload > input
+  {
+      display: none;
+  }
+  img:hover {
+      cursor: pointer;
+  }
+</style>
 
 <article class="content">
+  <!--caricamento immagine-->
 
-  <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
-    <div id="image_preview"><img id="previewing" src="/{{$logged_user -> pic_path}}" /></div>
-      <hr id="line">
-      <div id="selectImage">
-      <label>Select Your Image</label><br/>
-      <input type="file" name="file" id="file" required />
-      <input type="submit" value="Upload" class="submit" />
-    </div>
-  </form>
-  <br>
-  <h4 id='loading' >loading..</h4>
-  <div id="message"></div>
-  <br>
+  <!--div id="image_preview"><img id="previewing" src="{{$logged_user -> pic_path}}" /></div-->
+  <div class="image-upload">
+    <label for="file-input">
+        <img src="{{$logged_user -> pic_path}}" id="uploaded_image" width="300px" height="300px" />
+    </label>
+  </div>
+
+  <div class="container" style="width:700px;">
+    <br />
+    <label>Select Image</label>
+    <input type="file" name="file" id="file" />
+    <br />
+    <span id="uploaded_image" onchange="readURL(this);"></span>
+   </div>
+
+
+ </form>
+
   <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Dettagli Utente</b></p>
   <form name="modulo">
     <p>Nome</p>
@@ -37,7 +52,7 @@
     <p><input type="text" name="surname" id="surname" value="{{$logged_user -> surname}}"></p>
     <p>Citta'</p>
     <p><input type="text" name="citta" id="citta" value="{{$logged_user -> citta}}"></p>
-    <input type="button" id="bottone" value="Invia i dati">
+    <input type="button" id="bottone" value="Modifica">
   </form>
   <br>
   <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Privacy</b></p>
@@ -74,8 +89,6 @@ $(document).ready(function() {
       });
     });
 
-
-
 //radio privacy
 $(document).ready(function(){
           $('input[type="radio"]').click(function(){
@@ -93,58 +106,62 @@ $(document).ready(function(){
           })
         })
 
-$(document).ready(function (e) {
-        $("#uploadimage").on('submit',(function(e) {
-        e.preventDefault();
-        $("#message").empty();
-        $('#loading').show();
-        var fd = new FormData(this);
-        console.log(fd);
-        $.ajax({
-          url: "/formImage", // Url to which the request is send
-          type: "POST",             // Type of request to be send, called as method
-          data: {fd:fd}, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
-          contentType: false,       // The content type used when sending data to the server.
-          cache: false,             // To unable request pages to be cached
-          processData:false,        // To send DOMDocument or non processed data file it is set to false
-          success: function(data)   // A function to be called if request succeeds
+
+$(document).ready(function(){
+    $(document).on('change', '#file', function(){
+      var name = document.getElementById("file").files[0].name;
+      var form_data = new FormData();
+      var ext = name.split('.').pop().toLowerCase();
+      if(jQuery.inArray(ext, ['gif','png','jpg','jpeg']) == -1)
+        {
+          alert("Invalid Image File");
+        }
+      var oFReader = new FileReader();
+      oFReader.readAsDataURL(document.getElementById("file").files[0]);
+      var f = document.getElementById("file").files[0];
+      var fsize = f.size||f.fileSize;
+      if(fsize > 2000000)
+        {
+          alert("Image File Size is very big");
+        }
+          else
           {
-            $('#loading').hide();
-            $("#message").html(data);
-          }
-        });
-    }));
-
-        // Function to preview image after validation
-    $(function() {
-          $("#file").change(function() {
-          $("#message").empty(); // To remove the previous error message
-          var file = this.files[0];
-          var imagefile = file.type;
-          var match= ["image/jpeg","image/png","image/jpg"];
-          if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2])))
+      form_data.append("file", document.getElementById('file').files[0]);
+      $.ajax({
+          url:"/formImage",
+          method:"POST",
+          data: form_data,
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend:function(){
+             $('#uploaded_image').html("<label class='text-success'>Image Uploading...</label>");
+            },
+          success:function(data)
             {
-              $('#previewing').attr('src','noimage.png');
-              $("#message").html("<p id='error'>Please Select A valid Image File</p>"+"<h4>Note</h4>"+"<span id='error_message'>Only jpeg, jpg and png Images type allowed</span>");
-              return false;
+             $('#uploaded_image').html(data);
             }
-          else{
-                var reader = new FileReader();
-                reader.onload = imageIsLoaded;
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
+           });
+          }
       });
+  });
 
-function imageIsLoaded(e) {
-            $("#file").css("color","green");
-            $('#image_preview').css("display", "block");
-            $('#previewing').attr('src', e.target.result);
-            $('#previewing').attr('width', '250px');
-            $('#previewing').attr('height', '230px');
+
+function readURL(input) {
+
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          console.log("aaaaa");
+          reader.onload = function (e) {
+              $('#uploaded_image')
+                  .attr('src', e.target.result)
+                  .width(300)
+                  .height(300);
           };
-        });
 
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
 </script>
 
 

@@ -12,10 +12,7 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <link href="../../assets/css/admin/bootstrap.min.css" rel="stylesheet">
-
-  <script src="../../assets/js/common.js"></script>
-  <script src="../../assets/js/page.js"></script>
+  <link href="../../../assets/css/admin/bootstrap.min.css" rel="stylesheet">
 
 
   <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
@@ -24,14 +21,14 @@
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../../assets/js/jquery.powertip.js"></script>
-  <link href="../../assets/css/jquery.powertip.css" rel="stylesheet">
+  <script type="text/javascript" src="../../../assets/js/jquery.powertip.js"></script>
+  <link href="../../../assets/css/jquery.powertip.css" rel="stylesheet">
   <meta name="_token" content="{{ csrf_token() }}">
 
   <!-- CSS per profile page-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <link href="../../assets/css/profile_badge.css" rel="stylesheet">
+  <link href="../../../assets/css/profile_badge.css" rel="stylesheet">
 
 
   <!--Modal -->
