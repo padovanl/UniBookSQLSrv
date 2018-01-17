@@ -229,7 +229,7 @@ class HomeController extends Controller{
     $id = Cookie::get('session');
     $logged_user = User::where('id_user', '=', $id)->first();
     $id = $request->input('id_comment');
-    $comment = CommentU::where('id_comment', '=', $id)->first();
+    $comment = Comment::where('id_comment', '=', $id)->first();
     if(!$comment)
       return response()->json(['message' => 'Commento non trovato']);
     $motivo = $request->input('motivo');
