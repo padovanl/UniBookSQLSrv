@@ -34,14 +34,16 @@ class LikeComment extends Model
 	}
 
 	public function scopeSetCommentReaction($query, $action, $id_comment, $liker_id){
-		$user = User::where('id_user', Comment::where('id_comment', $liker_id)->first()['id_author'])->first();
+		$id_author = Comment::where('id_comment', $id_comment)->first()['id_author'];
+		$user = User::where('id_user', $id_author)->first();
+		$liker = User::where('id_user', $liker_id)->first();
 		switch($action){
 			case "likecomm":
-				$record = LikeComment::where('id_comment', $id_comment)->where('id_user', $liker_id)->first();
+				$record = LikeComment::where('id_comment', $id_comment)->where('id_sender', $liker_id)->first();
 				if(($record) && ($record['like'] == 1)){
 					//se premo di nuovo il pulsante elimino il record
 					DB::table('notifications')->where('id_user', $user['id_user'])->where('link', '/details/post/' . Comment::where('id_comment', $id_comment)->first()['id_post'])->delete();
-					DB::table('like_comments')->where('id_comment', $id_comment)->where('id_user', $liker_id)->delete();
+					DB::table('like_comments')->where('id_comment', $id_comment)->where('id_sender', $liker_id)->delete();
 					return(array('type' => 'comm', 'id_comment' => $id_comment, 'id_user' => $liker_id, 'status_like' => 'black', 'status_dislike' => 'black'));
 				}
 				else if(($record) && ($record['like'] == 0)){
@@ -55,7 +57,7 @@ class LikeComment extends Model
 					$like->like = 1;
 					$like->id_user = $liker_id;
 					$like->save();
-					Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $liker_id)->first()['id_post'], 'mi piace');
+					Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'mi piace');
 					return(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => $liker_id, 'status_like' => 'blue', 'status_dislike' => 'black'));
 				}
 				break;

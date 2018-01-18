@@ -129,19 +129,12 @@ class HomeController extends Controller{
     //manca controllo bontà dei parametri
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if((request('action') == 'like') || (request('action') == 'dislike')){
-      if(!request('id_page')){
-        $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
-      }
-      else if((request('id_page')) && ($logged_user['id_user'] === Page::where('id_page', request('id_page'))->first()['id_user'])){
-        $toreturn = LikePost::SetPostReaction(request('action'), request('id') , request('id_page'));
-      }
-      else{
-        $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
-      }
+      $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
       return(json_encode($toreturn));
     }
     else{
-      return(json_encode(LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user['id_user'])));
+      $toreturn = LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user['id_user']);
+      return(json_encode($toreturn));
     }
   }
 
