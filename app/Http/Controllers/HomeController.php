@@ -133,7 +133,7 @@ class HomeController extends Controller{
       return(json_encode($toreturn));
     }
     else{
-      $toreturn = LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user['id_user']);
+      $toreturn = LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user);
       return(json_encode($toreturn));
     }
   }
