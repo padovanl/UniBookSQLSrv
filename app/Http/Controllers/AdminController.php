@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Cookie;
+use DateTime;
 
 
 use App\ReportPost;
@@ -131,7 +132,51 @@ class AdminController extends Controller
             }
         }
     }
-    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user', 'donutChart', 'pageList', 'num_page_page'));
+    //donut chart eta
+        //donut chart
+    $donutChartEta = array();
+    $cnt = 0;
+    //qui citta' equivale alla fascia di eta'
+    $tmp2 = new AdminDonutChartViewModel();
+    $tmp2->citta = '0 - 12 anni';
+    $tmp2->count = 0;
+    array_push($donutChartEta, $tmp2);
+    $tmp2 = new AdminDonutChartViewModel();
+    $tmp2->citta = '13 - 18 anni';
+    $tmp2->count = 0;
+    array_push($donutChartEta, $tmp2);
+    $tmp2 = new AdminDonutChartViewModel();
+    $tmp2->citta = '19 - 30 anni';
+    $tmp2->count = 0;
+    array_push($donutChartEta, $tmp2);
+    $tmp2 = new AdminDonutChartViewModel();
+    $tmp2->citta = '31 - 50 anni';
+    $tmp2->count = 0;
+    array_push($donutChartEta, $tmp2);
+    $tmp2 = new AdminDonutChartViewModel();
+    $tmp2->citta = 'over 50';
+    $tmp2->count = 0;
+    array_push($donutChartEta, $tmp2);
+
+    foreach ($users as $u){
+        $bday = new DateTime($u->birth_date);
+        $today = new DateTime(); 
+        $diff = $today->diff($bday);
+
+        if(($diff->y >= 0) && ($diff->y <= 12))
+            $donutChartEta[0]->count++;
+        else if(($diff->y >= 13) && ($diff->y <= 18))
+            $donutChartEta[1]->count++;
+        else if(($diff->y >= 19) && ($diff->y <= 30))
+            $donutChartEta[2]->count++;
+        else if(($diff->y >= 31) && ($diff->y <= 50))
+            $donutChartEta[3]->count++;
+        else //pver 50
+            $donutChartEta[4]->count++;
+
+    }
+
+    return view('/admin', compact('reportList', 'reportListComment', 'userList','totUser', 'totPost', 'totComment', 'totPage', 'num_page_reportPost', 'num_page_reportComment', 'num_page_user', 'donutChart', 'pageList', 'num_page_page', 'donutChartEta'));
   }
 
   public function getPostDetails(Request $request){
@@ -155,7 +200,7 @@ class AdminController extends Controller
         $viewModel->tipoAutore = 1;
     }else{
         $author = Page::where('id_page', '=', $tmp->id_page)->first();
-        $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+        $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
         $viewModel->nomeAutore = $author->name;
         $viewModel->tipoAutore = 2;
     }
@@ -364,7 +409,7 @@ class AdminController extends Controller
         $viewModel->tipoAutore = 1;
     }else{
         $author = Page::where('id_page', '=', $tmp->id_page)->first();
-        $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+        $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
         $viewModel->nomeAutore = $author->name;
         $viewModel->tipoAutore = 2;
     }
@@ -463,7 +508,7 @@ class AdminController extends Controller
             $viewModel->tipoAutore = 1;
         }else{
             $author = Page::where('id_page', '=', $tmp->id_page)->first();
-            $viewModel->linkProfiloAutore = "/page/" . $author->id_page;
+            $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
             $viewModel->nomeAutore = $author->nome;
             $viewModel->tipoAutore = 2;
         }
@@ -606,7 +651,7 @@ class AdminController extends Controller
      $viewModel->email = $u->email;
      $viewModel->created_at = $u->created_at->format('M j, Y H:i');
      $viewModel->admin = $u->admin;
-     $viewModel->picPath = '../' . $u->pic_path;
+     $viewModel->picPath = '..' . $u->pic_path;
      $viewModel->totPage = 1;
 
     return response()->json($viewModel);
@@ -741,7 +786,7 @@ class AdminController extends Controller
     $viewModel->linkAdmin = '/profile/user/' . $admin->id_user;
     $viewModel->nomeAdmin = $admin->name . ' ' . $admin->surname;
     $viewModel->created_at = $p->created_at->format('M j, Y H:i');
-    $viewModel->picPath = '../' . $p->pic_path;
+    $viewModel->picPath = '..' . $p->pic_path;
     $viewModel->totPage = 1;
 
     return response()->json($viewModel);
