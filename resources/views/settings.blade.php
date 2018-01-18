@@ -25,25 +25,22 @@
 
     <article class="content">
         <!--caricamento immagine-->
-
-    <!--div id="image_preview"><img id="previewing" src="{{$logged_user -> pic_path}}" /></div-->
         <div class="image-upload">
             <label for="file-input">
                 <img src="{{$logged_user -> pic_path}}" id="uploaded_image" width="300px" height="300px"/>
             </label>
         </div>
-
         <div class="container" style="width:700px;">
             <br/>
             <label>Select Image</label>
             <input type="file" name="file" id="file"/>
             <br/>
-            <span id="uploaded_image" onchange="readURL(this);"></span>
+            <span id="uploaded_image"></span>
         </div>
-
-
-        </form>
-
+        <div id="image_view">
+          <img id="uploaded_image">
+        </div>
+        
         <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Dettagli Utente</b></p>
         <form name="modulo">
             <p>Nome</p>
@@ -126,6 +123,7 @@
                     alert("Image File Size is very big");
                 }
                 else {
+
                     form_data.append("file", document.getElementById('file').files[0]);
                     $.ajax({
                         url: "/formImage",
@@ -139,6 +137,8 @@
                         },
                         success: function (data) {
                             $('#uploaded_image').html(data);
+                            location.reload();
+
                         }
                     });
                 }
@@ -146,21 +146,6 @@
         });
 
 
-        function readURL(input) {
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                console.log("aaaaa");
-                reader.onload = function (e) {
-                    $('#uploaded_image')
-                        .attr('src', e.target.result)
-                        .width(300)
-                        .height(300);
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
     </script>
 
 
