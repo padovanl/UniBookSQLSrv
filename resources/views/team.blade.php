@@ -18,15 +18,19 @@ html {
   padding: 0 8px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 400px) {
   .column {
-    width: 100%;
+    width: 80%;
     display: block;
   }
 }
 
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.row {
+  height: 50%;
 }
 
 .container {
@@ -58,53 +62,80 @@ html {
 .button:hover {
   background-color: #555;
 }
+
 </style>
 </head>
 <body>
 
-<h2>Responsive "Meet The Team" Section</h2>
-<p>Resize the browser window to see the effect.</p>
+<h2>Meet The Team!</h2>
+<p>Gruppo 9</p>
 <br>
 
 <div class="row">
   <div class="column">
     <div class="card">
-      <img src="/w3images/team1.jpg" alt="Jane" style="width:100%">
+      <img src="/assets/team/Arturo_Pesaro.jpg" alt="Jane" style="width:100%">
       <div class="container">
-        <h2>Jane Doe</h2>
-        <p class="title">CEO & Founder</p>
-        <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-        <p>example@example.com</p>
-        <p><button class="button">Contact</button></p>
+        <h2>Arturo Pesaro</h2>
+        <p class="title">DevS</p
+        <p>Studente presso Università degli Studi di Ferrara</p>
+        <p>arturo.pesaro@student.unife.it</p>
+        <p><button class="button">Contatta</button></p>
       </div>
     </div>
   </div>
 
   <div class="column">
     <div class="card">
-      <img src="/w3images/team2.jpg" alt="Mike" style="width:100%">
+      <img src="/assets/team/luca_padovan.jpg" alt="Mike" style="width:100%">
       <div class="container">
-        <h2>Mike Ross</h2>
-        <p class="title">Art Director</p>
-        <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-        <p>example@example.com</p>
-        <p><button class="button">Contact</button></p>
+        <h2>Luca Padovan</h2>
+        <p class="title">Dev</p>
+        <p>Studente presso Università degli Studi di Ferrara</p>
+        <p>luca.padovan@student.unife.it</p>a
+        <p><button class="button">Contatta</button></p>
       </div>
     </div>
   </div>
   <div class="column">
     <div class="card">
-      <img src="/w3images/team3.jpg" alt="John" style="width:100%">
+      <img src="/assets/team/Daniele_Lovato.jpg" alt="John" style="width:100%">
       <div class="container">
-        <h2>John Doe</h2>
-        <p class="title">Designer</p>
-        <p>Some text that describes me lorem ipsum ipsum lorem.</p>
-        <p>example@example.com</p>
-        <p><button class="button">Contact</button></p>
+        <h2>Daniele Lovato</h2>
+        <p class="title">Dev</p>
+        <p>Studente presso Università degli Studi di Ferrara</p>
+        <p>daniele01.lovato@student.unife.it</p>
+        <p><button class="button">Contatta</button></p>
       </div>
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <img src="/assets/team/Andrei_Jizdan.jpg" alt="Jane" style="width:100%">
+      <div class="container">
+        <h2>Andrei Jizdan</h2>
+        <p class="title">Dev</p>
+        <p>Studente presso Università degli Studi di Ferrara</p>
+        <p>andrei.jizdan@student.unife.it</p>
+        <p><button class="button">Contatta</button></p>
+      </div>
+    </div>
+  </div>
 
+  <div class="column">
+    <div class="card">
+      <img src="/assets/team/Anonymous.jpg" alt="Mike" style="width:100%">
+      <div class="container">
+        <h2>Angelo Viro</h2>
+        <p class="title">Dev</p>
+        <p>Studente presso Università degli Studi di Ferrara</p>
+        <p>angelo.viro@student.unife.it</p>
+        <p><button class="button">Contatta</button></p>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
