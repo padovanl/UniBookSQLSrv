@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\File;
 use \Datetime;
 
 use App\User;
@@ -70,10 +71,11 @@ class RegisterController extends Controller
     $user->confirmed = false;
     if(Input::hasFile('file')){
       $file = Input::file('file');
-      $file->move('assets/images', $user->id_user . '.jpg');
-      $user->pic_path = 'assets/images/' . $user->id_user . '.jpg';
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      $file->move('assets/images', $user->id_user . $ext);
+      $user->pic_path = 'assets/images/' . $user->id_user . $ext;
     }else{
-      $user->pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
+      $user->pic_path = '/assets/images/facebook1.jpg';
     }
 
     $user -> save();
