@@ -33,22 +33,26 @@ class PostController extends Controller
   public function details($id){
     	if(!$this->verify_cookie())
     		return redirect('/');
-				
-			$logged_user = User::where('id_user', Cookie::get('session'))->first();
-			//se il profilo dell'utente è pubblico allora posso vedere il post
-			$post_author = User::where('id_user', Post::where('id_post', $id)->first()['id_author'])->first();
-			$logged_user_friends = User::friends($logged_user['id_user']);
-			if($post_author->profiloPubblico == 0){
-				return view('detailsPost', compact('logged_user'));
+			try{
+				$logged_user = User::where('id_user', Cookie::get('session'))->first();
+				//se il profilo dell'utente è pubblico allora posso vedere il post
+				$post_author = User::where('id_user', Post::where('id_post', $id)->first()['id_author'])->first();
+				$logged_user_friends = User::friends($logged_user['id_user']);
+				if($post_author->profiloPubblico == 0){
+					return view('detailsPost', compact('logged_user'));
+				}
+				else if($post_author['id_user'] === $logged_user['id_user']){
+					return view('detailsPost', compact('logged_user'));
+				}
+				else if(in_array($post_author, $logged_user_friends)){
+					return view('detailsPost', compact('logged_user'));
+				}
+				else{
+					return redirect('/');
+				}
 			}
-			else if($post_author['id_user'] === $logged_user['id_user']){
-				return view('detailsPost', compact('logged_user'));
-			}
-			else if(in_array($post_author, $logged_user_friends)){
-				return view('detailsPost', compact('logged_user'));
-			}
-			else{
-				return redirect('/');
+			catch(\Exception $e){
+				return view('error', compact('e'));
 			}
     }
 }
