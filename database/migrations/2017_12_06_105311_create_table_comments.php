@@ -17,7 +17,7 @@ class CreateTableComments extends Migration
             //increments imposta automaticamente la chiave primaria, non serve usare il metodo primary()
             $table->increments('id_comment');
             $table->timestamps();
-            $table->string('content', 500);
+            $table->string('content', 1000);
             $table->uuid('id_author');
             $table->integer('id_post')->unsigned();
 

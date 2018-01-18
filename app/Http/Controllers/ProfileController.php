@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
@@ -35,138 +35,61 @@ class ProfileController extends Controller{
     }
   }
 
+  public function CheckFriend($idA,$idB){
+    $a = Users_make_friends::where([['id_user','=',$idA],['id_request_user','=',$idB]])->value('status');
+    $b = Users_make_friends::where([['id_user','=',$idB],['id_request_user','=',$idA]])->value('status');
+
+    if(($a == '0') || ($b == '0') || ($a == '1') || ($b == '1')){
+      //sono sono presenti nei record amicizia
+      if(($a == '0') || ($b == '0')){
+        //se amicizia confermata
+        return '1';
+      }
+      else{
+        //se amicizia è da confermare(utente loggato ha fatto richiesta)
+        return '2';}
+    }
+    else{
+      //non siamo amici e non c'è richiesta di amicizia
+      return '0';
+    }
+  }
+
+  public function CheckBan($id){
+    $ban = User::where('id_user',$id)->value('ban');
+    return $ban;
+  }
+
   public function ShowUser($id){
     if($this->verify_cookie()){
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $controller = $this;
       $user = User::where('id_user', $id)->first();
       $friends_array = User::friends($user["id_user"]);
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0){
-        $user->gender = null;
-        $user->citta = null;
-        $user->ban = null;
-        $user->email = null;
-        $user->birth_date = null;
-        $user->admin = null;
-        $user->pwd_hash = null;
-        return view('profile', compact('logged_user', 'controller', 'user'));
+      $check_friend = $this->CheckFriend($logged_user['id_user'],$user['id_user']);
+      $ban = $this->CheckBan($logged_user['id_user']);
+      if($user->id_user == $logged_user->id_user){
+        //sono nel mio profilo
+        $case = 0;
       }
-      else{
-        return view('profile', compact('logged_user', 'controller', 'user','friends_array'));
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && ($check_friend == 0 || $check_friend == 2)){
+        //sono nel profilo di un altro utente non mio amico con profilo privato
+        $case = 1;
       }
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && ($check_friend == 0 || $check_friend == 2)){
+        //sono nel profilo di un altro utente non mio amico con profilo pubblico
+        $case = 2;
+      }
+      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1 ){
+        //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
+        $case = 3;
+      }
+      #return $case;
+      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend','ban'));
     }
     else{
       return view('login');
     }
-  }
-
-  public function PrintName($id){
-    if(is_numeric($id)){
-      $user = Page::where('id_page', $id)->first();
-      return ($user['nome']);
-    }
-    else{
-      $user = User::where('id_user', $id)->first();
-      return ($user['name'] . ' ' . $user['surname']);
-    }
-
-  }
-
-  //loading dei post
-  public function loadMore(Request $request){
-
-    $id = request("id");
-    $user = User::where('id_user', $id)->first();
-
-    //Caricamento dei post degli amici e delle pagine
-    $posts = array();
-    $list_comments = array();
-    $likes = array();
-
-    //inserisco anche i miei posts
-    array_push($posts, Post::where('id_author', $user['id_user'])->orderBy('created_at', 'asc')->get());
-    array_push($list_comments, CommentU::where('id_author', $user['id_user'])->orderBy('created_at', 'asc')->get());
-
-    $posts = array_flatten($posts);
-    $list_comments = array_flatten($list_comments);
-
-    //ordino per data
-    usort($posts, array($this, 'cmp'));
-    usort($list_comments, array($this, 'cmp'));
-
-    $toreturn = array();
-
-    foreach($posts as $post){
-      $tmp_comm = array();
-      foreach($list_comments as $comment){
-        if($comment['id_post'] === $post['id_post']){
-          if(!is_numeric($comment['id_author'])){
-            //TODO:manca is_friend
-            array_push($tmp_comm, new CommentViewModel($comment['id_comment'], User::where('id_user', $comment['id_author'])->first()->name,
-                                                      User::where('id_user', $comment['id_author'])->first()->surname,
-                                                      User::where('id_user', $comment['id_author'])->first()->pic_path,
-                                                      $comment['content'], $comment['created_at'], $comment['updated_at'],
-                                                      $comment['id_post'], '0',
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      LikeComment::where('id_user', $user['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'],
-                                                      $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
-          }
-          else{
-            array_push($tmp_comm, new CommentViewModel($comment['id_comment'], Page::where('id_page', $comment['id_author'])->first()->nome,
-                                                      '',
-                                                      Page::where('id_page', $comment['id_author'])->first()->pic_path,
-                                                      $comment['content'], $comment['created_at'], $comment['updated_at'],
-                                                      $comment['id_post'], '0',
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get()->count(),
-                                                      LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get()->count(),
-                                                      null, //bisogna capire se la pagina può mettere like
-                                                      $comment['id_author'], User::where('id_user', $comment['id_author'])->first()['ban']));
-          }
-
-        }
-      }
-      if(!is_numeric($post['id_author'])){
-        array_push($toreturn, new PostViewModel($post['id_post'], User::where('id_user', $post['id_author'])->first()->name,
-                                      User::where('id_user', $post['id_author'])->first()->surname,
-                                      User::where('id_user', $post['id_author'])->first()->pic_path,
-                                      $post['content'], $post['created_at'], $post['updated_at'],
-                                      $post['is_fixed'], $post['id_author'], $tmp_comm,
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
-                                      User::where('id_user', $post['id_author'])->first()['ban']));
-      }
-      else{
-        array_push($toreturn, new PostViewModel($post['id_post'], Page::where('id_page', $post['id_author'])->first()->nome,
-                                      '',
-                                      Page::where('id_page', $post['id_author'])->first()->pic_path,
-                                      $post['content'], $post['created_at'], $post['updated_at'],
-                                      $post['is_fixed'], $post['id_author'], $tmp_comm,
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 1)->get()->count(),
-                                      LikePost::where('id_post', $post['id_post'])->where('like', 0)->get()->count(),
-                                      LikePost::where('id_user', $user['id_user'])->where('id_post', $post['id_post'])->first()['like'],
-                                      User::where('id_user', $post['id_author'])->first()['ban']));
-      }
-    }
-    if($request->input('post_id') == '-1'){
-      $asd = array_slice($toreturn, 0, 5);
-    }
-    else{
-      for($i = 0; $i < count($toreturn); $i++){
-        if($toreturn[$i]->id_post == $request->input('post_id')){
-            $asd = array_slice($toreturn, $i + 1, $i + 3);
-            return(json_encode($asd));
-        }
-      }
-    }
-    return(json_encode($asd));
-
-  }
-
-  function cmp($a, $b) {
-      if ($a['created_at'] == $b['created_at']) return 0;
-      return (strtotime($a['created_at']) < strtotime($b['created_at'])) ? 1 : -1;
   }
 
   //profilo pagina
@@ -235,45 +158,22 @@ class ProfileController extends Controller{
     $citta = request("citta");
 
     DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
+
     return response()->json(['message' => 'Done']);
-  }
-  //cambio immagine profilo
+
+    }
+
   public function formImage(Request $request){
-    $file = request("fd");
-    if(isset($file["file"]["type"]))
-        {
-          $validextensions = array("jpeg", "jpg", "png");
-          $temporary = explode(".", $file["file"]["name"]);
-          $file_extension = end($temporary);
-          if ((($file["file"]["type"] == "image/png") || ($file["file"]["type"] == "image/jpg") || ($file["file"]["type"] == "image/jpeg")
-            ) && ($file["file"]["size"] < 100000)//Approx. 100kb files can be uploaded.
-            && in_array($file_extension, $validextensions)) {
-            if ($file["file"]["error"] > 0)
-              {
-                echo "Return Code: " . $file["file"]["error"] . "<br/><br/>";
-              }
-            else
-              {
-              if (file_exists("upload/" . $file["file"]["name"])) {
-                echo $file["file"]["name"] . " <span id='invalid'><b>already exists.</b></span> ";
-                }
-              else{
-                  $sourcePath = $file['file']['tmp_name']; // Storing source path of the file in a variable
-                  $targetPath = "public/assets/images/".$file['file']['name']; // Target path where file is to be stored
-                  move_uploaded_file($sourcePath,$targetPath) ; // Moving Uploaded file
-                  echo "<span id='success'>Image Uploaded Successfully...!!</span><br/>";
-                  echo "<br/><b>File Name:</b> " . $file["file"]["name"] . "<br>";
-                  echo "<b>Type:</b> " . $file["file"]["type"] . "<br>";
-                  echo "<b>Size:</b> " . ($file["file"]["size"] / 1024) . " kB<br>";
-                  echo "<b>Temp file:</b> " . $file["file"]["tmp_name"] . "<br>";
-                }
-              }
-            }
-          else
-            {
-              echo "<span id='invalid'>***Invalid file Size or Type***<span>";
-            }
-        }
-  }
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    if(Input::hasFile('file')){
+      $file = Input::file('file');
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      $file->move('assets/images', $logged_user->id_user . $ext);
+      $picture = '/assets/images/' . $logged_user->id_user . $ext;
+      DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['pic_path' => $picture]);
+      return response()->json(['message' => 'Done']);
+      }
+    else{return response()->json(['message' => 'Wrong']);}
+      }
 }
 ?>

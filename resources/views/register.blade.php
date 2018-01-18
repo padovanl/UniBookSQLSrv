@@ -7,97 +7,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <!--[if lt IE 9]>
-      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="assets/css/registrazione.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'></style>
-    <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'></style>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
     <script src="https://use.fontawesome.com/1e803d693b.js"></script>
 </head>
 <body>
 
-  <div class="wrapper">
+<div class="wrapper">
     <div class="register">
-      <h1>Registrazione</h1></br>
+        <h1>Registrazione</h1></br>
 
 
-      <form action="/register" method="post" enctype="multipart/form-data">
-        {{csrf_field()}}
+        <form action="/register" method="post" enctype="multipart/form-data">
+            {{csrf_field()}}
 
-        <div class="group">
-          <input type="text" name="name" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Nome</label>
-        </div>
-        <div class="group">
-          <input type="text" name="surname" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Cognome</label>
-        </div>
-        <div class="group">
-          <input type="email" name="email" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Email</label>
-        </div>
-        <div class="group">
-          <input type="password" name="pwd_hash" id="password" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Password</label>
-        </div>
-        <div class="group">
-          <input type="text" name="citta" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Città</label>
-        </div>
-        <p>Data di nascita</p>
-        <div class="form-row">
-            <input class="form-control" type="date" name="birth_date" required>
-        </div></br>
+            <div class="group">
+                <input type="text" name="name" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Nome</label>
+            </div>
+            <div class="group">
+                <input type="text" name="surname" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Cognome</label>
+            </div>
+            <div class="group">
+                <input type="email" name="email" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Email</label>
+            </div>
+            <div class="group">
+                <input type="password" name="pwd_hash" id="password" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Password</label>
+            </div>
+            <div class="group">
+                <input type="password" name="re_pwd_hash" id="re_password" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Conferma password</label>
+            </div>
+            <div class="group">
+                <input type="text" name="citta" required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Città</label>
+            </div>
+            <p>Data di nascita</p>
+            <div class="form-row">
+                <input class="form-control" type="date" name="birth_date" required>
+            </div>
+            </br>
 
 
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" class="gender" value="0" checked>
-          <label class="form-check-label" for="gender">Donna</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" class="gender" value="1">
-          <label class="form-check-label" for="gender">Uomo</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" class="gender" value="3">
-          <label class="form-check-label" for="gender">Altro</label>
-        </div></br>
+            <div class="form-check form-check-inline" id="genderDiv">
+                Sesso:&nbsp;
+                <input class="form-check-input" type="radio" name="gender" class="gender" value="0" checked>
+                <label class="form-check-label" for="gender">Donna</label>
+                <input class="form-check-input" type="radio" name="gender" class="gender" value="1">
+                <label class="form-check-label" for="gender">Uomo</label>
+                <input class="form-check-input" type="radio" name="gender" class="gender" value="3">
+                <label class="form-check-label" for="gender">Altro</label>
+            </div>
 
-        <div class="group">
-          <p>Foto profilo</p>
-          <div>
-            <input type="file" name="file" id="file" required>
-            <span class="highlight"></span>
-            <span class="bar"></span>
-          </div>
-        </div>
+            </br>
 
-        <div class="lg-btn">
-          <button type="submit" class="button" value="Register">Registrati</button>
-        </div>
+            <div class="group">
+                <p>Foto profilo</p>
+                <div>
+                    <input type="file" name="file" id="file">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
 
-      </form>
+            <div class="lg-btn">
+                <button type="submit" class="button" value="Register">Registrati</button>
+            </div>
+        </form>
 
     </div>
-  </div>
+</div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-      var err = '{{$error}}'
-      if(err !== '')
-        alert("{{$error}}");
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var err = '{{$error}}'
+        if (err !== '')
+            alert("{{$error}}");
     });
-  </script>
+</script>
 
 </body>
 </html>

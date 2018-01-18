@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\File;
 use \Datetime;
 
 use App\User;
@@ -58,24 +59,27 @@ class RegisterController extends Controller
     $user -> surname = request("surname");
     $user -> birth_date = request("birth_date");
     $user -> email = request("email");
+    $pwd = $request->input('pwd_hash');
+    $rePwd = $request->input('re_pwd_hash');
+    if($rePwd != $pwd){
+      $error = "Le password non coincidono";
+      return view('/register', compact('error'));
+    }
     $user->pwd_hash = password_hash($request->input('pwd_hash'), PASSWORD_DEFAULT);
     $user -> citta = request("citta");
     $user -> gender = request("gender");
     $user->confirmed = false;
     if(Input::hasFile('file')){
       $file = Input::file('file');
-      $file->move('assets/images', $user->id_user . '.jpg');
-      $user->pic_path = 'assets/images/' . $user->id_user . '.jpg';
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      $file->move('assets/images', $user->id_user . $ext);
+      $user->pic_path = 'assets/images/' . $user->id_user . $ext;
     }else{
-      $user->pic_path = 'assets/images/facebook1.jpg';#request("pic_path");
+      $user->pic_path = '/assets/images/facebook1.jpg';
     }
 
     $user -> save();
 
-    #sarebbe da fare la redirect con l'utente già loggato
-    //Daniele: non credo sia una buona idea, dobbiamo mandare una mail e confermare l'utente
-    #io farei fare l'auto login e poi una notifica standard che dice di validare account con email
-      //Cookie::queue('session', $user->id_user);
     $path = route('activeAccount', ['id_user' => $user->id_user]);
     Mail::to($user)->send(new ConfirmEmail($path));
     return redirect('/register/confirm');

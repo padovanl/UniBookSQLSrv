@@ -27,6 +27,7 @@ class FriendshipController extends Controller
         }
     }
 
+	//per le amicizie non uso queste funzioni, non le elimino perchè non so se valgono anche per le pagine
   public function sendRequestFriend(Request $request){
     	if(!$this->controllaAutorizzazione())
     		return response()->json(['message' => 'Loggati!']);
@@ -103,17 +104,18 @@ class FriendshipController extends Controller
     	return view('requestFriendList', compact('logged_user', 'requestList'));
     }
 
-	public function Addfriend(Request $request){
+	public function AddFriend(Request $request){
 
 			$data = request("data");
 			$id = request("id");
 			$logged_user = User::where('id_user', Cookie::get('session'))->first();
 			if ($data == "1"){
+				//inserisco il record che è comunque da confermare
 				DB::table('users_make_friends')->insert(['id_user' => $id,'id_request_user' => $logged_user->id_user, 'status' => 1]);
 				return response()->json(['value' => '1']);
 			}
 			else{
-				DB::table('users_make_friends')->where([['id_user' ,"=", $id],['id_request_user' ,"=", $logged_user->id_user], ['status' ,"=", 1]])->delete();
+				DB::table('users_make_friends')->where([['id_request_user', '=', $logged_user->id_user], ['id_user', '=', $id]])->delete();
 				return response()->json(['value' => '0']);
 			}
 		}

@@ -17,7 +17,7 @@ class CreateTablePosts extends Migration
             //increments imposta automaticamente la chiave primaria, non serve usare il metodo primary()
             $table->increments('id_post');
             $table->timestamps();
-            $table->string('content', 500);
+            $table->string('content', 1000);
             $table->boolean('fixed')->default(false);
             $table->uuid('id_author');
 

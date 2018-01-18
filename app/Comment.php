@@ -16,16 +16,16 @@ class Comment extends Model
   public $timestamps = false;
 
 
-  public function scopeGetCommentsPost($query, $post_comments, $logged){
+  public function scopeGetCommentsPost($query, $post_comments, $logged, $author){
     $tmp_comm = array();
     foreach($post_comments as $comment){
       if(!is_numeric($comment['id_author'])){
         $comm_user = User::where('id_user', $comment['id_author'])->first();
-        $user_liked = LikeComment::where('id_user', $logged['id_user'])->where('id_comment', $comment['id_comment'])->first()['like'];
+        $user_liked = LikeComment::where('id_user', $logged)->where('id_comment', $comment['id_comment'])->first()['like'];
       }
       else{
         $comm_user = Page::where('id_page', $comment['id_author'])->first();
-        $user_liked = LikeComment::where('id_user', $logged['id_page'])->where('id_comment', $comment['id_comment'])->first()['like'];
+        $user_liked = LikeComment::where('id_user', $logged)->where('id_comment', $comment['id_comment'])->first()['like'];
       }
       $users_like = LikeComment::GetLikeComment($comment);
       $users_dislike = LikeComment::GetDislikeComment($comment);
@@ -66,7 +66,7 @@ class Comment extends Model
     }
     else if(is_numeric($author)){
       $page = Page::where('id_page', $author)->first();
-      if(!$user['ban']){
+      if(!$page['ban']){
         $comment = new Comment();
         $comment->created_at = now();
         $comment->updated_at = now();

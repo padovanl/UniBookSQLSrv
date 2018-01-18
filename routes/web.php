@@ -21,9 +21,6 @@ Route::get('/register/resetPassword/{id_user}', 'RegisterController@resetPasswor
 Route::post('/register/resetPassword/{id_user}', 'RegisterController@resetPasswordPost');
 Route::resource('/register', 'RegisterController');
 
-//Pagina dettaglio post
-Route::get('/details/post/{id_post}', 'DetailsController@landing');
-
 //General App Routes: messaggi, notifiche, richieste di amicizia
 Route::post('/getnotifications', 'GeneralAppController@getNotifications');
 Route::post('/getcountNewMessage', 'GeneralAppController@countNewMessage');
@@ -33,7 +30,7 @@ Route::post('/getcountNewRequest', 'GeneralAppController@getFriendRequest');
 Route::get('/', 'HomeController@landing');
 Route::post('/home/post', 'HomeController@newPost');
 Route::post('/home/comment', 'HomeController@newComment');
-Route::post('/home/reaction', 'HomeController@reaction');
+Route::get('/home/reaction', 'HomeController@reaction');
 Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
@@ -45,7 +42,9 @@ Route::get('/profile/user/{id}', 'ProfileController@ShowUser');
 Route::get('/profile/user/{id}/settings', 'ProfileController@Settings');
 Route::get('/profile/user/{id}/loadmore', 'HomeController@loadMore');
 Route::post('/admin/dashboard/sendMessageUser', 'AdminController@sendMessageUser');
-Route::post('/friend/Addfriend', 'FriendshipController@Addfriend');
+#Route::post('/friend/sendRequestFriend', 'FriendshipController@sendRequestFriend');
+#Route::post('/friend/removeFriend', 'FriendshipController@removeFriend');
+Route::post('/friend/AddFriend', 'FriendshipController@AddFriend');
 Route::post('/privacy','ProfileController@Privacy');
 Route::post('/formDetails','ProfileController@formDetails');
 Route::post('/formImage','ProfileController@formImage');
@@ -102,10 +101,8 @@ Route::post('/friend/remove', 'FriendshipController@removeFriend');
 //pagine
 Route::get('/page/mypage', 'PageController@index');
 Route::post('/page/create', 'PageController@create')->name('createPage');
-
 Route::post('/page/invite', 'PageController@inviteFriends');
 Route::post('/page/changeImage', 'PageController@changeImage')->name('changeImage');
-
 Route::get('/page/loadmore', 'PageController@loadmore');
 Route::post('/page/newpost', 'PageController@newPost');
 
