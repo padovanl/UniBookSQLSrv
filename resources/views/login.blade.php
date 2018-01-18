@@ -76,6 +76,9 @@
             <p>Nuovo utente? <a href="{{ url('register') }}">Registrati!</a></p>
         </div>
 
+        <div class="new_user">
+          <a href="/team">Team di Sviluppo</a>
+        </div>
     </div>
     <div class="side" style="background-image:url(assets/img/uni3.png)">
         <!--<img src="assets/img/uni3.png">-->
