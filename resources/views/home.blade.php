@@ -160,9 +160,12 @@
             dataType: "json",
             data: {post_id: -1, home: 1},
             success: function (posts) {
-                console.log(posts);
                 onLoad(posts);
-            }
+            },
+            error: function(data){
+            var errors = data.responseJSON;
+            alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n\nERROR:\n" + errors.message);
+          }
         });
     });
 </script>
