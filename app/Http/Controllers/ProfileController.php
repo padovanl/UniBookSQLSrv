@@ -17,7 +17,6 @@ use App\PostViewModel;
 use App\Users_follow_pages;
 
 use Illuminate\Support\MessageBag;
-use App\Mail\ConfirmEmail;
 use App\Mail\SettingsEmail;
 use Illuminate\Support\Facades\Mail;
 
@@ -165,7 +164,7 @@ class ProfileController extends Controller{
 
     DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
 
-    Mail::to($logger_user)->send(new SettingsEmail('sdsdd'));
+    Mail::to($logged_user->email)->send(new SettingsEmail('sdsdd'));
 
     return response()->json(['message' => 'Done']);
 
