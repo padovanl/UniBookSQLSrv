@@ -36,12 +36,21 @@ class ProfileController extends Controller{
   }
 
   public function CheckFriend($idA,$idB){
-    $a = Users_make_friends::where([['id_user','=',$idA],['id_request_user','=',$idB],['status','=',0]])->first();
-    $b = Users_make_friends::where([['id_user','=',$idB],['id_request_user','=',$idA],['status','=',0]])->first();
-    if($a || $b){
-      return '1';
+    $a = Users_make_friends::where([['id_user','=',$idA],['id_request_user','=',$idB]])->value('status');
+    $b = Users_make_friends::where([['id_user','=',$idB],['id_request_user','=',$idA]])->value('status');
+
+    if(($a == '0') || ($b == '0') || ($a == '1') || ($b == '1')){
+      //sono sono presenti nei record amicizia
+      if(($a == '0') || ($b == '0')){
+        //se amicizia confermata
+        return '1';
+      }
+      else{
+        //se amicizia è da confermare(utente loggato ha fatto richiesta)
+        return '2';}
     }
     else{
+      //non siamo amici e non c'è richiesta di amicizia
       return '0';
     }
   }
@@ -58,20 +67,20 @@ class ProfileController extends Controller{
         //sono nel mio profilo
         $case = 0;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && $check_friend == 0){
         //sono nel profilo di un altro utente non mio amico con profilo privato
         $case = 1;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && $check_friend == 0){
         //sono nel profilo di un altro utente non mio amico con profilo pubblico
         $case = 2;
       }
-      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1){
+      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && ($check_friend == 1 || $check_friend == 2)){
         //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
         $case = 3;
       }
-
-      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case'));
+      #return $case;
+      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend'));
     }
     else{
       return view('login');
