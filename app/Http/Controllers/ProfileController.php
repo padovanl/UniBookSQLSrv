@@ -167,8 +167,9 @@ class ProfileController extends Controller{
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if(Input::hasFile('file')){
       $file = Input::file('file');
-      $file->move('assets/images', $logged_user->id_user . '.jpg');
-      $picture = '/assets/images/' . $logged_user->id_user . '.jpg';
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      $file->move('assets/images', $logged_user->id_user . $ext);
+      $picture = '/assets/images/' . $logged_user->id_user . $ext;
       DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['pic_path' => $picture]);
       return response()->json(['message' => 'Done']);
       }

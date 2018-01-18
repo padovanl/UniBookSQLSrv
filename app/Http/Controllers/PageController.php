@@ -71,8 +71,9 @@ class PageController extends Controller
 		 	$pageId = 1;
 		 }
          $file = Input::file('image');
-         $file->move('assets/images', $pageId . '.jpg');
-         Page::where('id_page', '=', $pageId)->update(['pic_path' => '/assets/images/' . $pageId . '.jpg']);
+         $ext = pathinfo($file, PATHINFO_EXTENSION);
+         $file->move('assets/images', $pageId . $ext);
+         Page::where('id_page', '=', $pageId)->update(['pic_path' => '/assets/images/' . $pageId . $ext]);
          //$page->save();
          return redirect('/page/mypage');
 	}
@@ -119,9 +120,10 @@ class PageController extends Controller
     $page = Page::where('id_page', '=', $id_page)->first();
 
     $file = Input::file('image');
+    $ext = pathinfo($file, PATHINFO_EXTENSION);
     //unlink('assets/images' . $page->id_page . '.jpg');
-    $file->move('assets/images', $page->id_page . '.jpg');
-    Page::where('id_page', '=', $page->id_page)->update(['pic_path' => '/assets/images/' . $page->id_page . '.jpg']);
+    $file->move('assets/images', $page->id_page . $ext);
+    Page::where('id_page', '=', $page->id_page)->update(['pic_path' => '/assets/images/' . $page->id_page . $ext]);
     return redirect('/profile/page/' . $page->id_page);
   }
 }

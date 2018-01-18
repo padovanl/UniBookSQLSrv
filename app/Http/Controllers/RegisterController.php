@@ -71,10 +71,11 @@ class RegisterController extends Controller
     $user->confirmed = false;
     if(Input::hasFile('file')){
       $file = Input::file('file');
-      $file->move('assets/images', $user->id_user . '.png');
-      $user->pic_path = 'assets/images/' . $user->id_user . '.png';
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      $file->move('assets/images', $user->id_user . $ext);
+      $user->pic_path = 'assets/images/' . $user->id_user . $ext;
     }else{
-      $user->pic_path = 'assets/images/facebook1.jpg';
+      $user->pic_path = '/assets/images/facebook1.jpg';
     }
 
     $user -> save();
