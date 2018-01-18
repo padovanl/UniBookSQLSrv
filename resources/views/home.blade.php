@@ -132,7 +132,7 @@
                     <div class="row">
                         <div class="profile-header-container">
                             <div class="profile-header-img">
-                                <img class="img-circle" src="{{$suggested->pic_path}}"/>
+                                <img class="img-circle" src="{{$suggested->pic_path}}" width="200px" height="200px" />
                                 <!-- badge -->
                                 <div class="rank-label-container">
                                     <span class="label label-default rank-label">{{$suggested->name . " " . $suggested->surname}}</span>
