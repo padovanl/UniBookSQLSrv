@@ -50,7 +50,6 @@ class Post extends Model
   }
   //funzione che, data una lista di id_post e l'utente, torna un array di PostViewModel
   public function scopeGetPosts($query, $id_post_list, $logged_id){
-
     $toreturn = array();
     foreach ($id_post_list as $post_id){
       //recupero tutte le informazioni di un post e me le restituisco in un array complesso
