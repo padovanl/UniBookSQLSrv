@@ -117,7 +117,6 @@
 
             </div>
         </div><!-- /padding -->
-
         <div class="row">
             <div class="col-md-12" style="text-align:center;">
                 <button id="load_home" onclick="loadOlder(this.id)" type="button" class="button btn-primary"
@@ -125,9 +124,7 @@
                 </button>
             </div>
         </div>
-
     </article>
-
     <article class="side">Amici Suggeriti
         @foreach($suggested_friends as $suggested)
             <a href="/profile/user/{{$suggested->id_user}}">
@@ -148,31 +145,23 @@
 
         @endforeach
     </article>
-
-
-
     @include('reportModal')
 
+<script>
+    $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
-    <script>
-        $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
-
-        //Caricamento dei post
-        $(document).ready(function () {
-            $.ajax({
-                url: '/home/loadmore',
-                method: "GET",
-                dataType: "json",
-                data: {post_id: -1, home: 1},
-                success: function (posts) {
-                    console.log(posts);
-                    onLoad(posts);
-                }
-            });
+    //Caricamento dei post
+    $(document).ready(function () {
+        $.ajax({
+            url: '/home/loadmore',
+            method: "GET",
+            dataType: "json",
+            data: {post_id: -1, home: 1},
+            success: function (posts) {
+                console.log(posts);
+                onLoad(posts);
+            }
         });
-
-    </script>
-
-
-
+    });
+</script>
 @endsection

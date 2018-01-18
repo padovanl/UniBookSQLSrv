@@ -96,6 +96,7 @@ class PageController extends Controller
 				$cnt++;
 			}
 		}
+    //questa funzione sarebbe già fatta: basta scrivere User::firends($id) e torna un array di utenti 
 		$friendships = Users_make_friends::where('id_user', '=', $logged_user->id_user)->get();
 		foreach ($friendships as $f){
 			$alreadyFollowPage = Users_follow_pages::where('id_user', '=', $f->id_request_user)->first();

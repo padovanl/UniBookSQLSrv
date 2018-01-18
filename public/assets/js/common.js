@@ -141,6 +141,7 @@ function createPost(data){
   else{
     $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name).attr('href', '/profile/page/' + data.id_auth);
   }
+  $post_clone.find("#creation_date").attr("href", "/post/details/" + data.id_post);
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);
   $post_clone.find("#post_content").text(data.content);
   //segnalazione
