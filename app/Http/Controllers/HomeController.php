@@ -94,7 +94,13 @@ class HomeController extends Controller{
       $post_ids = PostPage::where('id_page', $page['id_page'])->pluck('id_post')->toArray();
       $toreturn = Post::GetPosts($post_ids, $logged_user['id_user']);
     }
-
+    else if((request('details')) && (!is_numeric(Post::where('id_post',request('id_post'))->first()['id_author']))) {
+      $toreturn = Post::GetPosts(array(request('id_post')), $logged_user['id_user']);
+    }
+    else if((request('details')) && (is_numeric(Post::where('id_post',request('id_post'))->first()['id_author']))) {
+      $toreturn = Post::GetPosts(array(request('id_post')), $logged_user['id_user']);
+    }
+    return($toreturn);
     if($request->input('post_id') == -1){
       $toreturn = array_slice($toreturn, 0, 7);
       return(json_encode($toreturn));
@@ -127,6 +133,10 @@ class HomeController extends Controller{
   public function reaction(Request $request){
     //manca controllo bontà dei parametri
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
+    if((Page::where('id_page',request('page'))->first()['id_user']) === $logged_user['id_user']){
+      //eh boh
+      return(false);
+    }
     if((request('action') == 'like') || (request('action') == 'dislike')){
       $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
       return(json_encode($toreturn));
