@@ -16,6 +16,11 @@ use App\LikePost;
 use App\PostViewModel;
 use App\Users_follow_pages;
 
+use Illuminate\Support\MessageBag;
+use App\Mail\ConfirmEmail;
+use App\Mail\SettingsEmail;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\DB;
 use Cookie;
 
@@ -55,6 +60,10 @@ class ProfileController extends Controller{
     }
   }
 
+  public function CheckBan($id){
+    $ban = User::where('id_user',$id)->value('ban');
+    return $ban;
+  }
 
   public function ShowUser($id){
     if($this->verify_cookie()){
@@ -63,24 +72,25 @@ class ProfileController extends Controller{
       $user = User::where('id_user', $id)->first();
       $friends_array = User::friends($user["id_user"]);
       $check_friend = $this->CheckFriend($logged_user['id_user'],$user['id_user']);
+      $ban = $this->CheckBan($logged_user['id_user']);
       if($user->id_user == $logged_user->id_user){
         //sono nel mio profilo
         $case = 0;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && ($check_friend == 0 || $check_friend == 2)){
         //sono nel profilo di un altro utente non mio amico con profilo privato
         $case = 1;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && ($check_friend == 0 || $check_friend == 2)){
         //sono nel profilo di un altro utente non mio amico con profilo pubblico
         $case = 2;
       }
-      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && ($check_friend == 1 || $check_friend == 2)){
+      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1 ){
         //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
         $case = 3;
       }
       #return $case;
-      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend'));
+      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend','ban'));
     }
     else{
       return view('login');
@@ -145,6 +155,7 @@ class ProfileController extends Controller{
     DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['profiloPubblico' => $data]);
     return response()->json(['message' => 'Done']);
   }
+
   //cambio dati utente
   public function formDetails(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
@@ -154,6 +165,8 @@ class ProfileController extends Controller{
 
     DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
 
+    Mail::to($logger_user)->send(new SettingsEmail('sdsdd'));
+
     return response()->json(['message' => 'Done']);
 
     }
@@ -162,8 +175,9 @@ class ProfileController extends Controller{
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if(Input::hasFile('file')){
       $file = Input::file('file');
-      $file->move('assets/images', $logged_user->id_user . '.jpg');
-      $picture = '/assets/images/' . $logged_user->id_user . '.jpg';
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      $file->move('assets/images', $logged_user->id_user . $ext);
+      $picture = '/assets/images/' . $logged_user->id_user . $ext;
       DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['pic_path' => $picture]);
       return response()->json(['message' => 'Done']);
       }
