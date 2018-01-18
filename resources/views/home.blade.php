@@ -126,13 +126,14 @@
         </div>
     </article>
     <article class="side">Amici Suggeriti
+        <div style="width: 300px; margin: 0 auto 0 auto; text-align: center;">
         @foreach($suggested_friends as $suggested)
             <a href="/profile/user/{{$suggested->id_user}}">
                 <div class="container">
                     <div class="row">
                         <div class="profile-header-container">
                             <div class="profile-header-img">
-                                <img class="img-circle" src="{{$suggested->pic_path}}" width="200px" height="200px" />
+                                <img class="img-circle" src="{{$suggested->pic_path}}" width="165px" height="165px" />
                                 <!-- badge -->
                                 <div class="rank-label-container">
                                     <span class="label label-default rank-label">{{$suggested->name . " " . $suggested->surname}}</span>
@@ -142,8 +143,9 @@
                     </div>
                 </div>
             </a>
-
+            <br />
         @endforeach
+        </div>
     </article>
     @include('reportModal')
 

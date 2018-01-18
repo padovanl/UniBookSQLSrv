@@ -17,18 +17,26 @@ class LikeComment extends Model
 
 	public function scopeGetLikeComment($query, $comment){
 		$likes = LikeComment::where('id_comment', $comment['id_comment'])->where('like', 1)->get();
+		$page_like = LikeCommentPage::where('id_comment', $comment['id_comment'])->where('like', 1)->get();
 		$users_like = array();
 		foreach($likes as $like){
 			array_push($users_like, User::where('id_user', $like['id_user'])->first());
+		}
+		foreach($page_like as $like){
+			array_push($users_like, Page::where('id_page', $like['id_page'])->first());
 		}
 		return($users_like);
 	}
 
 	public function scopeGetDislikeComment($query, $comment){
 		$dislikes = LikeComment::where('id_comment', $comment['id_comment'])->where('like', 0)->get();
+		$page_dislike = LikeCommentPage::where('id_comment', $comment['id_comment'])->where('like', 0)->get();
 		$users_dislike = array();
 		foreach($dislikes as $dislike){
 			array_push($users_dislike, User::where('id_user', $dislike['id_user'])->first());
+		}
+		foreach($page_dislike as $like){
+			array_push($users_dislike, Page::where('id_page', $like['id_page'])->first());
 		}
 		return($users_dislike);
 	}

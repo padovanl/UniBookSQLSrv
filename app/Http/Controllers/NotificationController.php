@@ -31,7 +31,7 @@ class NotificationController extends Controller
 			$temp = collect();
 			foreach ($notificationList as $n) {
 				$user = User::where('id_user', '=', $n->id_sender)->first();
-				$viewModel = new NotificationViewModel($n->id_notification, $n->content, '/' . $user->pic_path, $n->link, $n->new);
+				$viewModel = new NotificationViewModel($n->id_notification, $n->content, $user->pic_path, $n->link, $n->new);
 				$temp->push($viewModel);
 			}
 			$notificationList = $temp;
