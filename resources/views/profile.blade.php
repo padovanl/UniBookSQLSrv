@@ -211,7 +211,7 @@
 
         <div class="row">
             <div class="col-md-12" style="text-align:center;">
-                <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
+                <button id="load_profile" onclick="loadOlder(this.id)" type="button" class="button btn-primary"
                         style="border-radius: 5px;">Carica post più vecchi...
                 </button>
             </div>
