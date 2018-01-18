@@ -33,7 +33,7 @@ class PostController extends Controller
   public function details($id){
     	if(!$this->verify_cookie())
     		return redirect('/');
-
+				
 			$logged_user = User::where('id_user', Cookie::get('session'))->first();
 			//se il profilo dell'utente è pubblico allora posso vedere il post
 			$post_author = User::where('id_user', Post::where('id_post', $id)->first()['id_author'])->first();
