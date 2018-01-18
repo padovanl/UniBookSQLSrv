@@ -23,22 +23,27 @@ class Post extends Model
   }
 
   //per ogni id post passato, crea una struttura del tipo 'PostViewModel' con all'interno tutti i dettagli di un post
-  public function createPost($logged, $post_id){
+  public function createPost($logged, $post_id, $in_page=null){
     $post = Post::where('id_post', $post_id)->first();
     $post_comments = Comment::where('id_post', $post_id)->get();
     if(!is_numeric($post['id_author'])){
       $user_post = User::where('id_user', $post['id_author'])->first();
       $userlikes = LikePost::where('id_user', $logged)->where('id_post', $post['id_post'])->first()['like'];
+      $comments = Comment::GetCommentsPost($post_comments, $logged, $user_post, $in_page);
     }
     else{
       $user_post = Page::where('id_page', $post['id_author'])->first();
-      $userlikes = LikePost::where('id_user', $logged)->where('id_post', $post['id_post'])->first()['like'];
+      if($in_page){
+        $userlikes = LikePostPage::where('id_page', $user_post['id_page'])->where('id_post', $post['id_post'])->first()['like'];
+        $comments = Comment::GetCommentsPost($post_comments, $user_post['id_page'], $user_post, 1);
+      }
+      else{
+        $userlikes = LikePost::where('id_user', $logged)->where('id_post', $post['id_post'])->first()['like'];
+        $comments = Comment::GetCommentsPost($post_comments, $logged, $user_post, $in_page);
+      }
     }
-
     $users_like = LikePost::GetPostLike($post);
     $users_dislike = LikePost::GetPostDislike($post);
-    $comments = Comment::GetCommentsPost($post_comments, $logged, $user_post);
-
     $toreturn = new PostViewModel($post_id, $user_post['name'], $user_post['surname'], $user_post['pic_path'],
                       $post['content'], $post['created_at'], $post['updated_at'],
                       $post['is_fixed'], $post['id_author'], $comments,
@@ -49,11 +54,11 @@ class Post extends Model
     return($toreturn);
   }
   //funzione che, data una lista di id_post e l'utente, torna un array di PostViewModel
-  public function scopeGetPosts($query, $id_post_list, $logged_id){
+  public function scopeGetPosts($query, $id_post_list, $logged_id, $in_page=null){
     $toreturn = array();
     foreach ($id_post_list as $post_id){
       //recupero tutte le informazioni di un post e me le restituisco in un array complesso
-      array_push($toreturn, $this->createPost($logged_id, $post_id));
+      array_push($toreturn, $this->createPost($logged_id, $post_id, $in_page));
     }
     //ordino per data
     usort($toreturn, array($this, 'cmp'));

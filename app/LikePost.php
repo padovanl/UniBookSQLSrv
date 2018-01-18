@@ -18,9 +18,13 @@ class LikePost extends Model
   public function scopeGetPostLike($query, $post){
     //Prendo gli user che hanno like
     $post_like = LikePost::where('id_post', $post['id_post'])->where('like', 1)->get();
+    $page_like = LikePostPage::where('id_post', $post['id_post'])->where('like', 1)->get();
     $users_like = array();
     foreach($post_like as $like){
       array_push($users_like, User::where('id_user', $like['id_user'])->first());
+    }
+    foreach($page_like as $like){
+      array_push($users_like, Page::where('id_page', $like['id_page'])->first());
     }
     return($users_like);
   }
@@ -28,9 +32,13 @@ class LikePost extends Model
   public function scopeGetPostDislike($query, $post){
     //Prendo gli user che hanno dislike
     $post_dislike = LikePost::where('id_post', $post['id_post'])->where('like', 0)->get();
+    $page_dislike = LikePostPage::where('id_post', $post['id_post'])->where('like', 0)->get();
     $users_dislike = array();
     foreach($post_dislike as $dislike){
       array_push($users_dislike, User::where('id_user', $dislike['id_user'])->first());
+    }
+    foreach($page_dislike as $dislike){
+      array_push($users_dislike, Page::where('id_page', $dislike['id_page'])->first());
     }
     return($users_dislike);
   }

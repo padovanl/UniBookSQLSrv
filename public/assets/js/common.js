@@ -2,7 +2,12 @@ function createTooltipData(data){
     if(data.length > 0 && data.length <= 4){
       var toreturn = '<ul>';
       data.forEach(function(el){
-          toreturn += "<li><a href='/profile/user/" + el.id_user + "'>" + el.name + " " + el.surname + "</a></li>";
+          if(el.surname != null){
+            toreturn += "<li><a href='/profile/user/" + el.id_user + "'>" + el.name + " " + el.surname + "</a></li>";
+          }
+          else{
+            toreturn += "<li><a href='/profile/page/" + el.id_page + "'>" + el.name + "</a></li>";
+          }
       });
       toreturn += '</ul>';
      return toreturn;
@@ -10,7 +15,12 @@ function createTooltipData(data){
     else if(data.length > 4){
       var toreturn = '<ul>';
       for(i = 0; i < 4; i++){
-        toreturn += "<li><a href='/profile/user/" + data[i].id_user + "'>" + data[i].name + " " + data[i].surname + "</a></li>";
+        if(data[i].surname != null){
+          toreturn += "<li><a href='/profile/user/" + data[i].id_user + "'>" + data[i].name + " " + data[i].surname + "</a></li>";
+        }
+        else{
+          toreturn += "<li><a href='/profile/page/" + data[i].id_page + "'>" + data[i].name +"</a></li>";
+        }
       }
       toreturn += "<li>e altri " + (data.length - 3) + "</li>";
       toreturn += '</ul>';

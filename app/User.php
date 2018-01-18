@@ -54,7 +54,7 @@ class User extends Authenticatable
     $suggested = User::whereNotIn('id_user', $friends_id)->where('citta', User::where('id_user', $user)->first()['citta'])->get();
     $size = sizeof($suggested);
     foreach($suggested as $suggestion){
-      if(!in_array($suggestion, $friends)){
+      if(!in_array($suggestion, $friends) && $suggestion != User::where('id_user', $user)->first()){
         array_push($toreturn, $suggestion);
       }
     }

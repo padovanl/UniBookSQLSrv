@@ -253,6 +253,7 @@
                 dataType: "json",
                 data: {post_id: -1, id: location.href.match(/([^\/]*)\/*$/)[1], page: 1},
                 success: function (posts) {
+                    console.log(posts);
                     onLoad(posts, 1);
                 }
             });
