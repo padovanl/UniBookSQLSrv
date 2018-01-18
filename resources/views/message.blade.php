@@ -95,7 +95,7 @@
         /* Chat containers */
         .container {
             border: 2px solid #dedede;
-            background-color: #afd7ee;
+            background-color: #a1d8e9;
             border-radius: 5px;
             padding: 10px;
             margin: 0 auto;
@@ -105,7 +105,7 @@
         /* Darker chat container */
         .darker {
             border-color: #ccc;
-            background-color: rgb(203, 247, 197);
+            background-color: rgb(226, 225, 222);
         }
 
         /* Clear floats */
