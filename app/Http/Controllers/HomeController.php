@@ -107,7 +107,6 @@ class HomeController extends Controller{
     else if((request('details')) && (is_numeric(Post::where('id_post',request('id_post'))->first()['id_author']))) {
       $toreturn = Post::GetPosts(array(request('id_post')), $logged_user['id_user']);
     }
-    return($toreturn);
     if($request->input('post_id') == -1){
       $toreturn = array_slice($toreturn, 0, 7);
       return(json_encode($toreturn));
