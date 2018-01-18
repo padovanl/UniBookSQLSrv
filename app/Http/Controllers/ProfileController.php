@@ -67,15 +67,15 @@ class ProfileController extends Controller{
         //sono nel mio profilo
         $case = 0;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && ($check_friend == 0 || $check_friend == 2)){
         //sono nel profilo di un altro utente non mio amico con profilo privato
         $case = 1;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && ($check_friend == 0 || $check_friend == 2)){
         //sono nel profilo di un altro utente non mio amico con profilo pubblico
         $case = 2;
       }
-      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && ($check_friend == 1 || $check_friend == 2)){
+      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1 ){
         //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
         $case = 3;
       }

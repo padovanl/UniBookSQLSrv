@@ -219,11 +219,19 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
+              @if($check_friend == 0)
               <div class="w3-container">
                   <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                      <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
                       </button>
                   </p>
+              @else
+              <div class="w3-container">
+                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
+                      </button>
+                  </p>
+              @endif
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
                       <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
                   </p>
@@ -250,11 +258,19 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
+              @if($check_friend == 0)
               <div class="w3-container">
                   <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                      <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
                       </button>
                   </p>
+              @else
+              <div class="w3-container">
+                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
+                      </button>
+                  </p>
+              @endif
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
                       <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
                   </p>
@@ -416,7 +432,7 @@
               <!--Add Friend and Message-->
               <div class="w3-container">
                   <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='Addfriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
+                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
                       </button>
                   </p>
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
@@ -744,27 +760,31 @@
         $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
 
-function Addfriend(data){
-            var id = document.URL.split("/")[5];
-            console.log(id);
-            $.ajax({
-               method: "POST",
-               url: "/friend/Addfriend",
-               data: {id:id,data:data},
-               dataType: "json",
-               success: function(data) {
-                 console.log(data.value);
-                 if(data.value == 1){
-                   $(".submit-btn").html("Annulla Richiesta");
-                   $(".submit-btn").val(0);
-                 }
-                 else{
-                   $(".submit-btn").html("Invia Richiesta");
-                   $(".submit-btn").val(1);
-                 }
-               }
-             });
-            }
 
+
+        function AddFriend(data){
+                            var id = document.URL.split("/")[5];
+                            console.log(id);
+                            console.log(data);
+                            $.ajax({
+                               method: "POST",
+                               url: "/friend/AddFriend",
+                               data: {id:id,data:data},
+                               dataType: "json",
+                               success: function(data) {
+                                 console.log(data.value);
+                                 if(data.value == 1){
+                                   $(".submit-btn").html("Cancella Richiesta");
+                                   $(".valore").val(0);
+                                   console.log('Inviata richiesta');
+                                 }
+                                 else{
+                                   $(".submit-btn").html("Invia Richiesta");
+                                   $(".valore").val(1);
+                                   console.log('Cancellata richiesta/amicizia');
+                                 }
+                               }
+                             });
+                            }
     </script>
 @endsection
