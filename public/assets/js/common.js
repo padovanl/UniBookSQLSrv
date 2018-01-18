@@ -312,4 +312,27 @@ function loadOlder(){
             }
           }
         })
+
+
+function Addfriend(data){
+                    var id = document.URL.split("/")[5];
+                    console.log(id);
+                    $.ajax({
+                       method: "POST",
+                       url: "/friend/Addfriend",
+                       data: {id:id,data:data},
+                       dataType: "json",
+                       success: function(data) {
+                         console.log(data.value);
+                         if(data.value == 1){
+                           $(".submit-btn").html("Annulla Richiesta");
+                           $(".submit-btn").val(0);
+                         }
+                         else{
+                           $(".submit-btn").html("Invia Richiesta");
+                           $(".submit-btn").val(1);
+                         }
+                       }
+                     });
+                    }
 }
