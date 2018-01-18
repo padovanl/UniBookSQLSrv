@@ -13,7 +13,7 @@
                             <div id="{{$r->id_request}}" class="row"
                                  style="border-style: solid; border-width: 1px; border-color: #008CBA; border-radius: 25px; padding: 10px;">
                                 <div class="col-md-1">
-                                    <img src="/{{$r->user->pic_path}}" height="55px" width="55px"
+                                    <img src="{{$r->user->pic_path}}" height="55px" width="55px"
                                          style="border-radius: 50%;">
                                 </div>
                                 <div class="col-md-9" style="display: flex; align-items: center;">
