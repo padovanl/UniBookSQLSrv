@@ -65,51 +65,60 @@ class ProfileController extends Controller{
   }
 
   public function ShowUser($id){
-    if($this->verify_cookie()){
-      $logged_user = User::where('id_user', Cookie::get('session'))->first();
-      $controller = $this;
-      $user = User::where('id_user', $id)->first();
-      $friends_array = User::friends($user["id_user"]);
-      $check_friend = $this->CheckFriend($logged_user['id_user'],$user['id_user']);
-      $ban = $this->CheckBan($logged_user['id_user']);
-      if($user->id_user == $logged_user->id_user){
-        //sono nel mio profilo
-        $case = 0;
+    try{
+      if($this->verify_cookie()){
+        $logged_user = User::where('id_user', Cookie::get('session'))->first();
+        $controller = $this;
+        $user = User::where('id_user', $id)->first();
+        $friends_array = User::friends($user["id_user"]);
+        $check_friend = $this->CheckFriend($logged_user['id_user'],$user['id_user']);
+        $ban = $this->CheckBan($logged_user['id_user']);
+        if($user->id_user == $logged_user->id_user){
+          //sono nel mio profilo
+          $case = 0;
+        }
+        if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && ($check_friend == 0 || $check_friend == 2)){
+          //sono nel profilo di un altro utente non mio amico con profilo privato
+          $case = 1;
+        }
+        if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && ($check_friend == 0 || $check_friend == 2)){
+          //sono nel profilo di un altro utente non mio amico con profilo pubblico
+          $case = 2;
+        }
+        if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1 ){
+          //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
+          $case = 3;
+        }
+        #return $case;
+        return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend','ban'));
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && ($check_friend == 0 || $check_friend == 2)){
-        //sono nel profilo di un altro utente non mio amico con profilo privato
-        $case = 1;
+      else{
+        return view('login');
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && ($check_friend == 0 || $check_friend == 2)){
-        //sono nel profilo di un altro utente non mio amico con profilo pubblico
-        $case = 2;
-      }
-      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1 ){
-        //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
-        $case = 3;
-      }
-      #return $case;
-      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend','ban'));
     }
-    else{
-      return view('login');
+    catch(\Exception $e){
+      return view('error', compact('e'));
     }
   }
 
   //profilo pagina
   public function ShowPage($id){
-    if(!$this->verify_cookie())
-      return view('/');
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    $page = Page::where('id_page', '=', $id)->first();
-    $alreadyFollow = Users_follow_pages::where([['id_user', '=', $logged_user->id_user], ['id_page', '=', $page->id_page]])->first();
-    if($alreadyFollow)
-      $alreadyFollow = true;
-    else
-      $alreadyFollow = false;
-    $tot_followers = Users_follow_pages::where('id_page', '=', $page->id_page)->count();
-    return view('profilePage', compact('logged_user', 'id', 'page', 'alreadyFollow', 'tot_followers'));
-
+    try{
+      if(!$this->verify_cookie())
+        return view('/');
+      $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      $page = Page::where('id_page', '=', $id)->first();
+      $alreadyFollow = Users_follow_pages::where([['id_user', '=', $logged_user->id_user], ['id_page', '=', $page->id_page]])->first();
+      if($alreadyFollow)
+        $alreadyFollow = true;
+      else
+        $alreadyFollow = false;
+      $tot_followers = Users_follow_pages::where('id_page', '=', $page->id_page)->count();
+      return view('profilePage', compact('logged_user', 'id', 'page', 'alreadyFollow', 'tot_followers'));
+    }
+    catch(\Exception $e){
+      return view('error', compact('e'));
+    }
   }
 
   public function follow(Request $request){
@@ -149,38 +158,54 @@ class ProfileController extends Controller{
   }
   //cambio di privacy della pagina utente
   public function Privacy(Request $request){
-    $data = request("privacy");
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['profiloPubblico' => $data]);
-    return response()->json(['message' => 'Done']);
+    try{
+      $data = request("privacy");
+      $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['profiloPubblico' => $data]);
+      return response()->json(['message' => 'Done']);
+    }
+    catch(\Exception $e){
+      return view('error', compact('e'));
+    }
+
   }
 
   //cambio dati utente
   public function formDetails(Request $request){
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    $name = request("name");
-    $surname = request("surname");
-    $citta = request("citta");
+    try{
+      $logged_user = User::where('id_user', Cookie::get('session'))->first();
+      $name = request("name");
+      $surname = request("surname");
+      $citta = request("citta");
 
-    DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
+      DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
 
-    Mail::to($logged_user->email)->send(new SettingsEmail('sdsdd'));
+      Mail::to($logged_user->email)->send(new SettingsEmail('sdsdd'));
 
-    return response()->json(['message' => 'Done']);
-
+      return response()->json(['message' => 'Done']);
     }
+    catch(\Exception $e){
+      return view('error', compact('e'));
+    }
+  }
 
   public function formImage(Request $request){
-    $logged_user = User::where('id_user', Cookie::get('session'))->first();
-    if(Input::hasFile('file')){
-      $file = Input::file('file');
-      $ext = pathinfo($file, PATHINFO_EXTENSION);
-      $file->move('assets/images', $logged_user->id_user . $ext);
-      $picture = '/assets/images/' . $logged_user->id_user . $ext;
-      DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['pic_path' => $picture]);
-      return response()->json(['message' => 'Done']);
-      }
-    else{return response()->json(['message' => 'Wrong']);}
-      }
+    try{
+        $logged_user = User::where('id_user', Cookie::get('session'))->first();
+        if(Input::hasFile('file')){
+          $file = Input::file('file');
+          $ext = pathinfo($file, PATHINFO_EXTENSION);
+          $file->move('assets/images', $logged_user->id_user . $ext);
+          $picture = '/assets/images/' . $logged_user->id_user . $ext;
+          DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['pic_path' => $picture]);
+          return response()->json(['message' => 'Done']);
+          }
+        else{return response()->json(['message' => 'Wrong']);}
+        }
+    catch(\Exception $e){
+      return view('error', compact('e'));
+    }
+    }
+
 }
 ?>

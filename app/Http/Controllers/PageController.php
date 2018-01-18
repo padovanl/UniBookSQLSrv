@@ -56,26 +56,32 @@ class PageController extends Controller
 
 	public function create(Request $request){
 		 $logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
-		 $input = $request->all();
-		 $page = new Page();
-		 $page->name = $input['nomePagina'];
-		 $page->ban = false;
-		 $page->id_user = $logged_user->id_user;
-		 $page->pic_path = '/';
-		 $page->save();
-         //$page->pic_path = 'assets/images/' . $page->id_page . '.jpg';
-		 $temp = Page::orderBy('id_page', 'DESC')->get();
-		 if(count($temp) > 0){
-		 	$pageId = $temp[0]->id_page;
-		 }else{
-		 	$pageId = 1;
-		 }
-         $file = Input::file('image');
-         $ext = pathinfo($file, PATHINFO_EXTENSION);
-         $file->move('assets/images', $pageId . $ext);
-         Page::where('id_page', '=', $pageId)->update(['pic_path' => '/assets/images/' . $pageId . $ext]);
-         //$page->save();
-         return redirect('/page/mypage');
+     try{
+       $input = $request->all();
+  		 $page = new Page();
+  		 $page->name = $input['nomePagina'];
+  		 $page->ban = false;
+  		 $page->id_user = $logged_user->id_user;
+  		 $page->pic_path = '/';
+  		 $page->save();
+           //$page->pic_path = 'assets/images/' . $page->id_page . '.jpg';
+  		 $temp = Page::orderBy('id_page', 'DESC')->get();
+  		 if(count($temp) > 0){
+  		 	$pageId = $temp[0]->id_page;
+  		 }else{
+  		 	$pageId = 1;
+  		 }
+           $file = Input::file('image');
+           $ext = pathinfo($file, PATHINFO_EXTENSION);
+           $file->move('assets/images', $pageId . $ext);
+           Page::where('id_page', '=', $pageId)->update(['pic_path' => '/assets/images/' . $pageId . $ext]);
+           //$page->save();
+           return redirect('/page/mypage');
+     }
+     catch(\Exception $e){
+       return view('/error', compact('e'));
+     }
+
 	}
 
 	public function inviteFriends(Request $request){
@@ -97,7 +103,7 @@ class PageController extends Controller
 				$cnt++;
 			}
 		}
-    //questa funzione sarebbe già fatta: basta scrivere User::firends($id) e torna un array di utenti 
+    //questa funzione sarebbe già fatta: basta scrivere User::firends($id) e torna un array di utenti
 		$friendships = Users_make_friends::where('id_user', '=', $logged_user->id_user)->get();
 		foreach ($friendships as $f){
 			$alreadyFollowPage = Users_follow_pages::where('id_user', '=', $f->id_request_user)->first();
@@ -116,14 +122,20 @@ class PageController extends Controller
 	}
 
   public function changeImage(Request $request){
-    $id_page = $request->input('id_page');
-    $page = Page::where('id_page', '=', $id_page)->first();
+    try{
+      $id_page = $request->input('id_page');
+      $page = Page::where('id_page', '=', $id_page)->first();
 
-    $file = Input::file('image');
-    $ext = pathinfo($file, PATHINFO_EXTENSION);
-    //unlink('assets/images' . $page->id_page . '.jpg');
-    $file->move('assets/images', $page->id_page . $ext);
-    Page::where('id_page', '=', $page->id_page)->update(['pic_path' => '/assets/images/' . $page->id_page . $ext]);
-    return redirect('/profile/page/' . $page->id_page);
+      $file = Input::file('image');
+      $ext = pathinfo($file, PATHINFO_EXTENSION);
+      //unlink('assets/images' . $page->id_page . '.jpg');
+      $file->move('assets/images', $page->id_page . $ext);
+      Page::where('id_page', '=', $page->id_page)->update(['pic_path' => '/assets/images/' . $page->id_page . $ext]);
+      return redirect('/profile/page/' . $page->id_page);
+    }
+    catch(\Exception $e){
+      return view('/error', compact('e'));
+    }
+
   }
 }
