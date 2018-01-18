@@ -47,7 +47,9 @@ class LikeComment extends Model
 				else if(($record) && ($record['like'] === 0)){
 					DB::table('notifications')->where('id_user', Comment::where('id_comment', $id_comment)->first()['id_author'] )->where('link', '/details/post/' . Comment::where('id_comment', $id_comment)->first()['id_post'])->delete();
 					DB::table('like_comments')->where('id_comment', $id_comment)->where('id_user', $user['id_user'])->update(array('like' => 1));
-					Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'mi piace');
+					if(!is_numeric(Comment::where('id_comment', $id_comment)->first()['id_author'])){
+						Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'mi piace');
+					}
 					return(array('type' => 'comm', 'id_comment' => $id_comment, 'id_user' => $user['id_user'], 'status_like' => 'blue', 'status_dislike' => 'black'));
 				}
 				else{
@@ -56,7 +58,9 @@ class LikeComment extends Model
 					$like->like = 1;
 					$like->id_user = $user['id_user'];
 					$like->save();
-					Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'mi piace');
+					if(!is_numeric(Comment::where('id_comment', $id_comment)->first()['id_author'])){
+						Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'mi piace');
+					}
 					return(array('type' => 'comm', 'id_comment' => request('id'), 'id_user' => $user['id_user'], 'status_like' => 'blue', 'status_dislike' => 'black'));
 				}
 				break;
@@ -71,8 +75,10 @@ class LikeComment extends Model
 				}
 				else if(($record) && ($record['like'] == 1)){
 					DB::table('notifications')->where('id_user', Comment::where('id_comment', $id_comment)->first()['id_author'] )->where('link', '/details/post/' . Comment::where('id_comment', $id_comment)->first()['id_post'])->delete();
-					Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'non mi piace');
 					DB::table('like_comments')->where('id_comment', $id_comment)->where('id_user', $user['id_user'])->update(array('like' => 0));
+					if(!is_numeric(Comment::where('id_comment', $id_comment)->first()['id_author'])){
+						Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'], 'non mi piace');
+					}
 					return(array('type' => 'comm', 'id_comment' => $id_comment, 'id_user' => $user['id_user'], 'status_like' => 'black', 'status_dislike' => 'red'));
 				}
 				else{
@@ -81,7 +87,9 @@ class LikeComment extends Model
 					$like->like = 0;
 					$like->id_user = $user['id_user'];
 					$like->save();
-					Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'],' non mi piace');
+					if(!is_numeric(Comment::where('id_comment', $id_comment)->first()['id_author'])){
+						Notification::SendNotification($id_comment, $user, "likecomment", Comment::where('id_comment', $id_comment)->first()['id_post'],' non mi piace');
+					}
 					return(array('type' => 'comm', 'id_comment' => $id_comment, 'id_user' => $user['id_user'], 'status_like' => 'black', 'status_dislike' => 'red'));
 				}
 				break;

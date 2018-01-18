@@ -92,7 +92,7 @@ class HomeController extends Controller{
     else if(request('page')){
       $page = Page::where('id_page', request('id'))->first();
       $post_ids = PostPage::where('id_page', $page['id_page'])->pluck('id_post')->toArray();
-      $toreturn = Post::GetPosts($post_ids, $page['id_page']);
+      $toreturn = Post::GetPosts($post_ids, $logged_user['id_user']);
     }
 
     if($request->input('post_id') == -1){

@@ -209,7 +209,7 @@ function newComment(e, id, page=null){
       }
   }
 
-function newPost(id_page = null){
+function newPost(id_page=null){
   //manca controllo che il campo non sia vuoto!
   if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
     var id_page = location.href.match(/([^\/]*)\/*$/)[1];
@@ -276,16 +276,29 @@ function onLoad(data, page=null){
   })
 }
 
-function loadOlder(){
+function loadOlder(id){
+  var is_home = 0;
+  var is_profile = 0;
+  var is_page = 0;
+  if(id.split("_")[1] == "home"){
+    is_home = 1;
+  }
+  else if(id.split("_")[1] == "profile"){
+    is_profile = 1;
+  }
+  else if(id.split("_")[1] == "page"){
+    is_page = 1;
+  }
   $prev_post = $("#post").prev();
   $post_id = $prev_post.attr("id").split("_")[1];
   $.ajax({
           method: "GET",
           url: "/home/loadmore",
-          data: { post_id: $post_id, home: 1},
+          data: { post_id: $post_id, home: is_home, page: is_page, user: is_profile, id: location.href.match(/([^\/]*)\/*$/)[1]},
           dataType : "json",
           success : function (posts)
           {
+            console.log(posts);
             if(posts.length != 0)
             {
               for(var x = posts.length - 1; x >= 0 ; x--)

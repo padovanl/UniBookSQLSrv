@@ -210,7 +210,7 @@
         <!-- /padding -->
         <div class="row">
             <div class="col-md-12" style="text-align:center;">
-                <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
+                <button id="load_page" onclick="loadOlder(this.id)" type="button" class="button btn-primary"
                         style="border-radius: 5px;">Carica post più vecchi...
                 </button>
             </div>
@@ -245,7 +245,7 @@
                             <label for="profilePic" class="col-sm-5 col-form-label">Immagine della pagina:</label>
                             <div class="image-upload">
                                 <label for="image">
-                                    <img src="/{{$page->pic_path}}" id="profilePic" width="250px" height="250px"/>
+                                    <img src="{{$page->pic_path}}" id="profilePic" width="250px" height="250px"/>
                                 </label>
 
                                 <input name="image" id="image" type="file" onchange="readURL(this);"/>
