@@ -14,7 +14,7 @@
 
     </style>
     <style type="text/css">
-        .image-upload > input {
+        .uploaded_image > input {
             display: none;
         }
 
