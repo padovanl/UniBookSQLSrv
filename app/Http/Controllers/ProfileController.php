@@ -16,6 +16,11 @@ use App\LikePost;
 use App\PostViewModel;
 use App\Users_follow_pages;
 
+use Illuminate\Support\MessageBag;
+use App\Mail\ConfirmEmail;
+use App\Mail\SettingsEmail;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\DB;
 use Cookie;
 
@@ -150,6 +155,7 @@ class ProfileController extends Controller{
     DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['profiloPubblico' => $data]);
     return response()->json(['message' => 'Done']);
   }
+
   //cambio dati utente
   public function formDetails(Request $request){
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
@@ -158,6 +164,8 @@ class ProfileController extends Controller{
     $citta = request("citta");
 
     DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
+
+    Mail::to($logger_user)->send(new SettingsEmail('sdsdd'));
 
     return response()->json(['message' => 'Done']);
 
