@@ -55,6 +55,10 @@ class ProfileController extends Controller{
     }
   }
 
+  public function CheckBan($id){
+    $ban = User::where('id_user',$id)->value('ban');
+    return $ban;
+  }
 
   public function ShowUser($id){
     if($this->verify_cookie()){
@@ -63,24 +67,25 @@ class ProfileController extends Controller{
       $user = User::where('id_user', $id)->first();
       $friends_array = User::friends($user["id_user"]);
       $check_friend = $this->CheckFriend($logged_user['id_user'],$user['id_user']);
+      $ban = $this->CheckBan($logged_user['id_user']);
       if($user->id_user == $logged_user->id_user){
         //sono nel mio profilo
         $case = 0;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 1 && ($check_friend == 0 || $check_friend == 2)){
         //sono nel profilo di un altro utente non mio amico con profilo privato
         $case = 1;
       }
-      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && $check_friend == 0){
+      if($user->id_user != $logged_user->id_user && $user->profiloPubblico == 0 && ($check_friend == 0 || $check_friend == 2)){
         //sono nel profilo di un altro utente non mio amico con profilo pubblico
         $case = 2;
       }
-      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && ($check_friend == 1 || $check_friend == 2)){
+      if($user->id_user != $logged_user->id_user && ($user->profiloPubblico == 0 || $user->profiloPubblico == 1) && $check_friend == 1 ){
         //sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico
         $case = 3;
       }
       #return $case;
-      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend'));
+      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend','ban'));
     }
     else{
       return view('login');

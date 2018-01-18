@@ -96,6 +96,7 @@
                       </div>
                   </div>
               </div>
+              <div class="insert_after_me"></div>
               <!--Pannello Post-->
               <div class="container" id="post">
                   <div class="row">
@@ -219,11 +220,25 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Invia Richiesta
-                      </button>
-                  </p>
+              @if($ban == 1)
+                <div class="w3-container">
+                  <p>Sei stato BLOCCATO!</p>
+                </div>
+              @else
+                @if($check_friend == 0)
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                          </button>
+                      </p>
+                @else
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
+                          </button>
+                      </p>
+                @endif
+              @endif
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
                       <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
                   </p>
@@ -250,11 +265,25 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Invia Richiesta
-                      </button>
-                  </p>
+              @if($ban == 1)
+                <div class="w3-container">
+                  <p>Sei stato BLOCCATO!</p>
+                </div>
+                @else
+                @if($check_friend == 0)
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                          </button>
+                      </p>
+                @else
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
+                          </button>
+                      </p>
+                @endif
+              @endif
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
                       <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
                   </p>
@@ -287,17 +316,8 @@
           <div class="padding pre-scrollable" style="max-height: 800px;">
               <!-- content -->
               <!-- main col right -->
-              <div class="well">
-                  <div>
-                      <h4>New Post</h4>
-                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
-                                    type="text"></textarea>
-                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                      </div>
-                  </div>
-              </div>
               <!--Pannello Post-->
+              <div class="insert_after_me"></div>
               <div class="container" id="post">
                   <div class="row">
                       <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
@@ -414,14 +434,20 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='Addfriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
-                      </button>
-                  </p>
-                  <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
-                  </p>
+              @if($ban == 1)
+                <div class="w3-container">
+                  <p>Sei stato BLOCCATO!</p>
+                </div>
+              @else
+                <div class="w3-container">
+                    <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                        <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
+                        </button>
+                    </p>
+                    <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                        <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
+                    </p>
+              @endif
               <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
                   <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
                   <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
@@ -451,17 +477,9 @@
           <div class="padding pre-scrollable" style="max-height: 800px;">
               <!-- content -->
               <!-- main col right -->
-              <div class="well">
-                  <div>
-                      <h4>New Post</h4>
-                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
-                                    type="text"></textarea>
-                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                      </div>
-                  </div>
-              </div>
+
               <!--Pannello Post-->
+              <div class="insert_after_me"></div>
               <div class="container" id="post">
                   <div class="row">
                       <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
@@ -626,7 +644,7 @@
                 data: {id: profileId, post_id: -1, user: 1},
                 success: function (posts) {
                     console.log(posts);
-                    onLoad(posts);
+                    onLoad(posts,1);
                 }
             });
         });
@@ -744,27 +762,31 @@
         $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
 
-function Addfriend(data){
-            var id = document.URL.split("/")[5];
-            console.log(id);
-            $.ajax({
-               method: "POST",
-               url: "/friend/Addfriend",
-               data: {id:id,data:data},
-               dataType: "json",
-               success: function(data) {
-                 console.log(data.value);
-                 if(data.value == 1){
-                   $(".submit-btn").html("Annulla Richiesta");
-                   $(".submit-btn").val(0);
-                 }
-                 else{
-                   $(".submit-btn").html("Invia Richiesta");
-                   $(".submit-btn").val(1);
-                 }
-               }
-             });
-            }
 
+
+        function AddFriend(data){
+                            var id = document.URL.split("/")[5];
+                            console.log(id);
+                            console.log(data);
+                            $.ajax({
+                               method: "POST",
+                               url: "/friend/AddFriend",
+                               data: {id:id,data:data},
+                               dataType: "json",
+                               success: function(data) {
+                                 console.log(data.value);
+                                 if(data.value == 1){
+                                   $(".submit-btn").html("Cancella Richiesta");
+                                   $(".valore").val(0);
+                                   console.log('Inviata richiesta');
+                                 }
+                                 else{
+                                   $(".submit-btn").html("Invia Richiesta");
+                                   $(".valore").val(1);
+                                   console.log('Cancellata richiesta/amicizia');
+                                 }
+                               }
+                             });
+                            }
     </script>
 @endsection
