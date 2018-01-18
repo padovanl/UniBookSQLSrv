@@ -37,222 +37,575 @@
         }
     </style>
 
-    <nav class="main-nav">
-        <div class="side-sec">
-            <!-- Left Column -->
-            <div class="w3-display-container">
-                <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
-                <div class="w3-display-bottomleft w3-container w3-text-black">
-                    <h2>{{$user -> name . " " . $user -> surname}}</h2>
-                </div>
-            </div>
-            <!--Add Friend and Message-->
-            <div class="w3-container">
-                <?php if ($logged_user->id_user != $user->id_user): ?>
-                <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                    <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Add Friend
-                    </button>
-                </p>
-                <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                    <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
-                </p>
-            <?php endif; ?>
-            <?php if (($logged_user->id_user != $user->id_user && $user->profiloPubblico == 1) || ($logged_user->id_user == $user->id_user)): ?>
-            <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
-                <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
-                <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
-                <p>
-                    <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> birth_date}}
-                </p>
-                <hr>
-                <!--grid images friends-->
-                <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
-                <div class="rowI">
-                    <div class="columnI">
-                        @foreach($friends_array as $array)
-                            <a href="/profile/user/{{ $array->id_user }}">
-                                <img src="{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-                <br>
-                <!--Settings-->
-                <p class="w3-large w3-text-theme">
+@switch($case)
+    @case(0)
+      <!--sono nel mio profilo-->
+      <nav class="main-nav">
+          <div class="side-sec">
+              <!-- Left Column -->
+              <div class="w3-display-container">
+                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+                  <div class="w3-display-bottomleft w3-container w3-text-black">
+                      <h2>{{$user -> name . " " . $user -> surname}}</h2>
+                  </div>
+              </div>
+              <!--Add Friend and Message-->
+              <div class="w3-container">
+                  <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
+                  <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
+                  <p>
+                      <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> birth_date}}
+                  </p>
+                  <hr>
+                  <!--grid images friends-->
+                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+                  <div class="rowI">
+                      <div class="columnI">
+                          @foreach($friends_array as $array)
+                              <a href="/profile/user/{{ $array->id_user }}">
+                                  <img src="{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
+                              </a>
+                          @endforeach
+                      </div>
+                  </div>
+                  <br>
+                  <!--Settings-->
+                  <p class="w3-large w3-text-theme">
+                      <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
+                          <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
+                      </b>
+                  </p>
+                  <br>
+              </div>
+          </div>
+          <br>
+          <!-- End Left Column -->
+      </nav>
+      <article class="content">
+          <!-- Right Column -->
+          <div class="padding pre-scrollable" style="max-height: 800px;">
+              <!-- content -->
+              <!-- main col right -->
+              <div class="well">
+                  <div>
+                      <h4>New Post</h4>
+                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
+                                    type="text"></textarea>
+                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+                      </div>
+                  </div>
+              </div>
+              <!--Pannello Post-->
+              <div class="container" id="post">
+                  <div class="row">
+                      <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
+                          <div class="panel panel-default">
+                              <div class="panel-body">
+                                  <section class="post-heading">
+                                      <div class="row">
+                                          <div class="col-md-10">
+                                              <div class="media">
+                                                  <div class="media-left">
+                                                      <a id="img_container" href="#">
+                                                          <img id="post_pic_path" class="media-object photo-profile"
+                                                               src="" width="40" height="40" alt="..."
+                                                               style="border-radius: 50%;">
+                                                      </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <a href="#" id="post_u_name" class="anchor-username"><h4
+                                                                  class="media-heading">User_name</h4></a>
+                                                      <a href="#" id="creation_date" class="anchor-time">time</a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-2">
+                                              <a id="reportingPost" href="#reportModal" data-toggle="modal"
+                                                 data-whatever="5" style="font-size: 15px;"><i
+                                                          class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                          </div>
 
-                    <?php if ($logged_user->id_user == $user->id_user): ?>
-                    <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
-                        <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
-                    </b>
-                    <?php endif; ?>
-                </p>
-                <br>
-            </div>
-        </div>
-        <br>
-        <!-- End Left Column -->
-    </nav>
-    <article class="content">
-        <!-- Right Column -->
-        <div class="padding pre-scrollable" style="max-height: 800px;">
-            <!-- content -->
-            <!-- main col right -->
-            <div class="well">
-                <?php if ($logged_user->id_user == $user->id_user): ?>
-                <div>
-                    <h4>New Post</h4>
-                    <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                        <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
-                                  type="text"></textarea>
-                        <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                    </div>
-                </div>
-                <?php endif; ?>
-            </div>
-            <!--Pannello Post-->
-            <div class="container" id="post">
-                <div class="row">
-                    <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <section class="post-heading">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <a id="img_container" href="#">
-                                                        <img id="post_pic_path" class="media-object photo-profile"
-                                                             src="" width="40" height="40" alt="..."
-                                                             style="border-radius: 50%;">
-                                                    </a>
-                                                </div>
-                                                <div class="media-body">
-                                                    <a href="#" id="post_u_name" class="anchor-username"><h4
-                                                                class="media-heading">User_name</h4></a>
-                                                    <a href="#" id="creation_date" class="anchor-time">time</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <a id="reportingPost" href="#reportModal" data-toggle="modal"
-                                               data-whatever="5" style="font-size: 15px;"><i
-                                                        class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
-                                        </div>
+                                      </div>
+                                  </section>
+                                  <section class="post-body">
+                                      <p id="post_content">content</p>
+                                  </section>
 
-                                    </div>
-                                </section>
-                                <section class="post-body">
-                                    <p id="post_content">content</p>
-                                </section>
-                                <section class="post-footer">
-                                    <hr>
-                                    <div class="post-footer-option container">
-                                        <ul id="option_" class="list-unstyled">
-                                            <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
-                                                      class="glyphicon glyphicon-thumbs-up"></i></a></li>
-                                            <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike"
-                                                      class="glyphicon glyphicon-thumbs-down"></i></a></li>
-                                            <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;"
-                                                      id="comment" class="glyphicon glyphicon-comment"></i> Comment</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="post-footer-comment-wrapper">
-                                        <div id="comment_panel" class="comment">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <a href="#">
-                                                        <img id="comm_pic_path" class="media-object photo-profile"
-                                                             src="" width="32" height="32" alt="..."
-                                                             style="border-radius: 50%;">
-                                                    </a>
-                                                </div>
-                                                <div class="media-body">
-                                                    <a href="#" id="comment_author" class="anchor-username"><h4
-                                                                class="media-heading">Media heading</h4></a>
-                                                    <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
-                                                    <br>
-                                                    <span id="comment_content"></span>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <a><i onclick="reaction(this.id)" style="cursor:pointer;"
-                                                              id="likecomm"
-                                                              class="glyphicon glyphicon-thumbs-up"></i></a>
-                                                        <a><i onclick="reaction(this.id)" style="cursor:pointer;"
-                                                              id="dislikecomm"
-                                                              class="glyphicon glyphicon-thumbs-down"></i></a>
-                                                        <a style="cursor: pointer;" id="reportingComment"
-                                                           href="#reportComment" data-toggle="modal"
-                                                           data-whatever="5"><i
-                                                                    class="glyphicon glyphicon-exclamation-sign"
-                                                                    aria-hidden="true"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
+                                  <section class="post-footer">
+                                      <hr>
+                                      <div class="post-footer-option container">
+                                          <ul id="option_" class="list-unstyled">
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
+                                                        class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike"
+                                                        class="glyphicon glyphicon-thumbs-down"></i></a></li>
+                                              <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;"
+                                                        id="comment" class="glyphicon glyphicon-comment"></i> Comment</a>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                      <div class="post-footer-comment-wrapper">
+                                          <div id="comment_panel" class="comment">
+                                              <div class="media">
+                                                  <div class="media-left">
+                                                      <a href="#">
+                                                          <img id="comm_pic_path" class="media-object photo-profile"
+                                                               src="" width="32" height="32" alt="..."
+                                                               style="border-radius: 50%;">
+                                                      </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <a href="#" id="comment_author" class="anchor-username"><h4
+                                                                  class="media-heading">Media heading</h4></a>
+                                                      <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                      <br>
+                                                      <span id="comment_content"></span>
+                                                  </div>
+                                                  <div class="row">
+                                                      <div class="col-md-12">
+                                                          <a><i onclick="reaction(this.id)" style="cursor:pointer;"
+                                                                id="likecomm"
+                                                                class="glyphicon glyphicon-thumbs-up"></i></a>
+                                                          <a><i onclick="reaction(this.id)" style="cursor:pointer;"
+                                                                id="dislikecomm"
+                                                                class="glyphicon glyphicon-thumbs-down"></i></a>
+                                                          <a style="cursor: pointer;" id="reportingComment"
+                                                             href="#reportComment" data-toggle="modal"
+                                                             data-whatever="5"><i
+                                                                      class="glyphicon glyphicon-exclamation-sign"
+                                                                      aria-hidden="true"></i></a>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <hr>
 
-                                        <div class="comment-form">
-                                            <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
-                                                      class="form-control form-rounded" placeholder="Add a comment.."
-                                                      type="text"></textarea>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                          <div class="comment-form">
+                                              <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
+                                                        class="form-control form-rounded" placeholder="Add a comment.."
+                                                        type="text"></textarea>
+                                          </div>
+                                      </div>
+                                  </section>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 
-            </div>
+              </div>
 
-        </div><!-- /padding -->
+          </div><!-- /padding -->
 
-        <div class="row">
-            <div class="col-md-12" style="text-align:center;">
-                <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
-                        style="border-radius: 5px;">Carica post più vecchi...
-                </button>
-            </div>
-        </div>
-        <!-- End Right Column -->
-    </article>
-    <!-- Message user modal -->
-    <div class="modal fade bd-example-modal-lg" id="messageUserModal" tabindex="-1" role="dialog"
-         aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="titleReportComment">Nuovo messaggio</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="messageUser" class="form-control-label">Messaggio:</label>
-                            <textarea class="form-control" id="messageUser" rows="7"></textarea>
-                            <h5 id="errorMessage"></h5>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" id="bthSendMessageUser"
-                                    disabled="true">Invia messaggio
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
+          <div class="row">
+              <div class="col-md-12" style="text-align:center;">
+                  <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
+                          style="border-radius: 5px;">Carica post più vecchi...
+                  </button>
+              </div>
+          </div>
+          <!-- End Right Column -->
+      </article>
+    @break
+    @case(1)
+      <!--sono nel profilo di un altro utente non mio amico con profilo privato-->
+      <nav class="main-nav">
+          <div class="side-sec">
+              <!-- Left Column -->
+              <div class="w3-display-container">
+                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+                  <div class="w3-display-bottomleft w3-container w3-text-black">
+                      <h2>{{$user -> name . " " . $user -> surname}}</h2>
+                  </div>
+              </div>
+              <!--Add Friend and Message-->
+              <div class="w3-container">
+                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                      </button>
+                  </p>
+                  <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
+                  </p>
+                  <br>
+              </div>
+          </div>
+          <br>
+          <!-- End Left Column -->
+      </nav>
+      <article class="content">
+          <!-- Right Column -->
+          <!-- End Right Column -->
+      </article>
+    @break
+    @case(2)
+      <!--sono nel profilo di un altro utente non mio amico con profilo pubblico-->
+      <nav class="main-nav">
+          <div class="side-sec">
+              <!-- Left Column -->
+              <div class="w3-display-container">
+                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+                  <div class="w3-display-bottomleft w3-container w3-text-black">
+                      <h2>{{$user -> name . " " . $user -> surname}}</h2>
+                  </div>
+              </div>
+              <!--Add Friend and Message-->
+              <div class="w3-container">
+                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button type="button" onclick='Addfriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                      </button>
+                  </p>
+                  <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
+                  </p>
+              <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
+                  <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
+                  <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
+                  <p>
+                      <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> birth_date}}
+                  </p>
+                  <hr>
+                  <!--grid images friends-->
+                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+                  <div class="rowI">
+                      <div class="columnI">
+                          @foreach($friends_array as $array)
+                              <a href="/profile/user/{{ $array->id_user }}">
+                                  <img src="{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
+                              </a>
+                          @endforeach
+                      </div>
+                  </div>
+                  <br>
+              </div>
+          </div>
+          <br>
+          <!-- End Left Column -->
+      </nav>
+      <article class="content">
+          <!-- Right Column -->
+          <div class="padding pre-scrollable" style="max-height: 800px;">
+              <!-- content -->
+              <!-- main col right -->
+              <div class="well">
+                  <div>
+                      <h4>New Post</h4>
+                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
+                                    type="text"></textarea>
+                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+                      </div>
+                  </div>
+              </div>
+              <!--Pannello Post-->
+              <div class="container" id="post">
+                  <div class="row">
+                      <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
+                          <div class="panel panel-default">
+                              <div class="panel-body">
+                                  <section class="post-heading">
+                                      <div class="row">
+                                          <div class="col-md-10">
+                                              <div class="media">
+                                                  <div class="media-left">
+                                                      <a id="img_container" href="#">
+                                                          <img id="post_pic_path" class="media-object photo-profile"
+                                                               src="" width="40" height="40" alt="..."
+                                                               style="border-radius: 50%;">
+                                                      </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <a href="#" id="post_u_name" class="anchor-username"><h4
+                                                                  class="media-heading">User_name</h4></a>
+                                                      <a href="#" id="creation_date" class="anchor-time">time</a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-2">
+                                              <a id="reportingPost" href="#reportModal" data-toggle="modal"
+                                                 data-whatever="5" style="font-size: 15px;"><i
+                                                          class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                          </div>
 
+                                      </div>
+                                  </section>
+                                  <section class="post-body">
+                                      <p id="post_content">content</p>
+                                  </section>
+
+                                  <section class="post-footer">
+                                      <hr>
+                                      <div class="post-footer-option container">
+                                          <ul id="option_" class="list-unstyled">
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
+                                                        class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike"
+                                                        class="glyphicon glyphicon-thumbs-down"></i></a></li>
+                                              <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;"
+                                                        id="comment" class="glyphicon glyphicon-comment"></i> Comment</a>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                      <div class="post-footer-comment-wrapper">
+                                          <div id="comment_panel" class="comment">
+                                              <div class="media">
+                                                  <div class="media-left">
+                                                      <a href="#">
+                                                          <img id="comm_pic_path" class="media-object photo-profile"
+                                                               src="" width="32" height="32" alt="..."
+                                                               style="border-radius: 50%;">
+                                                      </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <a href="#" id="comment_author" class="anchor-username"><h4
+                                                                  class="media-heading">Media heading</h4></a>
+                                                      <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                      <br>
+                                                      <span id="comment_content"></span>
+                                                  </div>
+                                                  <div class="row">
+                                                      <div class="col-md-12">
+                                                          <a><i onclick="reaction(this.id)" style="cursor:pointer;"
+                                                                id="likecomm"
+                                                                class="glyphicon glyphicon-thumbs-up"></i></a>
+                                                          <a><i onclick="reaction(this.id)" style="cursor:pointer;"
+                                                                id="dislikecomm"
+                                                                class="glyphicon glyphicon-thumbs-down"></i></a>
+                                                          <a style="cursor: pointer;" id="reportingComment"
+                                                             href="#reportComment" data-toggle="modal"
+                                                             data-whatever="5"><i
+                                                                      class="glyphicon glyphicon-exclamation-sign"
+                                                                      aria-hidden="true"></i></a>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                      </div>
+                                  </section>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+
+          </div><!-- /padding -->
+
+          <div class="row">
+              <div class="col-md-12" style="text-align:center;">
+                  <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
+                          style="border-radius: 5px;">Carica post più vecchi...
+                  </button>
+              </div>
+          </div>
+          <!-- End Right Column -->
+      </article>
+    @break
+    @case(3)
+      <!--sono nel profilo di un altro utente mio amico con profilo privato oppure pubblico-->
+      <nav class="main-nav">
+          <div class="side-sec">
+              <!-- Left Column -->
+              <div class="w3-display-container">
+                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+                  <div class="w3-display-bottomleft w3-container w3-text-black">
+                      <h2>{{$user -> name . " " . $user -> surname}}</h2>
+                  </div>
+              </div>
+              <!--Add Friend and Message-->
+              <div class="w3-container">
+                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button type="button" onclick='Addfriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
+                      </button>
+                  </p>
+                  <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                      <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
+                  </p>
+              <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
+                  <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
+                  <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
+                  <p>
+                      <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> birth_date}}
+                  </p>
+                  <hr>
+                  <!--grid images friends-->
+                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+                  <div class="rowI">
+                      <div class="columnI">
+                          @foreach($friends_array as $array)
+                              <a href="/profile/user/{{ $array->id_user }}">
+                                  <img src="{{$array->pic_path}}" title="{{$array -> name . " " . $array -> surname}}">
+                              </a>
+                          @endforeach
+                      </div>
+                  </div>
+                  <br>
+              </div>
+          </div>
+          <br>
+          <!-- End Left Column -->
+      </nav>
+      <article class="content">
+          <!-- Right Column -->
+          <div class="padding pre-scrollable" style="max-height: 800px;">
+              <!-- content -->
+              <!-- main col right -->
+              <div class="well">
+                  <div>
+                      <h4>New Post</h4>
+                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
+                                    type="text"></textarea>
+                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+                      </div>
+                  </div>
+              </div>
+              <!--Pannello Post-->
+              <div class="container" id="post">
+                  <div class="row">
+                      <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
+                          <div class="panel panel-default">
+                              <div class="panel-body">
+                                  <section class="post-heading">
+                                      <div class="row">
+                                          <div class="col-md-10">
+                                              <div class="media">
+                                                  <div class="media-left">
+                                                      <a id="img_container" href="#">
+                                                          <img id="post_pic_path" class="media-object photo-profile"
+                                                               src="" width="40" height="40" alt="..."
+                                                               style="border-radius: 50%;">
+                                                      </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <a href="#" id="post_u_name" class="anchor-username"><h4
+                                                                  class="media-heading">User_name</h4></a>
+                                                      <a href="#" id="creation_date" class="anchor-time">time</a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-2">
+                                              <a id="reportingPost" href="#reportModal" data-toggle="modal"
+                                                 data-whatever="5" style="font-size: 15px;"><i
+                                                          class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                          </div>
+
+                                      </div>
+                                  </section>
+                                  <section class="post-body">
+                                      <p id="post_content">content</p>
+                                  </section>
+
+                                  <section class="post-footer">
+                                      <hr>
+                                      <div class="post-footer-option container">
+                                          <ul id="option_" class="list-unstyled">
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
+                                                        class="glyphicon glyphicon-thumbs-up"></i></a></li>
+                                              <li><a><i onclick="reaction(this.id)" style="cursor:pointer;" id="dislike"
+                                                        class="glyphicon glyphicon-thumbs-down"></i></a></li>
+                                              <li><a><i onclick="commentfocus(this.id)" style="cursor:pointer;"
+                                                        id="comment" class="glyphicon glyphicon-comment"></i> Comment</a>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                      <div class="post-footer-comment-wrapper">
+                                          <div id="comment_panel" class="comment">
+                                              <div class="media">
+                                                  <div class="media-left">
+                                                      <a href="#">
+                                                          <img id="comm_pic_path" class="media-object photo-profile"
+                                                               src="" width="32" height="32" alt="..."
+                                                               style="border-radius: 50%;">
+                                                      </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <a href="#" id="comment_author" class="anchor-username"><h4
+                                                                  class="media-heading">Media heading</h4></a>
+                                                      <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                      <br>
+                                                      <span id="comment_content"></span>
+                                                  </div>
+                                                  <div class="row">
+                                                      <div class="col-md-12">
+                                                          <a><i onclick="reaction(this.id)" style="cursor:pointer;"
+                                                                id="likecomm"
+                                                                class="glyphicon glyphicon-thumbs-up"></i></a>
+                                                          <a><i onclick="reaction(this.id)" style="cursor:pointer;"
+                                                                id="dislikecomm"
+                                                                class="glyphicon glyphicon-thumbs-down"></i></a>
+                                                          <a style="cursor: pointer;" id="reportingComment"
+                                                             href="#reportComment" data-toggle="modal"
+                                                             data-whatever="5"><i
+                                                                      class="glyphicon glyphicon-exclamation-sign"
+                                                                      aria-hidden="true"></i></a>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <hr>
+
+                                          <div class="comment-form">
+                                              <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
+                                                        class="form-control form-rounded" placeholder="Add a comment.."
+                                                        type="text"></textarea>
+                                          </div>
+                                      </div>
+                                  </section>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+
+          </div><!-- /padding -->
+
+          <div class="row">
+              <div class="col-md-12" style="text-align:center;">
+                  <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
+                          style="border-radius: 5px;">Carica post più vecchi...
+                  </button>
+              </div>
+          </div>
+          <!-- End Right Column -->
+      </article>
+    @break
+@endswitch
+      <!-- Message user modal -->
+      <div class="modal fade bd-example-modal-lg" id="messageUserModal" tabindex="-1" role="dialog"
+           aria-labelledby="detailModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="titleReportComment">Nuovo messaggio</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <form>
+                          <div class="form-group">
+                              <label for="messageUser" class="form-control-label">Messaggio:</label>
+                              <textarea class="form-control" id="messageUser" rows="7"></textarea>
+                              <h5 id="errorMessage"></h5>
+                          </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                      <div class="row">
+                          <div class="col-md-12">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                              <button type="button" class="btn btn-primary" data-dismiss="modal" id="bthSendMessageUser"
+                                      disabled="true">Invia messaggio
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
 
     @include('reportModal')
@@ -390,6 +743,28 @@
 
         $('.pre-scrollable').attr('style', 'max-height:' + $(window).height() + 'px;');
 
+
+function Addfriend(data){
+            var id = document.URL.split("/")[5];
+            console.log(id);
+            $.ajax({
+               method: "POST",
+               url: "/friend/Addfriend",
+               data: {id:id,data:data},
+               dataType: "json",
+               success: function(data) {
+                 console.log(data.value);
+                 if(data.value == 1){
+                   $(".submit-btn").html("Annulla Richiesta");
+                   $(".submit-btn").val(0);
+                 }
+                 else{
+                   $(".submit-btn").html("Invia Richiesta");
+                   $(".submit-btn").val(1);
+                 }
+               }
+             });
+            }
 
     </script>
 @endsection

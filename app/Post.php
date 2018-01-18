@@ -37,7 +37,7 @@ class Post extends Model
 
     $users_like = LikePost::GetPostLike($post);
     $users_dislike = LikePost::GetPostDislike($post);
-    $comments = Comment::GetCommentsPost($post_comments, $user_post);
+    $comments = Comment::GetCommentsPost($post_comments, $logged, $user_post);
 
     $toreturn = new PostViewModel($post_id, $user_post['name'], $user_post['surname'], $user_post['pic_path'],
                       $post['content'], $post['created_at'], $post['updated_at'],
@@ -50,7 +50,6 @@ class Post extends Model
   }
   //funzione che, data una lista di id_post e l'utente, torna un array di PostViewModel
   public function scopeGetPosts($query, $id_post_list, $logged_id){
-
     $toreturn = array();
     foreach ($id_post_list as $post_id){
       //recupero tutte le informazioni di un post e me le restituisco in un array complesso

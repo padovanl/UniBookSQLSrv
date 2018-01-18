@@ -92,7 +92,7 @@ class LikePost extends Model
           $like->id_user = $liker_id;
           $like->save();
           if(!is_numeric(Post::where('id_post', $id_post)->first()['id_author'])){
-            Notification::SendNotification($id_post, $user, "likepost", $post_id, 'non mi piace');
+            Notification::SendNotification($id_post, $user, "likepost", $id_post, 'non mi piace');
           }
           return(array('type' => 'post', 'id_post' => $id_post, 'id_user' => $liker_id, 'status_like' => 'black', 'status_dislike' => 'red'));
         }

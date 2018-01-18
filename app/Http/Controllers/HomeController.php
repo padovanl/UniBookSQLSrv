@@ -64,8 +64,8 @@ class HomeController extends Controller{
   //loading dei post
   public function loadMore(Request $request){
     //distinguo il tipo di post che devo caricare: 'home' carica la homepage, 'user' carica il profilo dell'utente, 'page' carica il profilo della pagina
+    $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if(request('home')){
-      $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $friends = User::friends($logged_user['id_user']);     //Torna un array con gli amici
       $followed_pages_id = Users_follow_pages::where('id_user', $logged_user['id_user'])->get();
       //Caricamento dei post degli amici e delle pagine
@@ -86,14 +86,13 @@ class HomeController extends Controller{
       $toreturn = Post::GetPosts($posts_ids, $logged_user['id_user']);
     }
     else if(request('user')){
-      $user = User::where('id_user', request('id'))->first();
-      $post_ids = PostUser::where('id_user', $user['id_user'])->pluck('id_post')->toArray();
-      $toreturn = Post::GetPosts($post_ids, $user['id_user']);
+      $post_ids = PostUser::where('id_user', request('id'))->pluck('id_post')->toArray();
+      $toreturn = Post::GetPosts($post_ids, $logged_user['id_user']);
     }
     else if(request('page')){
       $page = Page::where('id_page', request('id'))->first();
       $post_ids = PostPage::where('id_page', $page['id_page'])->pluck('id_post')->toArray();
-      $toreturn = Post::GetPosts($post_ids, $page['id_page']);
+      $toreturn = Post::GetPosts($post_ids, $logged_user['id_user']);
     }
 
     if($request->input('post_id') == -1){
@@ -129,19 +128,12 @@ class HomeController extends Controller{
     //manca controllo bontà dei parametri
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if((request('action') == 'like') || (request('action') == 'dislike')){
-      if(!request('id_page')){
-        $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
-      }
-      else if((request('id_page')) && ($logged_user['id_user'] === Page::where('id_page', request('id_page'))->first()['id_user'])){
-        $toreturn = LikePost::SetPostReaction(request('action'), request('id') , request('id_page'));
-      }
-      else{
-        $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
-      }
+      $toreturn = LikePost::SetPostReaction(request('action'), request('id'), $logged_user['id_user']);
       return(json_encode($toreturn));
     }
     else{
-      return(json_encode(LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user['id_user'])));
+      $toreturn = LikeComment::SetCommentReaction(request('action'), request('id'), $logged_user);
+      return(json_encode($toreturn));
     }
   }
 
