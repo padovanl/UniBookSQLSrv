@@ -37,7 +37,7 @@ class Post extends Model
 
     $users_like = LikePost::GetPostLike($post);
     $users_dislike = LikePost::GetPostDislike($post);
-    $comments = Comment::GetCommentsPost($post_comments, $user_post);
+    $comments = Comment::GetCommentsPost($post_comments, $logged, $user_post);
 
     $toreturn = new PostViewModel($post_id, $user_post['name'], $user_post['surname'], $user_post['pic_path'],
                       $post['content'], $post['created_at'], $post['updated_at'],
