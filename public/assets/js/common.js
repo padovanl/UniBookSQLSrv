@@ -82,7 +82,6 @@ function reaction(id, page=null){
     data: {action: id.split("_")[0], id: id.split("_")[1], id_page: id_page},
      success : function (data)
      {
-       console.log(data);
        switch (data.type) {
          case "post":
            $("#like_" + data.id_post).css({ 'color': data.status_like })
@@ -93,7 +92,11 @@ function reaction(id, page=null){
            $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
            break;
        }
-     }
+     },
+     error: function(data){
+     var errors = data.responseJSON;
+     alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n\nERROR:\n" + errors.message);
+   }
   })
 }
 
@@ -187,77 +190,89 @@ function createPost(data){
 }
 
 function newComment(e, id, page=null){
-  //manca controllo campo vuoto!!
-  if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
-    var id_page = location.href.match(/([^\/]*)\/*$/)[1];
-  }
   if(e.keyCode === 13){
-          console.log(id.split("_")[2]);
           e.preventDefault();
-          $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      }
-                  });
-          $.ajax({
-            method: "POST",
-            url: "/home/comment",
-            dataType : "json",
-            data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], id_page: id_page},
-             success : function (data)
-             {
-               if(data.ban != 1){
-                 $("#comment_insert_" + data.id_post).val('');
-                 $comment_clone = createcomment(data);
-                 $comment_clone.insertBefore("#comment_insert_" + data.id_post);
-                 $comment_clone.show();
-               }
-               else{
-                 alert("Non puoi commentare, sei bannato!");
-               }
+          if($("#comment_insert_" + id.split("_")[2]).val() == ''){
+            alert("Non puoi inserire un commento vuoto!\nScrivi qualcosa!\n");
+          }
+          else{
+            if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
+              var id_page = location.href.match(/([^\/]*)\/*$/)[1];
+            }
+            $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+            $.ajax({
+              method: "POST",
+              url: "/home/comment",
+              dataType : "json",
+              data: {content: $("#comment_insert_" + id.split("_")[2]).val(), id_post: id.split("_")[2], id_page: id_page},
+               success : function (data){
+                 if(data.ban != 1){
+                   $("#comment_insert_" + data.id_post).val('');
+                   $comment_clone = createcomment(data);
+                   $comment_clone.insertBefore("#comment_insert_" + data.id_post);
+                   $comment_clone.show();
+                 }
+                 else{
+                   alert("Non puoi commentare, sei bannato!");
+                 }
+               },
+               error: function(data){
+               var errors = data.responseJSON;
+               alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n" + errors.message);
              }
-          })
-      }
-  }
+            })
+          }
+        }
+}
 
 function newPost(id_page=null){
   //manca controllo che il campo non sia vuoto!
   if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
     var id_page = location.href.match(/([^\/]*)\/*$/)[1];
   }
-
-  $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-  $.ajax({
-          method: "POST",
-          url: "/home/post",
-          data: {content: $("#new_post_content").val(), id_page: id_page},
-          dataType : "json",
-          success : function (data)
-          {
-            if(data.ban != 1){
-              $("#new_post_content").val('');
-              $post_clone = createPost(data)
-              $post_clone.insertAfter(".well");
-              $post_clone.show();
-              $("#comment_panel").hide();
-              if(data.comments.length > 0){
-                for(j = 0; j < data.comments.length; j++){
-                  $comment_clone = createcomment(data.comments[j]);
-                  $comment_clone.insertBefore("#comment_insert_" + data.id_comment);
-                  $comment_clone.show();
+  if($("#new_post_content").val() == ''){
+    alert("Non puoi inserire un post vuoto!\nInserisci qualcosa!");
+  }
+  else{
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+            method: "POST",
+            url: "/home/post",
+            data: {content: $("#new_post_content").val(), id_page: id_page},
+            dataType : "json",
+            success : function (data){
+              if(data.ban != 1){
+                $("#new_post_content").val('');
+                $post_clone = createPost(data)
+                $post_clone.insertAfter(".well");
+                $post_clone.show();
+                $("#comment_panel").hide();
+                if(data.comments.length > 0){
+                  for(j = 0; j < data.comments.length; j++){
+                    $comment_clone = createcomment(data.comments[j]);
+                    $comment_clone.insertBefore("#comment_insert_" + data.id_comment);
+                    $comment_clone.show();
+                }
               }
-            }
-            }
-            else{
-              alert("Non puoi scrivere post, sei bannato!");
-            }
-
+              }
+              else{
+                alert("Non puoi scrivere post, sei bannato!");
+              }
+          },
+          error: function(data){
+          var errors = data.responseJSON;
+          alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n\n" + errors.message);
         }
-      });
+        });
+  }
 }
 
 function onLoad(data, page=null){
@@ -307,9 +322,7 @@ function loadOlder(id){
           url: "/home/loadmore",
           data: { post_id: $post_id, home: is_home, page: is_page, user: is_profile, id: location.href.match(/([^\/]*)\/*$/)[1]},
           dataType : "json",
-          success : function (posts)
-          {
-            console.log(posts);
+          success : function (posts){
             if(posts.length != 0)
             {
               for(var x = posts.length - 1; x >= 0 ; x--)
@@ -334,9 +347,10 @@ function loadOlder(id){
             else{
               $("#load").text("Nothing More!");
             }
-          }
-        })
-
-
-
+          },
+          error: function(data){
+          var errors = data.responseJSON;
+          alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n\nERROR:\n" + errors.message);
+        }
+    })
 }

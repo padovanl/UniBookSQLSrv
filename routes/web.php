@@ -108,3 +108,8 @@ Route::get('/profile/page/{id}', 'ProfileController@ShowPage');
 Route::post('/profile/page/comment', 'ProfileController@newCommentPage');
 Route::post('/profile/page/stopFollow', 'ProfileController@stopFollow');
 Route::post('/profile/page/follow', 'ProfileController@follow');
+
+//se viene richiesta una route che non esiste, torna alla home
+Route::any('{query}',
+    function() { return redirect('/'); })
+    ->where('query', '.*');
