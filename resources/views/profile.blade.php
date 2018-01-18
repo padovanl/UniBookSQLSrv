@@ -315,17 +315,8 @@
           <div class="padding pre-scrollable" style="max-height: 800px;">
               <!-- content -->
               <!-- main col right -->
-              <div class="well">
-                  <div>
-                      <h4>New Post</h4>
-                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
-                                    type="text"></textarea>
-                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                      </div>
-                  </div>
-              </div>
               <!--Pannello Post-->
+              <div class="insert_after_me"></div>
               <div class="container" id="post">
                   <div class="row">
                       <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
@@ -485,17 +476,9 @@
           <div class="padding pre-scrollable" style="max-height: 800px;">
               <!-- content -->
               <!-- main col right -->
-              <div class="well">
-                  <div>
-                      <h4>New Post</h4>
-                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
-                                    type="text"></textarea>
-                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                      </div>
-                  </div>
-              </div>
+
               <!--Pannello Post-->
+              <div class="insert_after_me"></div>
               <div class="container" id="post">
                   <div class="row">
                       <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
@@ -660,7 +643,7 @@
                 data: {id: profileId, post_id: -1, user: 1},
                 success: function (posts) {
                     console.log(posts);
-                    onLoad(posts);
+                    onLoad(posts,1);
                 }
             });
         });
