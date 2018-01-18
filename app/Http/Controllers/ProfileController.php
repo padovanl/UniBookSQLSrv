@@ -55,6 +55,10 @@ class ProfileController extends Controller{
     }
   }
 
+  public function CheckBan($id){
+    $ban = User::where('id_user',$id)->value('ban');
+    return $ban;
+  }
 
   public function ShowUser($id){
     if($this->verify_cookie()){
@@ -63,6 +67,7 @@ class ProfileController extends Controller{
       $user = User::where('id_user', $id)->first();
       $friends_array = User::friends($user["id_user"]);
       $check_friend = $this->CheckFriend($logged_user['id_user'],$user['id_user']);
+      $ban = $this->CheckBan($logged_user['id_user']);
       if($user->id_user == $logged_user->id_user){
         //sono nel mio profilo
         $case = 0;
@@ -80,7 +85,7 @@ class ProfileController extends Controller{
         $case = 3;
       }
       #return $case;
-      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend'));
+      return view('profile', compact('logged_user', 'controller', 'user','friends_array','case','check_friend','ban'));
     }
     else{
       return view('login');

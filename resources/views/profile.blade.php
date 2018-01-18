@@ -219,18 +219,24 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
-              @if($check_friend == 0)
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
-                      </button>
-                  </p>
+              @if($ban == 1)
+                <div class="w3-container">
+                  <p>Sei stato BLOCCATO!</p>
+                </div>
               @else
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
-                      </button>
-                  </p>
+                @if($check_friend == 0)
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                          </button>
+                      </p>
+                @else
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
+                          </button>
+                      </p>
+                @endif
               @endif
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
                       <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
@@ -258,18 +264,24 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
-              @if($check_friend == 0)
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
-                      </button>
-                  </p>
-              @else
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
-                      </button>
-                  </p>
+              @if($ban == 1)
+                <div class="w3-container">
+                  <p>Sei stato BLOCCATO!</p>
+                </div>
+                @else
+                @if($check_friend == 0)
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
+                          </button>
+                      </p>
+                @else
+                  <div class="w3-container">
+                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
+                          </button>
+                      </p>
+                @endif
               @endif
                   <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
                       <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
@@ -430,14 +442,20 @@
                   </div>
               </div>
               <!--Add Friend and Message-->
-              <div class="w3-container">
-                  <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
-                      </button>
-                  </p>
-                  <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
-                  </p>
+              @if($ban == 1)
+                <div class="w3-container">
+                  <p>Sei stato BLOCCATO!</p>
+                </div>
+              @else
+                <div class="w3-container">
+                    <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                        <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Amicizia
+                        </button>
+                    </p>
+                    <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                        <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
+                    </p>
+              @endif
               <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
                   <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
                   <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
