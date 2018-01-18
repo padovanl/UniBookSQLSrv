@@ -255,10 +255,10 @@
                 success: function (posts) {
                     console.log(posts);
                     onLoad(posts, 1);
-                }
+                },
                 error: function(data){
                 var errors = data.responseJSON;
-                alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n" + errors);
+                alert("Qualcosa è andato storto! Prova a ricaricare la pagina.\n" + errors.message);
               }
             });
         });
