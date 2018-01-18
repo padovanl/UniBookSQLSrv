@@ -294,7 +294,7 @@ function loadOlder(id){
   $.ajax({
           method: "GET",
           url: "/home/loadmore",
-          data: { post_id: $post_id, home: is_home, page: is_page, user: is_profile},
+          data: { post_id: $post_id, home: is_home, page: is_page, user: is_profile, id: location.href.match(/([^\/]*)\/*$/)[1]},
           dataType : "json",
           success : function (posts)
           {
