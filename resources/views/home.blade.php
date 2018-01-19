@@ -1,20 +1,18 @@
 @extends('layouts.app')
 @section('content')
     <article class="content">
+        <div class="new_post">
+            <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+                <textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
+                <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+            </div>
+        </div>
         <div class="padding pre-scrollable" style="max-height: 800px;">
             <!-- content -->
             <!-- main col right -->
-            <div class="well">
-                <div>
-                    <h4>Nuovo post</h4>
-                    <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                        <input id="_token" type="hidden" value="{{ csrf_token() }}">
-                        <textarea class="form-control input-lg form-rounded" id="new_post_content"
-                                  placeholder="Hey, What's Up?" type="text"></textarea>
-                        <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                    </div>
-                </div>
+            <div class="well" style="display: none;">
             </div>
+
             <!--Pannello Post-->
             <div class="container" id="post">
                 <div class="row">
