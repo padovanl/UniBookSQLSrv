@@ -90,27 +90,14 @@ class PageController extends Controller
 		$logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
 		$friendships = Users_make_friends::where('id_request_user', '=', $logged_user->id_user)->get();
 		$cnt = 0;
+    //questa funzione sarebbe già fatta: basta scrivere User::firends($id) e torna un array di utenti
+		$friendships = User::friends($logged_user->id_user);
 		foreach ($friendships as $f){
 			$alreadyFollowPage = Users_follow_pages::where('id_user', '=', $f->id_user)->first();
 			if(!$alreadyFollowPage){
 				$notification = new Notification();
 				$notification->content = $logged_user->name . ' ' . $logged_user->surname . ' ti ha invitato a mettere mi piace alla sua pagina "' .  $page->name . '".';
 				$notification->id_user = $f->id_user;
-				$notification->id_sender = $logged_user->id_user;
-				$notification->new = true;
-				$notification->link = '/profile/page/' . $id_page;
-				$notification->save();
-				$cnt++;
-			}
-		}
-    //questa funzione sarebbe già fatta: basta scrivere User::firends($id) e torna un array di utenti
-		$friendships = Users_make_friends::where('id_user', '=', $logged_user->id_user)->get();
-		foreach ($friendships as $f){
-			$alreadyFollowPage = Users_follow_pages::where('id_user', '=', $f->id_request_user)->first();
-			if(!$alreadyFollowPage){
-				$notification = new Notification();
-				$notification->content = $logged_user->name . ' ' . $logged_user->surname . ' ti ha invitato a mettere mi piace alla sua pagina "' .  $page->name . '".';
-				$notification->id_user = $f->id_request_user;
 				$notification->id_sender = $logged_user->id_user;
 				$notification->new = true;
 				$notification->link = '/profile/page/' . $id_page;
