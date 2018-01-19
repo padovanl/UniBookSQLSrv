@@ -14,7 +14,6 @@
             <!--Pannello Post-->
             <div class="container" id="post">
 
-
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <section class="post-heading">
@@ -127,36 +126,19 @@
         <hr/>
         <div class="list_possible_friends">
             @foreach($suggested_friends as $suggested)
-                <div class="possible_friend">
-
-                    <div class="profile_img_possible_friend">
-                        <a href="/profile/user/{{$suggested->id_user}}">
-                            <img class="img-circle" src="{{$suggested->pic_path}}"  />
-                        </a>
-                    </div>
-
-                    <div class="nome_ps_friend">
-                        <div class="">{{$suggested->name . " " . $suggested->surname}}</div>
-                    </div>
-
-
+            <div class="possible_friend">
+                <div class="profile_img_possible_friend">
+                    <a href="/profile/user/{{$suggested->id_user}}">
+                        <img class="img-circle" src="{{$suggested->pic_path}}"  />
+                    </a>
                 </div>
-                <br/>
-                <div class="possible_friend">
 
-                    <div class="profile_img_possible_friend">
-                        <a href="/profile/user/{{$suggested->id_user}}">
-                            <img class="img-circle" src="{{$suggested->pic_path}}"  />
-                        </a>
-                    </div>
-
-                    <div class="nome_ps_friend">
-                        <div class="">{{$suggested->name . " " . $suggested->surname}}</div>
-                    </div>
-
-
+                <div class="nome_ps_friend">
+                    <div class="">{{$suggested->name . " " . $suggested->surname}}</div>
                 </div>
-                <br/>
+
+
+            </div>
 
             @endforeach
         </div>
