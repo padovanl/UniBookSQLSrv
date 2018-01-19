@@ -30,7 +30,7 @@ Route::post('/getcountNewRequest', 'GeneralAppController@getFriendRequest');
 Route::get('/', 'HomeController@landing');
 Route::post('/home/post', 'HomeController@newPost');
 Route::post('/home/comment', 'HomeController@newComment');
-Route::get('/home/reaction', 'HomeController@reaction');
+Route::post('/home/reaction', 'HomeController@reaction');
 Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
