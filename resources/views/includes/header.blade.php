@@ -6,16 +6,15 @@
 
 
 <div class="middle-nav">
-    <div class="growing-search">
-        <div class="input">
-            <input type="text" name="search"/>
-        </div><!-- Space hack -->
-        <div class="submit">
-            <button type="submit" id="search" name="go_search">
+          <div class="growing-search">
+            <div class="input">
+              <input type="text" name="search" id="searchtext"/>
+            </div><!-- Space hack -->
+            <div class="submit">
+              <button type="submit" id="search" name="go_search" onclick="window.location='/search/' + document.getElementById('searchtext').value">
                 <span class="fa fa-search"></span>
-            </button>
-        </div>
-    </div>
+              </button>
+            </div>
 
     <div id="notifiche">
         <a href="{{url('friend/request')}}" id="navBarFriend">

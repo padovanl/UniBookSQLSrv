@@ -30,17 +30,17 @@
           <div class="name" onclick="window.location='/';" style="cursor: pointer;">
             <div class="marcato">UNI</div><div class="fino">BOOK</div>
           </div>
-          <div class="middle-nav">
-            <div class="growing-search">
-              <div class="input">
-                <input type="text" name="search"/>
-              </div><!-- Space hack -->
-              <div class="submit">
-                <button type="submit" id="search" name="go_search">
-                  <span class="fa fa-search"></span>
-                </button>
-              </div>
+         <div class="middle-nav">
+          <div class="growing-search">
+            <div class="input">
+              <input type="text" name="search" id="searchtext"/>
+            </div><!-- Space hack -->
+            <div class="submit">
+              <button type="submit" id="search" name="go_search" onclick="window.location='/search/' + document.getElementById('searchtext').value">
+                <span class="fa fa-search"></span>
+              </button>
             </div>
+          </div>
 
             <div id="notifiche">
               <a href="{{url('friend/request')}}" id="navBarFriend"><span class="fa-stack fa-1x has-badge" id="spanNewFriend"><i class="fa fa-user fa-stack-1x fa-lg" aria-hidden="true"></i></span></a>
