@@ -200,7 +200,7 @@
   		<td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
       <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #FFFFFF;"><![endif]-->
 
-      <div style="background-color:#323341;">
+      <div style="background-color:#2683fb;">
         <div style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
           <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
             <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#323341;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width: 500px;"><tr class="layout-full-width" style="background-color:transparent;"><![endif]-->
@@ -233,7 +233,7 @@
       </div>
       <div align="center" class="img-container center  autowidth " style="padding-right: 0px;  padding-left: 0px;">
           <a href="g9.deltaschool.it" target="_blank">
-          <img class="center  autowidth " align="center" border="0" src="https://image.flaticon.com/icons/png/512/123/123369.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 402px" width="402">
+          <img class="center  autowidth " align="center" border="0" src="http://www.pngmart.com/files/5/Gears-PNG-Pic.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 402px" width="402">
         </a>
       </div>
       </div>
@@ -242,7 +242,7 @@
       </div>
       </div>
       </div>
-      <div style="background-color:#61626F;">
+      <div style="background-color:#092135;">
             <div style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
               <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
                 <div class="col num12" style="min-width: 320px;max-width: 500px;display: table-cell;vertical-align: top;">
