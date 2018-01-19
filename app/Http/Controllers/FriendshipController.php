@@ -64,6 +64,7 @@ class FriendshipController extends Controller
     		return response()->json(['message' => 'Richiesta di amicizia non trovata.']);
 			Users_make_friends::where('id_request', '=', $id_request)->update(['status' => 0]);
 	    	//creo la notifica da inviare all'utente
+            date_default_timezone_set('Europe/Rome');
 	    	$notifica = new Notification();
 	    	$notifica->new = true;
 	    	$notifica->content = $logged_user->name . ' ' . $logged_user->surname . ' ha accettato la tua richiesta di amicizia';

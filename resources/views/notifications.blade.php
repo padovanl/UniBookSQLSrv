@@ -16,14 +16,18 @@
                                              style="border-radius: 50%;">
                                     </div>
                                     <div class="col-md-10">
-                                        <div class="col-md-11">
-                                            <p>{{$n->content}}</p>
-                                        </div>
-                                        <div class="col-md-1">
-                                            @if($n->new)
-                                                <img src="../../assets/img/puntoEsclamativo.png" width="20px"
-                                                     height="20px">
-                                            @endif
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <p>{{$n->content}}</p>
+                                            </div>
+                                            <div class="col-md-1">
+                                                @if($n->new)
+                                                    <img src="../../assets/img/puntoEsclamativo.png" width="20px" height="20px">
+                                                @endif
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p class="notificationTime" id="{{$n->id_notification}}" style="font-size: 12px; color: #cacdd1;"><i>{{$n->created_at}}</i></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -51,6 +55,9 @@
             }).done(function (data) {
             });
         }
+
+
+
     </script>
 
 
