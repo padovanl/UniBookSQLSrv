@@ -21,8 +21,8 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
 }
-
-/*-- Bootstrap Override Style --
+*/
+/*-- Bootstrap Override Style --*/
 .fa-stack[data-count]:after {
     position: absolute;
     right: 0%;
@@ -287,8 +287,7 @@ nav ul {
 
 #name-nav {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
     margin-right: 10px;
 }
 
@@ -297,6 +296,10 @@ nav ul {
 @media (min-width: 900px) {
     .side-sec {
         width: 300px;
+        margin: auto;
+    }
+    .side {
+        width: 400px;
         margin: auto;
     }
 }
@@ -397,27 +400,27 @@ nav ul {
 /* Side possible frinds */
 
 .side  h5 {
-    font-size: 18px;
+    font-size: 20px;
     margin: 10px;
     color: #4285f4;
+}
+.side .list_possible_friends {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 82vh;
 }
 
 .side .possible_friend {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    flex-direction: row;
     margin: 10px 0;
+    max-width: 300px;
+    margin-left: 20%;
+    min-height: 83px;
 }
-
 
 .side .profile_img_possible_friend {
-    flex-direction: row;
-    display: flex;
-}
-
-.list_possible_friends {
-    overflow-y: auto;
-    height: 82vh;
 }
 
 .profile_img_possible_friend  img {
@@ -427,8 +430,9 @@ nav ul {
 }
 
 .nome_ps_friend {
-    flex-direction: column;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     color: #4285f4;
 }
 
