@@ -2,9 +2,9 @@
 @section('content')
     <article class="content">
         <div class="new_post">
-            <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
+            <div class="form-group"> <!--se non vi piace mettete quello di prima: input-group-->
                 <textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea>
-                <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
+                <button onclick="newPost()" class="btn btn-lg btn-primary btn_post">Post</button>
             </div>
         </div>
         <div class="padding pre-scrollable" style="max-height: 800px;">
@@ -123,28 +123,53 @@
             </div>
         </div>
     </article>
-    <article class="side">Amici Suggeriti
-        <div style="width: 300px; margin: 0 auto 0 auto; text-align: center;">
+
+
+    <article class="side">
+        <h5>Amici Suggeriti</h5>
+        <hr/>
+        <div>
         @foreach($suggested_friends as $suggested)
-            <a href="/profile/user/{{$suggested->id_user}}">
-                <div class="container">
-                    <div class="row">
-                        <div class="profile-header-container">
-                            <div class="profile-header-img">
-                                <img class="img-circle" src="{{$suggested->pic_path}}" width="165px" height="165px" />
-                                <!-- badge -->
-                                <div class="rank-label-container">
-                                    <span class="label label-default rank-label">{{$suggested->name . " " . $suggested->surname}}</span>
+            <div class="possible_friend">
+
+                <div class="profile_img_possible_friend">
+                    <a href="/profile/user/{{$suggested->id_user}}">
+                        <img class="img-circle" src="{{$suggested->pic_path}}"  />
+                    </a>
+                </div>
+
+                <div class="flex-column">
+                    <div>{{$suggested->name . " " . $suggested->surname}}</div>
+                    <div>Aggiungi agli amici</div>
+                </div>
+
+                <!--<a href="/profile/user/{{$suggested->id_user}}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="profile-header-container">
+                                <div class="profile-header-img">
+                                    <img class="img-circle" src="{{$suggested->pic_path}}" width="165px" height="165px" />
+
+                                    <div class="rank-label-container">
+                                        <span class="label label-default rank-label">{{$suggested->name . " " . $suggested->surname}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>-->
+
+            </div>
+
             <br />
         @endforeach
         </div>
     </article>
+
+
+
+
+
     @include('reportModal')
 
 <script>
