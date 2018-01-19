@@ -31,7 +31,7 @@ class NotificationController extends Controller
 			$temp = collect();
 			foreach ($notificationList as $n) {
 				$user = User::where('id_user', '=', $n->id_sender)->first();
-				$viewModel = new NotificationViewModel($n->id_notification, $n->content, $user->pic_path, $n->link, $n->new);
+				$viewModel = new NotificationViewModel($n->id_notification, $n->content, $user->pic_path, $n->link, $n->new, $this->humanTiming($n->created_at), count($notificationList));
 				$temp->push($viewModel);
 			}
 			$notificationList = $temp;
@@ -45,4 +45,31 @@ class NotificationController extends Controller
     	$id = $request->input('id');
     	Notification::where('id_notification', '=', $id)->update(['new' => false]);
     }
+
+
+
+	protected function humanTiming ($time)
+	{
+		date_default_timezone_set('Europe/Rome');
+		$time = strtotime($time);
+	    $time = time() - $time; 
+	    $time = ($time<1)? 1 : $time;
+	    $tokens = array (
+	        31536000 => 'anno fa',
+	        2592000 => 'mese fa',
+	        604800 => 'settimana fa',
+	        86400 => 'giorno fa',
+	        3600 => 'ora fa',
+	        60 => 'minuto fa',
+	        1 => 'secondo fa'
+	    );
+
+	    foreach ($tokens as $unit => $text) {
+	        if ($time < $unit) continue;
+	        $numberOfUnits = floor($time / $unit);
+	        return $numberOfUnits.' '.$text;
+	    }
+
+	}
+
 }
