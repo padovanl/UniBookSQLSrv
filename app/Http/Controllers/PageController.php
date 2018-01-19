@@ -92,6 +92,7 @@ class PageController extends Controller
 		$cnt = 0;
     //questa funzione sarebbe già fatta: basta scrivere User::firends($id) e torna un array di utenti
 		$friendships = User::friends($logged_user->id_user);
+    date_default_timezone_set('Europe/Rome');
 		foreach ($friendships as $f){
 			$alreadyFollowPage = Users_follow_pages::where([['id_user', '=', $f->id_user], ['id_page', '=', $id_page]])->first();
 			if(!$alreadyFollowPage){

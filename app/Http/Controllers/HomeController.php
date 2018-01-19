@@ -229,6 +229,7 @@ class HomeController extends Controller{
     $post = Post::where('id_post', '=', $id)->first();
     if(!$post)
       return response()->json(['message' => 'Post non trovato']);
+    date_default_timezone_set('Europe/Rome');
     $motivo = $request->input('motivo');
     $report = new ReportPost();
     $report->id_post = $id;
@@ -247,6 +248,7 @@ class HomeController extends Controller{
     $comment = Comment::where('id_comment', '=', $id)->first();
     if(!$comment)
       return response()->json(['message' => 'Commento non trovato']);
+    date_default_timezone_set('Europe/Rome');
     $motivo = $request->input('motivo');
     $report = new ReportComment();
     $report->id_comment = $id;
