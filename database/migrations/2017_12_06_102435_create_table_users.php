@@ -18,7 +18,7 @@ class CreateTableUsers extends Migration
            $table->string('name');
            $table->string('surname');
            $table->date('birth_date');
-           $table->string('email')->unique();
+           $table->string('email');
            //0 =  normale 1 = admin
            $table->integer('admin')->default(0);
            $table->boolean('confirmed')->default(false);
