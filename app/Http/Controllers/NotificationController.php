@@ -60,8 +60,8 @@ class NotificationController extends Controller
 	        604800 => 'settimana fa',
 	        86400 => 'giorno fa',
 	        3600 => 'ora fa',
-	        60 => 'minuto fa',
-	        1 => 'secondo fa'
+	        60 => 'minuti fa',
+	        1 => 'secondi fa'
 	    );
 
 	    foreach ($tokens as $unit => $text) {
