@@ -21,7 +21,7 @@
         <h1>Registrazione</h1></br>
 
 
-        <form action="/register" method="post" enctype="multipart/form-data">
+        <form action="/register" method="post" id="registerForm" enctype="multipart/form-data">
             {{csrf_field()}}
 
             <div class="group">
@@ -82,26 +82,43 @@
             <div class="group">
                 <p>Foto profilo</p>
                 <div>
-                    <input type="file" name="file" id="file">
+                    <input type="file" name="file" id="file" onchange="showFileSize();">
                     <span class="highlight"></span>
                     <span class="bar"></span>
                 </div>
             </div>
 
             <div class="lg-btn">
-                <button type="submit" class="button" value="Register">Registrati</button>
+                <button type="submit" class="button" id="btnSubmit" value="Register">Regstrati</button>
             </div>
         </form>
 
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
         var err = '{{$error}}'
         if (err !== '')
             alert("{{$error}}");
     });
+
+
+    function showFileSize() {
+        var input, file;
+        input = document.getElementById('file');
+            file = input.files[0]; console.log(file);
+            var filesizeMb = file.size/1024/1024;
+            if(filesizeMb >= 2.0){
+                alert('La dimensione dell\'immagine del profilo non deve superare i 2MB');
+                $('#btnSubmit').prop('disabled', true);
+            }
+            else{
+                $('#btnSubmit').prop('disabled', false);
+            }
+    }
+
 </script>
 
 </body>
