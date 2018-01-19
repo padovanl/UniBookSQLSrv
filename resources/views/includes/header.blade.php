@@ -15,6 +15,7 @@
                 <span class="fa fa-search"></span>
               </button>
             </div>
+           </div>
 
     <div id="notifiche">
         <a href="{{url('friend/request')}}" id="navBarFriend">
