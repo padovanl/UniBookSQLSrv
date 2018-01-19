@@ -112,8 +112,8 @@
 
                 </div> <!--/Panello post-->
 
-              <div>
-                  <button id="load_home" onclick="loadOlder(this.id)" type="button" class="button btn-default">Carica post più vecchi...</button>
+              <div style="text-align: center;">
+                  <button id="load_home" onclick="loadOlder(this.id)" type="button" class="btn btn-primary">Carica post più vecchi...</button>
               </div>
 
         </div>
