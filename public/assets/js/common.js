@@ -76,7 +76,7 @@ function reaction(id, page=null){
               }
           });
     $.ajax({
-    method: "get",
+    method: "POST",
     dataType: "json",
     url: "/home/reaction",
     data: {action: id.split("_")[0], id: id.split("_")[1], id_page: id_page},

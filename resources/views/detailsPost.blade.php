@@ -2,6 +2,7 @@
 
 @section('content')
   <!--Pannello Post-->
+  <div class="padding pre-scrollable" style="max-height: 800px;">
   <div class="insert_after_me"></div>
   <div class="container" id="post">
       <div class="row">
@@ -102,6 +103,7 @@
   </div>
         @include('reportModal')
     </div>
+  </div>
 <script>
 //Caricamento dei post
 $(document).ready(function () {
