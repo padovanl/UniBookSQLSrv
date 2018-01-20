@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -42,7 +41,12 @@ class SearchController extends Controller{
       return view('login');
   }
 
-  public function searchPage(Request $request, $search_term) {
+  public function searchPage(Request $request) {
+
+    if ($request->has("search_term") && $request->input("search_term") != "")
+      $search_term = $request->input("search_term");
+    else
+      return "Inserisci il parametro search_term";
 
     if ($request->has("take") && $request->input("take") != "")
       $take = $request->input("take");
@@ -54,7 +58,18 @@ class SearchController extends Controller{
     else
       $skip = 0;
 
-    $pages = Page::where("name" , "like", "%" . $search_term . "%")->take($take)->skip($skip)->get();
+    $pages = Page::take($take)->skip($skip);
+
+    if (strpos($search_term, " ") !== false) {
+      $search_term = explode(" ", $search_term);
+
+      foreach ($search_term as $term)
+        $pages->orWhere("name" , "like", "%" . $term . "%");
+    }
+    else
+      $pages->where("name" , "like", "%" . $search_term . "%");
+
+    $pages = $pages->get();
 
     if (count($pages) > 0)
       return response()->json($pages);
@@ -62,7 +77,12 @@ class SearchController extends Controller{
       return response()->json("No results");
   }
 
-  public function searchUsers(Request $request, $search_term) {
+  public function searchUsers(Request $request) {
+
+    if ($request->has("search_term") && $request->input("search_term") != "")
+      $search_term = $request->input("search_term");
+    else
+      return "Inserisci il parametro search_term";
 
     if ($request->has("take") && $request->input("take") != "")
       $take = $request->input("take");
@@ -74,19 +94,26 @@ class SearchController extends Controller{
     else
       $skip = 0;
 
-    $users = User::where("name" , "like", "%" . $search_term . "%")
-                ->orWhere("surname" , "like", "%" . $search_term . "%")
-                ->select("id_user", "name", "surname", "email", "pic_path", "gender", "citta", "birth_date")
+    $users = User::select("id_user", "name", "surname", "email", "pic_path", "gender", "citta", "birth_date")
                 ->take($take)
-                ->skip($skip)
-                ->get();
+                ->skip($skip);
+
+    if (strpos($search_term, " ") !== false) {
+      $search_term = explode(" ", $search_term);
+
+      foreach ($search_term as $term)
+        $users->orWhere("name" , "like", "%" . $term . "%")->orWhere("surname" , "like", "%" . $term . "%");
+    }
+    else
+      $users->where("name" , "like", "%" . $search_term . "%")->orWhere("surname" , "like", "%" . $search_term . "%");
+
+    $users = $users->get();
 
     if (count($users) > 0)
       return response()->json($users);
     else
       return response()->json("No results");
   }
-
 
 }
 ?>

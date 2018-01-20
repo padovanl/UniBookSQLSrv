@@ -169,7 +169,7 @@ function loadOlderUser() {
 
   $.ajax({
     method: "GET",
-    url: "/searchUsers/" + search_term,
+    url: "/searchUsers?search_term=" + encodeURI(search_term),
     data: {
       take: 5,
       skip: user_counter
@@ -202,7 +202,7 @@ function loadOlderPage() {
 
   $.ajax({
     method: "GET",
-    url: "/searchPages/" + search_term,
+    url: "/searchPages?search_term=" + encodeURI(search_term),
     data: {
       take: 5,
       skip: page_counter
@@ -236,7 +236,7 @@ $(document).ready(function(){
   $("#no_results_page").hide();
 
   $.ajax({
-      url : '/searchUsers/' + search_term,
+      url : "/searchUsers?search_term=" + encodeURI(search_term),
       method : "GET",
       dataType : "json",
       success: function(users) {
@@ -245,7 +245,7 @@ $(document).ready(function(){
   });
 
   $.ajax({
-      url : '/searchPages/' + search_term,
+      url : "/searchPages?search_term=" + encodeURI(search_term),
       method : "GET",
       dataType : "json",
       success: function(pages) {
