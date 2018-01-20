@@ -173,7 +173,7 @@
                                               <br>
                                               <span id="comment_content"></span>
                                           </div>
-                                          <div class="">
+                                          <div class="pull-right">
                                               <div class="comment_options">
                                                   <a><i onclick="reaction(this.id)" style="cursor:pointer;"
                                                         id="likecomm"
@@ -234,19 +234,17 @@
                 @if($check_friend == 0)
                   <div class="w3-container">
                       <p>
-                          <i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta</button>
+                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn valore btn btn-round color-1 material-design">Invia Richiesta</button>
                       </p>
                 @else
                   <div class="w3-container">
                       <p>
-                          <i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta</button>
+                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn valore btn btn-round color-1 material-design">Cancella Richiesta</button>
                       </p>
                 @endif
               @endif
-                  <p><i class="fa fa-comment fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                      <button cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Message</button>
+                  <p>
+                      <button class="btn btn-border btn-round color-1 material-design" cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Invia messaggio</button>
                   </p>
                   <br>
               </div>
