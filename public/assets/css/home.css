@@ -39,7 +39,9 @@ body {
     font-weight: bold;
 }
 
-.comment_options{
+
+
+.comment_options {
     display: flex;
     flex-direction: row;
 }
@@ -141,6 +143,9 @@ nav ul {
     margin-top: 75px;
 }
 
+.main-nav button{
+    font-size: 13px;
+}
 .side {
     background-color: #FFFFFF;
     grid-area: side;
@@ -423,6 +428,7 @@ nav ul {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     color: #444;
+    padding: 7px;
 }
 .btn_post {
     background: #EEEEEE;
@@ -492,6 +498,9 @@ nav ul {
 }
 
 .comment {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     border: 1px solid #EEEEEE;
     border-radius: 1rem;
     background-color: #F5F5F5;
@@ -499,6 +508,10 @@ nav ul {
 
 .load_altri_post {
     text-align: center;
+}
+
+.load_altri_post button{
+    width: 200px;
 }
 
 #reportModal button{
@@ -516,4 +529,20 @@ nav ul {
 #reasonReportComment{
     height: 35px;
     font-size: 16px;
+}
+
+.button {
+    height: 40px;
+    width: 200px;
+    display: block;
+    margin: 20px auto;
+    padding: 0;
+
+    overflow: hidden;
+
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+
 }

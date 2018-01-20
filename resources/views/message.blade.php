@@ -75,6 +75,9 @@
 
 
     <style>
+        #messageUser{
+            font-size: 15px;
+        }
         .form-rounded {
             border-radius: 1rem;
         }
