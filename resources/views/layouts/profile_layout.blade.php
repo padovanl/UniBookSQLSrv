@@ -16,6 +16,7 @@
   <script src="/assets/js/common.js"></script>
 
   <script src="/assets/js/admin/popper.min.js"></script>
+  <script src="/assets/js/page.js"></script>
   <script src="/assets/js/admin/bootstrap.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
