@@ -9,6 +9,7 @@ use \Datetime;
 
 use App\User;
 use App\ResetPassword;
+use App\Message;
 
 use Cookie;
 
@@ -73,7 +74,7 @@ class RegisterController extends Controller
       $file = Input::file('file');
       $ext = pathinfo($file, PATHINFO_EXTENSION);
       $file->move('assets/images', $user->id_user . $ext);
-      $user->pic_path = 'assets/images/' . $user->id_user . $ext;
+      $user->pic_path = '/assets/images/' . $user->id_user . $ext;
     }else{
       $user->pic_path = '/assets/images/facebook1.jpg';
     }
@@ -82,6 +83,16 @@ class RegisterController extends Controller
 
     $path = route('activeAccount', ['id_user' => $user->id_user]);
     Mail::to($user)->send(new ConfirmEmail($path));
+
+    //invio messaggio di benvenuto
+    $welcomeMess = new Message();
+    $welcomeMess->letto = false;
+    $welcomeMess->content = 'Benvenuto su UniBook! Sono uno degli amministratori del sito, se hai bisogno di aiuto non esitare a contattarmi in futuro. Buon divertimento su UniBook!';
+    $admins = User::where('admin', '=', true)->inRandomOrder()->get();
+    $welcomeMess->sender = $admins[0]->id_user;
+    $welcomeMess->receiver = $user->id_user;
+    $welcomeMess->save();
+
     return redirect('/register/confirm');
 
   }
