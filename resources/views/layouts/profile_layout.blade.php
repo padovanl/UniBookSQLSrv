@@ -5,27 +5,27 @@
   @include('includes.head')
 
   <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 
-  <script src="../../assets/js/common.js"></script>
-  <script src="../../assets/js/page.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="../../assets/js/jquery.powertip.js"></script>
+  <link href="/assets/css/jquery.powertip.css" rel="stylesheet">
+
+  <script src="/assets/js/common.js"></script>
+
+  <script src="/assets/js/admin/popper.min.js"></script>
+  <script src="/assets/js/page.js"></script>
+  <script src="/assets/js/admin/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 
   <link href="/assets/css/home.css" rel="stylesheet">
-
   <script src="https://use.fontawesome.com/1e803d693b.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../../assets/js/jquery.powertip.js"></script>
-  <link href="../../assets/css/jquery.powertip.css" rel="stylesheet">
 
-  <!-- CSS per profile page-->
-  <link href="../../assets/css/profile_badge.css" rel="stylesheet">
+  <link href="/assets/css/profile_badge.css" rel="stylesheet">
 
-
-  <!--Modal -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body class="wrapper">
         <header class="main-head">

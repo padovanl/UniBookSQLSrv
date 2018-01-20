@@ -149,10 +149,10 @@ function createPost(data){
   $post_clone.find("#creation_date").text(getTimeDelta(data.created_at)).attr('href', '/post/details/' + data.id_post);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
   if(data.auth_surname != null){
-    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
+    $post_clone.find("#post_u_name").html("<span style='margin-left: 3px'>" + data.auth_name + " " + data.auth_surname+"</span>").attr('href', '/profile/user/' + data.id_auth);
   }
   else{
-    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name).attr('href', '/profile/page/' + data.id_auth);
+    $post_clone.find("#post_u_name").html("<span style='margin-left: 3px'>" + data.auth_name+"</span>").attr('href', '/profile/page/' + data.id_auth);
   }
   $post_clone.find("#creation_date").attr("href", "/post/details/" + data.id_post);
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);

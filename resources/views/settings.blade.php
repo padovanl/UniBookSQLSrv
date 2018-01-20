@@ -24,48 +24,56 @@
     </style>
 
     <article class="content">
-        <!--caricamento immagine-->
-        <div class="image-upload">
-            <label for="file-input">
-                <img src="{{$logged_user -> pic_path}}" id="uploaded_image" width="300px" height="300px"/>
-            </label>
+        <div class="row">
+            <div class="col-md-12" style="margin: 10px 10px;">
+                <a href="/profile/user/<?php echo "$logged_user->id_user" ?>"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Torna al tuo profilo</a>
+            </div>
         </div>
-        <div class="container" style="width:700px;">
-            <br/>
-            <label>Select Image</label>
-            <input type="file" name="file" id="file"/>
-            <br/>
-            <span id="uploaded_image"></span>
-        </div>
-        <div id="image_view">
-          <img id="uploaded_image">
-        </div>
-        
-        <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Dettagli Utente</b></p>
-        <form name="modulo">
-            <p>Nome</p>
-            <p><input type="text" name="name" id="name" value="{{$logged_user -> name}}"></p>
-            <p>Cognome</p>
-            <p><input type="text" name="surname" id="surname" value="{{$logged_user -> surname}}"></p>
-            <p>Citta'</p>
-            <p><input type="text" name="citta" id="citta" value="{{$logged_user -> citta}}"></p>
-            <input type="button" id="bottone" value="Modifica">
-        </form>
-        <br>
-        <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Privacy</b></p>
-        <div class="radio">
-            <input type="radio" name="privacy" value="1" <?php if ($logged_user->profiloPubblico == 1) {
-                echo "checked";
-            }?>/> Private </br>
-            <input type="radio" name="privacy" value="0" <?php if ($logged_user->profiloPubblico == 0) {
-                echo "checked";
-            }?>/> Public </br>
-        </div>
+        <div style="width: 325px; margin: 0 auto;">
+            <!--caricamento immagine-->
+            <div class="image-upload">
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Cambia immagine</b></p>
+                <label for="file">
+                    <img src="{{$logged_user -> pic_path}}" id="uploaded_image" width="300px" height="300px"/>
+                </label>
+            </div>
+            <div class="container" style="width:400px; margin: 0 auto; padding: 0 70px;">
+                
+                <input type="file" name="file" id="file" style="display: none;" />
+                <br/>
+                <span id="uploaded_image"></span>
+            </div>
+            <div id="image_view" style="text-align: center;">
+              <img id="uploaded_image">
+            </div>
+            
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Dettagli Utente</b></p>
+            <form name="modulo">
+                <p>Nome:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="name" id="name" value="{{$logged_user -> name}}"></p>
+                <p>Cognome:&nbsp;&nbsp;<input type="text" name="surname" id="surname" value="{{$logged_user -> surname}}"></p>
+                <p>Citt&agrave;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="citta" id="citta" value="{{$logged_user -> citta}}"></p>
+                <div style="width: 80px; margin: 0 auto;">
+                    <input type="button" id="bottone" value="Modifica">
+                </div>
+            </form>
+            <br>
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Privacy</b></p>
+            <div class="radio">
+                <p style="font-size: 12px; color: #a9abad;">Impostando la privacy del tuo profilo, puoi decidere se gli utenti che non sono tuoi amici possono vedere i tuoi post.</p>
+                <input type="radio" name="privacy" value="1" <?php if ($logged_user->profiloPubblico == 1) {
+                    echo "checked";
+                }?>/> Privato &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="privacy" value="0" <?php if ($logged_user->profiloPubblico == 0) {
+                    echo "checked";
+                }?>/> Pubblico </br>
+            </div>
 
-        <br>
+            <br>
+            </div>
+            </div>
+
+            <br>
         </div>
-        </div><br>
-        <a href="/profile/user/<?php echo "$logged_user->id_user" ?>">Back</a>
     </article>
 
 
@@ -83,7 +91,8 @@
                     data: {name: name, surname: surname, citta: citta},
                     dataType: "json",
                     success: function (data) {
-                        console.log(data.message);
+                        //console.log(data.message);
+                        alert("I tuoi dati sono stati modificati!");
                     }
                 });
             });

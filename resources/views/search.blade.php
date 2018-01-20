@@ -18,23 +18,25 @@
     <br>
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
-        <!-- Utenti -->
-        <div class="panel panel-default" id="user">
-          <div class="panel-body">
-              <div class="row">
-                  <div class="col-md-10">
-                      <div class="media">
-                        <div class="media-left">
-                          <a id="link_img" href="#">
-                            <img id="user_pic" class="photo-profile" src="/assets/images/facebook3.jpeg" alt="..." style="border-radius: 50%;" width="40" height="40">
-                          </a>
-                          <a href="#" id="fullname" class="anchor-username"> &nbsp; Name Surname</a>
-                          <p></p>
-                          <p><small id="user-desc" class="text-info"></small> <small><i class="fa fa-birthday-cake text-info"></i></small></p>
+        <div class="pre-scrollable">
+          <!-- Utenti -->
+          <div class="panel panel-default" id="user">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="media">
+                          <div class="media-left">
+                            <a id="link_img" href="#">
+                              <img id="user_pic" class="photo-profile" src="/assets/images/facebook3.jpeg" alt="..." style="border-radius: 50%;" width="40" height="40">
+                            </a>
+                            <a href="#" id="fullname" class="anchor-username"> &nbsp; Name Surname</a>
+                            <p></p>
+                            <p><small id="user-desc" class="text-info"></small> <small><i class="fa fa-birthday-cake text-info"></i></small></p>
+                          </div>
                         </div>
-                      </div>
-                  </div>
-              </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
 
@@ -45,21 +47,23 @@
 
       </div>
       <div class="tab-pane fade" id="pills-page" role="tabpanel" aria-labelledby="pills-page-tab">
-        <!-- Pagine -->
-        <div class="panel panel-default" id="page">
-          <div class="panel-body">
-              <div class="row">
-                  <div class="col-md-10">
-                      <div class="media">
-                        <div class="media-left">
-                          <a id="link_img" href="#">
-                            <img id="page_pic" class="photo-profile" src="/assets/images/facebook3.jpeg" alt="..." style="border-radius: 50%;" width="40" height="40">
-                          </a>
-                          <a href="#" id="name" class="anchor-username"> &nbsp; Name</a>
+        <div class="pre-scrollable-page">
+          <!-- Pagine -->
+          <div class="panel panel-default" id="page">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="media">
+                          <div class="media-left">
+                            <a id="link_img" href="#">
+                              <img id="page_pic" class="photo-profile" src="/assets/images/facebook3.jpeg" alt="..." style="border-radius: 50%;" width="40" height="40">
+                            </a>
+                            <a href="#" id="name" class="anchor-username"> &nbsp; Name</a>
+                          </div>
                         </div>
-                      </div>
-                  </div>
-              </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
 
@@ -76,6 +80,19 @@
   </div>
 
 </div>
+
+ <style>
+    .pre-scrollable {
+        max-height: 670px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    .pre-scrollable-page {
+        max-height: 670px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
 
 <script>
 

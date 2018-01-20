@@ -40,7 +40,7 @@
         </div>
     </article>
 
-    <aside class="side">
+    <aside class="side" style="margin: 0 auto; height: 700px;">
         <div class="pre-scrollable">
             <div class="list-group" id="sidebar">
                 @foreach($messages as $m)
@@ -75,6 +75,9 @@
 
 
     <style>
+        #messageUser{
+            font-size: 15px;
+        }
         .form-rounded {
             border-radius: 1rem;
         }
