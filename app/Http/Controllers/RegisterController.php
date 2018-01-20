@@ -85,6 +85,7 @@ class RegisterController extends Controller
     Mail::to($user)->send(new ConfirmEmail($path));
 
     //invio messaggio di benvenuto
+    date_default_timezone_set('Europe/Rome');
     $welcomeMess = new Message();
     $welcomeMess->letto = false;
     $welcomeMess->content = 'Benvenuto su UniBook! Sono uno degli amministratori del sito, se hai bisogno di aiuto non esitare a contattarmi in futuro. Buon divertimento su UniBook!';

@@ -30,6 +30,7 @@
                                                     <div class="media-body">
                                                         <a href="#" id="post_u_name" class="anchor-username"><h4
                                                                     class="media-heading">User_name</h4></a>
+                                                        <!--<a><i style="color: blue;" class="fa fa-shield" aria-hidden="true"></i></a>-->
                                                         <a href="#" id="creation_date" class="anchor-time">time</a>
                                                     </div>
                                                 </div>
