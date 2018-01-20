@@ -105,7 +105,7 @@ function createcomment(comment){
   $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
   $comment_clone.find("#comm_pic_path").attr('src', comment.pic_path);
   if(comment.auth_surname != null){
-    $comment_clone.find("#comment_author").html('&nbsp;&nbsp;' + comment.auth_name + " " + comment.auth_surname);
+    $comment_clone.find("#comment_author").html(comment.auth_name + " " + comment.auth_surname);
     $comment_clone.find("#comment_author").attr('href', '/profile/user/' + comment.id_author);
   }
   else{
@@ -149,10 +149,10 @@ function createPost(data){
   $post_clone.find("#creation_date").text(getTimeDelta(data.created_at)).attr('href', '/post/details/' + data.id_post);
   $post_clone.find("#comment_insert").attr("id", "comment_insert_" + data.id_post);
   if(data.auth_surname != null){
-    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
+    $post_clone.find("#post_u_name").html(data.auth_name + " " + data.auth_surname).attr('href', '/profile/user/' + data.id_auth);
   }
   else{
-    $post_clone.find("#post_u_name").html("&nbsp;&nbsp;" + data.auth_name).attr('href', '/profile/page/' + data.id_auth);
+    $post_clone.find("#post_u_name").html(data.auth_name).attr('href', '/profile/page/' + data.id_auth);
   }
   $post_clone.find("#creation_date").attr("href", "/post/details/" + data.id_post);
   $post_clone.find("#post_pic_path").attr('src', data.pic_path);

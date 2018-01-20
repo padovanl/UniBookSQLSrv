@@ -27,7 +27,7 @@
                                                         </a>
                                                     </div>
                                                     <div >
-                                                        <a href="#" id="post_u_name" class="anchor-username"><h4
+                                                        &nbsp;&nbsp;<a href="#" id="post_u_name" class="anchor-username"><h4
                                                                     class="media-heading">User_name</h4></a>
                                                         <a href="#" id="creation_date" class="anchor-time">time</a>
                                                     </div>
@@ -72,7 +72,7 @@
                                                         </a>
                                                     </div>
                                                     <div>
-                                                        <a href="#" id="comment_author" class="anchor-username"><h4
+                                                        &nbsp;&nbsp;<a href="#" id="comment_author" class="anchor-username"><h4
                                                                     class="media-heading">Media heading</h4></a>
                                                         <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
                                                         <br>
