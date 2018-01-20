@@ -39,11 +39,34 @@ body {
     font-weight: bold;
 }
 
-/*-- Content Style --
+.comment_options{
+    display: flex;
+    flex-direction: row;
+}
+.comment_options a{
+    margin-right: 5px;
+}
+
+/*-- Content Style --*/
+.post-footer-option {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #EEEEEE;
+    border-top: 1px solid #EEEEEE;
+    color: #4285f4;;
+}
+
+.post-footer-option ul {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 20px;
+}
 .post-footer-option li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     float: left;
-    margin-right: 50px;
-    padding-bottom: 15px;
+    margin-right: 35px;
 }
 
 .post-footer-option li a {
@@ -66,8 +89,18 @@ body {
 }
 
 .post-footer-comment-wrapper {
-    background-color: #F6F7F8;
-}*/
+    /*background-color: #F6F7F8;*/
+}
+
+.post-body{
+    margin: 10px 10px;
+}
+
+.post_header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 .wrapper {
   font-family: 'Roboto';
@@ -266,7 +299,6 @@ nav ul {
     border: 1px;
     z-index: 2;
     margin-bottom: 14px;
-
     position: absolute;
     top: -50px;
     left: 50%;
@@ -440,5 +472,48 @@ nav ul {
 /*Post's list*/
 .main_posts_list {
     overflow-y: auto;
-    height: 70vh;
+    height: 71vh;
+}
+
+
+.main_posts_list{
+    /*max-width: 100px;*/
+}
+.container_post{
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.comment_text {
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.comment {
+    border: 1px solid #EEEEEE;
+    border-radius: 1rem;
+    background-color: #F5F5F5;
+}
+
+.load_altri_post {
+    text-align: center;
+}
+
+#reportModal button{
+    font-size: 15px;
+}
+#reportComment button{
+    font-size: 15px;
+}
+
+#reasonReportPost{
+    height: 35px;
+    font-size: 16px;
+}
+
+#reasonReportComment{
+    height: 35px;
+    font-size: 16px;
 }

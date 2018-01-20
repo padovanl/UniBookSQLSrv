@@ -104,10 +104,10 @@
 
         /* Darker chat container */
         .darker {
-            border-color: #ccc;
-            background-color: rgb(226, 225, 222);
+            border: 1px solid #EEEEEE;
+            border-radius: 1rem;
+            background-color: #F5F5F5;
         }
-
         /* Clear floats */
         .container::after {
             content: "";
@@ -141,6 +141,7 @@
         .time-left {
             float: left;
             color: #999;
+            font-size: 14px;
         }
     </style>
 

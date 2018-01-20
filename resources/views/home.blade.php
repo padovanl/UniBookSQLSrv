@@ -7,18 +7,17 @@
             <div><textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea></div>
             <div class="btn_post"><button onclick="newPost()" class="btn btn-lg btn-primary ">Post</button></div>
         </div>
-
         <div class="main_posts_list">
             <div class="well" style="display: none;"></div>
 
             <!--Pannello Post-->
-            <div class="container" id="post">
+            <div class="container_post" id="post">
 
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <section class="post-heading">
-                                    <div class="row">
-                                        <div class="col-md-10">
+                                    <div class="post_header">
+                                        <div class="">
                                             <div class="media">
                                                 <div class="media-left">
                                                     <a id="img_container" href="#">
@@ -27,18 +26,16 @@
                                                              style="border-radius: 50%;">
                                                         </a>
                                                     </div>
-                                                    <div class="media-body">
+                                                    <div >
                                                         <a href="#" id="post_u_name" class="anchor-username"><h4
                                                                     class="media-heading">User_name</h4></a>
-                                                        <!--<a><i style="color: blue;" class="fa fa-shield" aria-hidden="true"></i></a>-->
                                                         <a href="#" id="creation_date" class="anchor-time">time</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
-                                                <a id="reportingPost" href="#reportModal" data-toggle="modal"
-                                                   data-whatever="5" style="font-size: 15px;"><i
-                                                            class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                            <div >
+                                                <a id="reportingPost" href="#reportModal" data-toggle="modal" data-whatever="5" style="font-size: 15px;">
+                                                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
                                             </div>
 
                                         </div>
@@ -46,9 +43,10 @@
                                     <section class="post-body">
                                         <p id="post_content">content</p>
                                     </section>
+
+
                                     <section class="post-footer">
-                                        <hr>
-                                        <div class="post-footer-option container">
+                                        <div class="post-footer-option">
                                             <ul id="option_" class="list-unstyled">
                                                 <li>
                                                     <a>
@@ -73,15 +71,15 @@
                                                                  style="border-radius: 50%;">
                                                         </a>
                                                     </div>
-                                                    <div class="media-body">
+                                                    <div>
                                                         <a href="#" id="comment_author" class="anchor-username"><h4
                                                                     class="media-heading">Media heading</h4></a>
                                                         <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
                                                         <br>
                                                         <span id="comment_content"></span>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
+                                                    <div class="">
+                                                        <div class="comment_options">
                                                             <a><i onclick="reaction(this.id)" style="cursor:pointer;"
                                                                   id="likecomm"
                                                                   class="glyphicon glyphicon-thumbs-up"></i></a>
@@ -97,11 +95,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <hr>
 
                                             <div class="comment-form">
                                                 <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
-                                                          class="form-control form-rounded" placeholder="Add a comment.."
+                                                          class="form-control form-rounded comment_text" placeholder="Add a comment.."
                                                           type="text"></textarea>
                                             </div>
                                         </div>
@@ -113,12 +110,11 @@
 
                 </div> <!--/Panello post-->
 
-              <div style="text-align: center;">
-                  <button id="load_home" onclick="loadOlder(this.id)" type="button" class="btn btn-primary">Carica post più vecchi...</button>
+              <div class="load_altri_post">
+                  <button id="load_home" onclick="loadOlder(this.id)" type="button" class="button btn-default">Carica altri post...</button>
               </div>
 
         </div>
-
     </article>
 
 

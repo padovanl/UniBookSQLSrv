@@ -33,7 +33,18 @@
             width: 20%;
 
         }
+        .avatar-container img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 1px;
+            margin-bottom: 14px;
+            /*margin: auto;
+            right: 50px;*/
+        }
 
+        .content {
+            max-width: 900px;
         }
     </style>
 
@@ -43,8 +54,8 @@
       <nav class="main-nav">
           <div class="side-sec">
               <!-- Left Column -->
-              <div class="w3-display-container">
-                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+              <div class="avatar-container">
+                  <img src="{{$user->pic_path}}" alt="Avatar">
                   <div class="w3-display-bottomleft w3-container w3-text-black">
                       <h2>{{$user -> name . " " . $user -> surname}}</h2>
                   </div>
@@ -78,64 +89,58 @@
                   <br>
               </div>
           </div>
-          <br>
+
           <!-- End Left Column -->
       </nav>
-      <article class="content">
-          <!-- Right Column -->
-          <div class="padding pre-scrollable" style="max-height: 800px;">
-              <!-- content -->
-              <!-- main col right -->
-              <div class="well">
-                  <div>
-                      <h4>New Post</h4>
-                      <div class="form-group text-center"> <!--se non vi piace mettete quello di prima: input-group-->
-                          <textarea class="form-control input-lg" id="new_post_content" placeholder="Hey, What's Up?"
-                                    type="text"></textarea>
-                          <button onclick="newPost()" class="btn btn-lg btn-primary">Post</button>
-                      </div>
-                  </div>
-              </div>
-              <div class="insert_after_me"></div>
-              <!--Pannello Post-->
-              <div class="container" id="post">
-                  <div class="row">
-                      <div class="col-md-9" style="width: 1000px; margin: 0 auto;">
-                          <div class="panel panel-default">
-                              <div class="panel-body">
-                                  <section class="post-heading">
-                                      <div class="row">
-                                          <div class="col-md-10">
-                                              <div class="media">
-                                                  <div class="media-left">
-                                                      <a id="img_container" href="#">
-                                                          <img id="post_pic_path" class="media-object photo-profile"
-                                                               src="" width="40" height="40" alt="..."
-                                                               style="border-radius: 50%;">
-                                                      </a>
-                                                  </div>
-                                                  <div class="media-body">
-                                                      <a href="#" id="post_u_name" class="anchor-username"><h4
-                                                                  class="media-heading">User_name</h4></a>
-                                                      <a href="#" id="creation_date" class="anchor-time">time</a>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col-md-2">
-                                              <a id="reportingPost" href="#reportModal" data-toggle="modal"
-                                                 data-whatever="5" style="font-size: 15px;"><i
-                                                          class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
-                                          </div>
 
+
+      <article class="content">
+
+          <div class="new_post">
+              <div><textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea></div>
+              <div class="btn_post"><button onclick="newPost()" class="btn btn-lg btn-primary ">Post</button></div>
+          </div>
+          <div class="main_posts_list">
+              <div class="insert_after_me" style="display: none;"></div>
+
+              <!--Pannello Post-->
+              <div class="container_post" id="post">
+
+                  <div class="panel panel-default">
+                      <div class="panel-body">
+                          <section class="post-heading">
+                              <div class="post_header">
+                                  <div class="">
+                                      <div class="media">
+                                          <div class="media-left">
+                                              <a id="img_container" href="#">
+                                                  <img id="post_pic_path" class="media-object photo-profile"
+                                                       src="" width="40" height="40" alt="..."
+                                                       style="border-radius: 50%;">
+                                              </a>
+                                          </div>
+                                          <div class="">
+                                              <a href="#" id="post_u_name" class="anchor-username"><h4
+                                                          class="media-heading">User_name</h4></a>
+                                              <a href="#" id="creation_date" class="anchor-time">time</a>
+                                          </div>
                                       </div>
-                                  </section>
+                                  </div>
+                                  <div >
+                                      <a id="reportingPost" href="#reportModal" data-toggle="modal" data-whatever="5" style="font-size: 15px;">
+                                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Segnala</a>
+                                  </div>
+
+                              </div>
+                          </section>
+
+
                                   <section class="post-body">
                                       <p id="post_content">content</p>
                                   </section>
 
                                   <section class="post-footer">
-                                      <hr>
-                                      <div class="post-footer-option container">
+                                      <div class="post-footer-option">
                                           <ul id="option_" class="list-unstyled">
                                               <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
                                                         class="glyphicon glyphicon-thumbs-up"></i></a></li>
@@ -156,7 +161,7 @@
                                                                style="border-radius: 50%;">
                                                       </a>
                                                   </div>
-                                                  <div class="media-body">
+                                                  <div class="">
                                                       <a href="#" id="comment_author" class="anchor-username"><h4
                                                                   class="media-heading">Media heading</h4></a>
                                                       <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
@@ -180,7 +185,6 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <hr>
 
                                           <div class="comment-form">
                                               <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
@@ -191,29 +195,26 @@
                                   </section>
                               </div>
                           </div>
+
+
+
+                      </div> <!--/Panello post-->
+
+                      <div class="load_altri_post">
+                          <button id="load_home" onclick="loadOlder(this.id)" type="button" class="button btn-default">Carica altri post...</button>
                       </div>
+
                   </div>
-
-              </div>
-
-          </div><!-- /padding -->
-
-          <div class="row">
-              <div class="col-md-12" style="text-align:center;">
-                  <button id="load" onclick="loadOlder()" type="button" class="button btn-primary"
-                          style="border-radius: 5px;">Carica post più vecchi...
-                  </button>
-              </div>
-          </div>
-          <!-- End Right Column -->
       </article>
+
+
     @break
     @case(1)
       <!--sono nel profilo di un altro utente non mio amico con profilo privato-->
       <nav class="main-nav">
           <div class="side-sec">
               <!-- Left Column -->
-              <div class="w3-display-container">
+              <div class="avatar-container">
                   <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
                   <div class="w3-display-bottomleft w3-container w3-text-black">
                       <h2>{{$user -> name . " " . $user -> surname}}</h2>
@@ -227,15 +228,15 @@
               @else
                 @if($check_friend == 0)
                   <div class="w3-container">
-                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta
-                          </button>
+                      <p>
+                          <i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="1" class="submit-btn">Invia Richiesta</button>
                       </p>
                 @else
                   <div class="w3-container">
-                      <p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta
-                          </button>
+                      <p>
+                          <i class="fa fa-user-circle-o fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                          <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn">Cancella Richiesta</button>
                       </p>
                 @endif
               @endif
@@ -259,7 +260,7 @@
           <div class="side-sec">
               <!-- Left Column -->
               <div class="w3-display-container">
-                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+                  <img src="{{$user->pic_path}}" alt="Avatar">
                   <div class="w3-display-bottomleft w3-container w3-text-black">
                       <h2>{{$user -> name . " " . $user -> surname}}</h2>
                   </div>
@@ -334,7 +335,7 @@
                                                                style="border-radius: 50%;">
                                                       </a>
                                                   </div>
-                                                  <div class="media-body">
+                                                  <div class="">
                                                       <a href="#" id="post_u_name" class="anchor-username"><h4
                                                                   class="media-heading">User_name</h4></a>
                                                       <a href="#" id="creation_date" class="anchor-time">time</a>
@@ -354,7 +355,6 @@
                                   </section>
 
                                   <section class="post-footer">
-                                      <hr>
                                       <div class="post-footer-option container">
                                           <ul id="option_" class="list-unstyled">
                                               <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
@@ -376,7 +376,7 @@
                                                                style="border-radius: 50%;">
                                                       </a>
                                                   </div>
-                                                  <div class="media-body">
+                                                  <div class="">
                                                       <a href="#" id="comment_author" class="anchor-username"><h4
                                                                   class="media-heading">Media heading</h4></a>
                                                       <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
@@ -400,7 +400,6 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <hr>
                                       </div>
                                   </section>
                               </div>
@@ -427,8 +426,8 @@
       <nav class="main-nav">
           <div class="side-sec">
               <!-- Left Column -->
-              <div class="w3-display-container">
-                  <img src="{{$user->pic_path}}" style="width:100%" alt="Avatar">
+              <div class="avatar-container">
+                  <img src="{{$user->pic_path}}"  alt="Avatar">
                   <div class="w3-display-bottomleft w3-container w3-text-black">
                       <h2>{{$user -> name . " " . $user -> surname}}</h2>
                   </div>
@@ -496,7 +495,7 @@
                                                                style="border-radius: 50%;">
                                                       </a>
                                                   </div>
-                                                  <div class="media-body">
+                                                  <div class="">
                                                       <a href="#" id="post_u_name" class="anchor-username"><h4
                                                                   class="media-heading">User_name</h4></a>
                                                       <a href="#" id="creation_date" class="anchor-time">time</a>
@@ -516,7 +515,6 @@
                                   </section>
 
                                   <section class="post-footer">
-                                      <hr>
                                       <div class="post-footer-option container">
                                           <ul id="option_" class="list-unstyled">
                                               <li><a><i onclick="reaction(this.id)" style="cursor:pointer; " id="like"
@@ -538,7 +536,7 @@
                                                                style="border-radius: 50%;">
                                                       </a>
                                                   </div>
-                                                  <div class="media-body">
+                                                  <div class="">
                                                       <a href="#" id="comment_author" class="anchor-username"><h4
                                                                   class="media-heading">Media heading</h4></a>
                                                       <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
@@ -562,7 +560,6 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <hr>
 
                                           <div class="comment-form">
                                               <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
@@ -597,7 +594,7 @@
           <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h5 class="modal-title" id="titleReportComment">Nuovo messaggio</h5>
+                      <h5 class="modal-title" id="titleReportComment">Invia messaggio</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
