@@ -64,22 +64,25 @@
                                     </div>
                                     <div class="post-footer-comment-wrapper">
                                         <div id="comment_panel" class="comment">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <a href="#">
-                                                        <img id="comm_pic_path" class="media-object photo-profile"
-                                                             src="" width="32" height="32" alt="..."
-                                                             style="border-radius: 50%;">
-                                                    </a>
+                                            <div class="cooment_media">
+                                                <div class="cooment_media_left">
+
+                                                    <div class="media-left">
+                                                        <a href="#">
+                                                            <img id="comm_pic_path" class="media-object photo-profile"
+                                                                 src="" width="32" height="32" alt="..."
+                                                                 style="border-radius: 50%;">
+                                                        </a>
+                                                    </div>
+                                                    <div class="comment_div">
+                                                        <a href="#" id="comment_author" class="anchor-username"><h4
+                                                                    class="media-heading">Media heading</h4></a>
+                                                        <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
+                                                        <br>
+                                                        <span id="comment_content"></span>
+                                                    </div>
                                                 </div>
                                                 <div>
-                                                    <a href="#" id="comment_author" class="anchor-username"><h4
-                                                                class="media-heading">Media heading</h4></a>
-                                                    <a href="#" id="comment_created_at" class="anchor-time">51 mins</a>
-                                                    <br>
-                                                    <span id="comment_content"></span>
-                                                </div>
-                                                <div class="">
                                                     <div class="comment_options">
                                                         <a><i onclick="reaction(this.id)" style="cursor:pointer;"
                                                               id="likecomm"

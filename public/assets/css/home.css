@@ -547,3 +547,29 @@ nav ul {
     box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
 
 }
+
+.cooment_media{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.cooment_media_left{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.comment_div span{
+    font-size: 15px;
+}
+
+.img_friends {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+#messageUserModal textarea{
+    font-size: 16px;
+}
