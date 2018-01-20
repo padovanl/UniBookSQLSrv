@@ -35,7 +35,7 @@ Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
 //Ricerca
-Route::get('/search/{search_term}',   'SearchController@search');
+Route::get('/search',   			  'SearchController@search');
 Route::get('/searchPages',            'SearchController@searchPage');
 Route::get('/searchUsers',            'SearchController@searchUsers');
 

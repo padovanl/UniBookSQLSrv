@@ -38,7 +38,7 @@
               <input type="text" name="search" id="searchtext"/>
             </div><!-- Space hack -->
             <div class="submit">
-              <button type="submit" id="search" name="go_search" onclick="window.location='/search/' + document.getElementById('searchtext').value">
+              <button type="submit" id="search" name="go_search" onclick="window.location='/search?search_term=' + encodeURI(document.getElementById('searchtext').value)">
                 <span class="fa fa-search"></span>
               </button>
             </div>

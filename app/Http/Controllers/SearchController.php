@@ -29,9 +29,14 @@ class SearchController extends Controller{
     }
   }
 
-  public function search($search_term){
+  public function search(Request $request) {
 
-    if($this->verify_cookie()){
+    if ($request->has("search_term") && $request->input("search_term") != "")
+      $search_term = $request->input("search_term");
+    else
+      return "Inserisci un parametro di ricerca!";
+
+    if ($this->verify_cookie()) {
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $userprofile = User::where('id_user', request('id'))->first();
 
@@ -40,6 +45,7 @@ class SearchController extends Controller{
     else
       return view('login');
   }
+
 
   public function searchPage(Request $request) {
 
