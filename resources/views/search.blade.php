@@ -91,7 +91,7 @@ function createUser(data) {
   user_clone = $("#user").clone();
 
   user_clone.attr("id", "user_" + data.id_user);
-  user_clone.find("#user_pic").attr("src", "/" + data.pic_path);
+  user_clone.find("#user_pic").attr("src", (data.pic_path[0] == "/" ? "" : "/") + data.pic_path);
   user_clone.find("#link_img").attr("href", "/profile/user/" + data.id_user);
   user_clone.find("#fullname").html(" &nbsp; " + data.name + " " + data.surname);
   user_clone.find("#fullname").attr("href", "/profile/user/" + data.id_user);
@@ -115,7 +115,7 @@ function createPage(data) {
   page_clone = $("#page").clone();
 
   page_clone.attr("id", "page_" + data.id_page);
-  page_clone.find("#page_pic").attr("src", "/" + data.pic_path);
+  page_clone.find("#page_pic").attr("src", (data.pic_path[0] == "/" ? "" : "/") + data.pic_path);
   page_clone.find("#link_img").attr("href", "/profile/page/" + data.id_page);
   page_clone.find("#name").html(" &nbsp; " + data.name);
   page_clone.find("#name").attr("href", "/profile/page/" + data.id_page);
@@ -150,10 +150,14 @@ function onLoad(data, type) {
 
   }
   else {
-    $("#more_user").hide();
-    $("#more_page").hide();
-    $("#no_results").show();
-    $("#no_results_page").show();
+    if (type == "user") {
+      $("#more_user").hide();
+      $("#no_results").show();
+    }
+    else {
+      $("#more_page").hide();
+      $("#no_results_page").show();
+    }
   }
 
 }
