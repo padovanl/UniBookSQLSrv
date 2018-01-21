@@ -79,7 +79,7 @@ class PageController extends Controller
                 $page_image = '/assets/img/profilo.png';
             }else{
                 $page_image = '/assets/images/' . $pageId . $ext;
-                $file->move($page_image);
+                $file->move('assets/images/', $pageId . $ext);
             }
 
             Page::where('id_page', '=', $pageId)->update(['pic_path' =>  $page_image]);

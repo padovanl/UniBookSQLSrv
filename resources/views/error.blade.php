@@ -1,8 +1,9 @@
 
 <html>
 <head>
-<title>JoeTech.com - 404! -</title>
+<title>UniBook - 404! -</title>
 <link rel="image_src" href="http://www.joetech.com/logo_normal.gif" />
+<link rel="icon" href="/assets/img/icon2.png">
 <style type="text/css">
 body {
     background:#0000aa;
@@ -50,7 +51,7 @@ a,a:hover {
 <div id="wrapper">
 <span class="neg">UNIBOOK</span>
 <p>
-Volevi fare il furbo e provare a vedere se commettavamo un errore così stupido?
+Volevi fare il furbo e provare a vedere se commettevamo un errore così stupido?
 </p>
 <p>
 <br />
