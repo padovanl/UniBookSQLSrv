@@ -7,6 +7,7 @@
             <div><textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea></div>
             <div class="btn_post"><button onclick="newPost()" class="btn btn-lg btn-primary ">Post</button></div>
         </div>
+
         <div class="main_posts_list">
             <div class="well" style="display: none;"></div>
 

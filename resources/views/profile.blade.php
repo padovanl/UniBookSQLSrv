@@ -33,15 +33,7 @@
             width: 20%;
 
         }
-        .avatar-container img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 1px;
-            margin-bottom: 14px;
-            /*margin: auto;
-            right: 50px;*/
-        }
+
 
         .content {
             max-width: 900px;
@@ -196,7 +188,7 @@
 
                                   <div class="comment-form">
                                                 <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
-                                                          class="form-control form-rounded comment_text" placeholder="Add a comment.."
+                                                          class="form-control form-rounded comment_text" placeholder="Aggiungi un commento.."
                                                           type="text"></textarea>
                                   </div>
                               </div>
@@ -406,7 +398,7 @@
 
                                 <div class="comment-form">
                                                 <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
-                                                          class="form-control form-rounded comment_text" placeholder="Add a comment.."
+                                                          class="form-control form-rounded comment_text" placeholder="Aggiungi commento.."
                                                           type="text"></textarea>
                                 </div>
                             </div>

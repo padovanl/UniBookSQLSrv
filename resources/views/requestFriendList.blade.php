@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <article>
+    <article class="content">
         <div class="container-full">
             <br/>
             <div class="row">
@@ -10,29 +10,30 @@
                 <div class="col-md-10" id="requestContainer">
                     @if(count($requestList) > 0)
                         @foreach($requestList as $r)
-                            <div id="{{$r->id_request}}" class="row"
-                                 style="border-style: solid; border-width: 1px; border-color: #008CBA; border-radius: 25px; padding: 10px;">
-                                <div class="col-md-1">
-                                    <img src="{{$r->user->pic_path}}" height="55px" width="55px"
-                                         style="border-radius: 50%;">
+                            <div id="{{$r->id_request}}" class="friend_index">
+                                <div class="req_index">
+                                <div>
+                                    <img class="img_friends" src="{{$r->user->pic_path}}">
                                 </div>
-                                <div class="col-md-9" style="display: flex; align-items: center;">
+                                <div class="page_index_name">
                                     <p>{{$r->content}}</p>
                                 </div>
-                                <div class="col-md-2">
-                                    <button class="buttonPersonal"
+                                </div>
+                                <div class="acc_buttons">
+                                    <button class="buttonPersonal button_acc btn-primary"
                                             onclick="accetta({{$r->id_request}}, '{{$r->id_request_user}}')"><i
                                                 class="fa fa-check" aria-hidden="true"></i></button>
-                                    <button class="buttonPersonalRed"
+                                    <button class="buttonPersonalRed button_acc btn-default"
                                             onclick="rifiuta({{$r->id_request}}, '{{$r->id_request_user}}')"><i
                                                 class="fa fa-times" aria-hidden="true"></i></button>
                                 </div>
                             </div>
                             <br id='br{{$r->id_request}}'/>
                         @endforeach
+
                     @else
-                        <div class="alert alert-success" role="alert" style="text-align: center;">
-                            <strong>Al momento non hai nessuna richiesta di amicizia in sospeso</strong>
+                        <div class="page_alert" role="alert" >
+                            <strong>Nessuna richiesta di amicizia in sospeso</strong>
                         </div>
                     @endif
                 </div>
@@ -41,47 +42,7 @@
         </div>
     </article>
 
-    <aside class="side">
 
-    </aside>
-
-    <style>
-        .buttonPersonal {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .buttonPersonalRed {
-            background-color: #f44336;
-            border: none;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .buttonPersonal:hover {
-            background-color: #1C8C21;
-        }
-
-        .buttonPersonalRed:hover {
-            background-color: #CB3125;
-        }
-    </style>
     <script>
         function accetta(id_request, id_request_user) {
             $.ajax({
@@ -95,8 +56,8 @@
                 $('#br' + id_request).remove();
                 if (totRichieste == 0) {
                     var html = '';
-                    html += '<div class="alert alert-success" role="alert" style="text-align: center;">';
-                    html += ' <strong>Al momento non hai nessuna richiesta di amicizia in sospeso</strong>';
+                    html += '<div class="page_alert" role="alert" >';
+                    html += '<strong>Nessuna richiesta di amicizia in sospeso</strong>';
                     html += '</div>';
                     $('#requestContainer').html(html);
                 }
@@ -119,8 +80,8 @@
                 $('#br' + id_request).remove();
                 if (totRichieste == 0) {
                     var html = '';
-                    html += '<div class="alert alert-success" role="alert" style="text-align: center;">';
-                    html += ' <strong>Al momento non hai nessuna richiesta di amicizia in sospeso</strong>';
+                    html += '<div class="page_alert" role="alert" >';
+                    html += '<strong>Nessuna richiesta di amicizia in sospeso</strong>';
                     html += '</div>';
                     $('#requestContainer').html(html);
                 }

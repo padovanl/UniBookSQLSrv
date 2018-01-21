@@ -31,7 +31,7 @@
                             </a>
                             <a href="#" id="fullname" class="anchor-username"> &nbsp; Name Surname</a>
                             <p></p>
-                            <p><small id="user-desc" class="text-info"></small> <small><i class="fa fa-birthday-cake text-info"></i></small></p>
+                            <p><small id="user-desc" ></small> <small><i class="fa fa-birthday-cake"></i></small></p>
                           </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
         </div>
 
         <center>
-          <button id="more_user" class="btn btn-primary" style="border-radius: 2em;" OnClick="loadOlderUser();">Carica altri utenti</button>
+          <button id="more_user" class="button btn-primary" style="border-radius: 2em;" OnClick="loadOlderUser();">Carica altri utenti</button>
           <p id="no_results">Non sono stati trovati utenti con <b class="text-primary">"<?= $search_term; ?>"</b>.</p>
         </center>
 
@@ -68,7 +68,7 @@
         </div>
 
         <center>
-          <button id="more_page" class="btn btn-primary" style="border-radius: 2em;" OnClick="loadOlderPage();">Carica altre pagine</button>
+          <button id="more_page" class="button btn-primary" style="border-radius: 2em;" OnClick="loadOlderPage();">Carica altre pagine</button>
           <p id="no_results_page">Non sono state trovate pagine con <b class="text-primary">"<?= $search_term; ?>"</b>.</p>
         </center>
       </div>
