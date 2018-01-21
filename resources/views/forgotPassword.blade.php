@@ -13,7 +13,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
     <script src="https://use.fontawesome.com/1e803d693b.js"></script>
-
+    <link rel="icon" href="/assets/img/icon2.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
@@ -68,7 +68,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="lg-btn">
-                    <a class="btn button" role="button" id="btnToHome" onclick="window.location='/'">Ritorna alla pagina
+                    <a class="btn button" role="button" id="btnToHome" onclick="window.location='/'">Torna alla pagina
                         di login</a>
                 </div>
             </div>
