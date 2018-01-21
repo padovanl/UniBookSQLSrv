@@ -132,6 +132,14 @@
             $('#btnSendEmail').attr('disabled', 'true');
     });
 
+    $('#email').change(function () {
+        var email = $('#email').val();
+        if (email != '' && validateEmail(email))
+            $('#btnSendEmail').removeAttr('disabled');
+        else
+            $('#btnSendEmail').attr('disabled', 'true');
+    });
+
     function validateEmail(email) {
         return true;
     }
