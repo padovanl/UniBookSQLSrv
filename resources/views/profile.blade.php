@@ -75,7 +75,7 @@
                   <!--Settings-->
                   <p class="w3-large w3-text-theme">
                       <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>
-                          <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Settings</a>
+                          <a href="/profile/user/<?php echo "$logged_user->id_user" ?>/settings">Impostazioni</a>
                       </b>
                   </p>
                   <br>
