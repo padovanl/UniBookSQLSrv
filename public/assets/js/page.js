@@ -1,16 +1,16 @@
 function stopFollow(id_page, id_user) {
+  console.log(id_page,' ', id_user)
   $.ajax({
     dataType: 'json',
     type: 'POST',
     url: '/profile/page/stopFollow',
-    data: { id_page: id_page, id_user: id_user }
+    data: { id_page: parseInt(id_page), id_user: id_user }
   }).done(function (data) {
     $('#stopFollowP').remove();
-    var html = '<p id="followP" style="text-align: center; color: blue;"><a style="cursor: pointer; font-size: 20px;" onclick="follow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: blue;" id="follow" class="glyphicon glyphicon-thumbs-up"></i>&nbsp;Segui</a></p>';
-    $('#divFollowPage').html(html);
+    var html = '<p id="followP"><a onclick="follow( \'' + id_page + '\' ,\''+ id_user + '\')"><i id="follow" class="glyphicon glyphicon-thumbs-up"></i> Segui</a></p>';
+    $('#piace_ono').html(html);
 
-    var t = $('#totFollowers');
-    $('#totFollowers').html('<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>');
+    $('#num_followers').text(data.tot_followers);
   });
 
 
@@ -18,20 +18,22 @@ function stopFollow(id_page, id_user) {
 }
 
 function follow(id_page, id_user) {
+  console.log(id_page,' ', id_user)
   $.ajax({
     dataType: 'json',
     type: 'POST',
     url: '/profile/page/follow',
-    data: { id_page: id_page, id_user: id_user }
+    data: { id_page: parseInt(id_page), id_user: id_user }
   }).done(function (data) {
     $('#followP').remove();
-    var html = ' <p id="stopFollowP" style="text-align: center; color: red;"><a style="cursor: pointer; font-size: 20px;" onclick="stopFollow({{$page->id_page}}, \'{{$logged_user->id_user}}\')"><i style="cursor:pointer; color: red;" id="follow" class="glyphicon glyphicon-thumbs-down"></i>&nbsp;Smetti di seguire la pagina</a></p>';
-    $('#divFollowPage').html(html);
+    var html = ' <p id="stopFollowP"><a onclick="stopFollow( \'' + id_page + '\' ,\''+ id_user + '\')"><i id="follow" class="glyphicon glyphicon-thumbs-down"></i>Smetti di seguire la pagina</a></p>';
+    $('#piace_ono').html(html);
 
-    var t = $('#totFollowers');
-    $('#totFollowers').html('<p style="text-align: center; color: blue; font-size: 20px;"><i style="color: blue;" id="like" class="glyphicon glyphicon-user"></i>&nbsp;' + data.tot_followers + ' persone seguono questa pagina</p>');
+    $('#num_followers').text(data.tot_followers);
   });
 }
+
+
 
 function InvitaAmici(id_page) {
   $.ajax({

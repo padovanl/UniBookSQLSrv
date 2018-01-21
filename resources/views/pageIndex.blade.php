@@ -1,38 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <article>
+    <article class="content">
         <div class="container-full">
             <br/>
-            <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-10" id="pageContainer">
+            <div class="container_pages">
+                <div id="pageContainer">
                     @if(count($userspages) > 0)
                         @foreach($userspages as $u)
                             <a href="/profile/page/{{$u->id_page}}">
-                                <div id="{{$u->id_page}}" class="row"
-                                     style="border-style: solid; border-width: 1px; border-color: #008CBA; border-radius: 25px; padding: 10px;">
-                                    <div class="col-md-1">
-                                        <img src="{{$u->pic_path}}" height="55px" width="55px"
-                                             style="border-radius: 50%;">
+
+                                <div class="page_index" id="{{$u->id_page}}" >
+                                    <div >
+                                        <img class="img_friends" src="{{$u->pic_path}}">
                                     </div>
-                                    <div class="col-md-9" style="display: flex; align-items: center;">
+                                    <div class="page_index_name">
                                         <p>{{$u->name}}</p>
-                                    </div>
-                                    <div class="col-md-2">
                                     </div>
                                 </div>
                                 <br id='br{{$u->id_page}}'/>
+
                             </a>
                         @endforeach
                     @else
-                        <div class="alert alert-success" role="alert" style="text-align: center;">
+                        <div class="page_alert" role="alert" >
                             <strong>Al momento non hai nessuna pagina.</strong>
                         </div>
                     @endif
-                    <div style="text-align: center;">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPageModal">
-                            Crea una nuova pagina
+                    <div>
+                        <button type="button" class="button btn-primary" data-toggle="modal" data-target="#newPageModal">
+                            Crea pagina
                         </button>
                     </div>
                 </div>
@@ -67,7 +64,7 @@
                             <label for="profilePic" class="col-sm-5 col-form-label">Immagine della pagina:</label>
                             <div class="image-upload">
                                 <label for="image">
-                                    <img src="../../assets/img/profilo.png" id="profilePic" width="250px"
+                                    <img src="/assets/img/profilo.png" id="profilePic" width="250px"
                                          height="250px"/>
                                 </label>
 
@@ -77,8 +74,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div>
+                            <div class="modal_buttons">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
                                 <button type="submit" class="btn btn-primary" id="btnCreatePage">Crea</button>
                             </div>

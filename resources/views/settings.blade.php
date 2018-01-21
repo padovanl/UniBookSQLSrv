@@ -3,10 +3,7 @@
 @section('content')
 
     <style>
-        .w3-teal, .w3-hover-teal:hover {
-            color: #fff !important;
-            background-color: #4285f4 !important;
-        }
+
 
         .w3-text-teal, .w3-hover-text-teal:hover {
             color: #4285f4 !important;
@@ -24,42 +21,53 @@
     </style>
 
     <article class="content">
-        <div class="row">
-            <div class="col-md-12" style="margin: 10px 10px;">
-                <a href="/profile/user/<?php echo "$logged_user->id_user" ?>"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Torna al tuo profilo</a>
+        <div>
+            <div class="back_to_profile">
+                <a href="/profile/user/<?php echo "$logged_user->id_user" ?>">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>TORNA AL PROFILO</a>
             </div>
         </div>
-        <div style="width: 325px; margin: 0 auto;">
+        <div class="info_user">
+            <div>
             <!--caricamento immagine-->
             <div class="image-upload">
-            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Cambia immagine</b></p>
+                <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Cambia immagine</b>
+                </p>
+                <div class="mod_image">
                 <label for="file">
                     <img src="{{$logged_user -> pic_path}}" id="uploaded_image" width="300px" height="300px"/>
                 </label>
+                </div>
             </div>
             <div class="container" style="width:400px; margin: 0 auto; padding: 0 70px;">
-                
-                <input type="file" name="file" id="file" style="display: none;" />
+
+                <input type="file" name="file" id="file" style="display: none;"/>
                 <br/>
                 <span id="uploaded_image"></span>
             </div>
             <div id="image_view" style="text-align: center;">
-              <img id="uploaded_image">
+                <img id="uploaded_image">
             </div>
-            
-            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Dettagli Utente</b></p>
+
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Dettagli Utente</b>
+            </p>
+
             <form name="modulo">
-                <p>Nome:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="name" id="name" value="{{$logged_user -> name}}"></p>
-                <p>Cognome:&nbsp;&nbsp;<input type="text" name="surname" id="surname" value="{{$logged_user -> surname}}"></p>
-                <p>Citt&agrave;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="citta" id="citta" value="{{$logged_user -> citta}}"></p>
-                <div style="width: 80px; margin: 0 auto;">
-                    <input type="button" id="bottone" value="Modifica">
+                <p>Nome: <input class="form-control" type="text" name="name" id="name" value="{{$logged_user -> name}}">
+                </p>
+                <p>Cognome: <input class="form-control" type="text" name="surname" id="surname"
+                                   value="{{$logged_user -> surname}}"></p>
+                <p>Citt&agrave: <input class="form-control" type="text" name="citta" id="citta"
+                                       value="{{$logged_user -> citta}}"></p>
+                <div>
+                    <input type="button" class="button" id="bottone" value="Modifica">
                 </div>
             </form>
             <br>
             <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Privacy</b></p>
             <div class="radio">
-                <p style="font-size: 12px; color: #a9abad;">Impostando la privacy del tuo profilo, puoi decidere se gli utenti che non sono tuoi amici possono vedere i tuoi post.</p>
+                <p style="font-size: 12px; color: #a9abad;">Impostando la privacy del tuo profilo, puoi decidere se gli
+                    utenti che non sono tuoi amici possono vedere i tuoi post.</p>
                 <input type="radio" name="privacy" value="1" <?php if ($logged_user->profiloPubblico == 1) {
                     echo "checked";
                 }?>/> Privato &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -70,10 +78,9 @@
 
             <br>
             </div>
-            </div>
-
-            <br>
         </div>
+
+        <br>
     </article>
 
 
