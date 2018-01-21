@@ -435,7 +435,7 @@
                 </div>
               @else
                   <p>
-                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn valore btn btn-round color-1 material-design">Cancella Richiesta</button>
+                      <button type="button" onclick='AddFriend(this.value)' value="0" class="submit-btn valore btn btn-round color-1 material-design">Cancella amicizia</button>
                   </p>
                   <p>
                       <button class="btn btn-border btn-round color-1 material-design" cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Invia messaggio</button>
