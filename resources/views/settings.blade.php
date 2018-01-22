@@ -149,10 +149,12 @@
                         cache: false,
                         processData: false,
                         beforeSend: function () {
+                    	    $('#uploaded_image').hide(1);
                             $('#uploaded_image').html("<label class='text-success'>Image Uploading...</label>");
                         },
                         success: function (data) {
                             $('#uploaded_image').html(data);
+                            $('#uploaded_image').show();
                             location.reload();
 
                         }
