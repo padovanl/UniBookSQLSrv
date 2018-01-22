@@ -285,7 +285,7 @@
                   </p>
                   <hr>
                   <!--grid images friends-->
-                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Amici</b></p>
                   <div class="rowI">
                       <div class="columnI">
                           @foreach($friends_array as $array)
@@ -449,7 +449,7 @@
                   </p>
                   <hr>
                   <!--grid images friends-->
-                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Amici</b></p>
                   <div class="rowI">
                       <div class="columnI">
                           @foreach($friends_array as $array)
