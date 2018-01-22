@@ -35,7 +35,7 @@
       <h3><span class="badge badge-primary">Andrei Jizdan</span></h3>
     </div>
     <div class="col-md-6" style="text-align: center;">
-      <img src="/assets/team/Angelo_Viro.jpg" style="border-radius: 50%;" width="250px" class="mx-auto d-block" height="250px" />
+      <img src="/assets/team/Angelo_Viro.jpg" style="border-radius: 50%; image-orientation: 90deg;" width="250px" class="mx-auto d-block" height="250px" />
       <h3><span class="badge badge-primary">Angelo Viro</span></h3>     
     </div>
   </div>
