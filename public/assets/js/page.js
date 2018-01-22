@@ -60,5 +60,22 @@ function readURL(input) {
 
       reader.readAsDataURL(input.files[0]);
       $('#btnChange').removeAttr('disabled');
+
+      showFileSize();
   }
+}
+
+
+function showFileSize() {
+    var input, file;
+    input = document.getElementById('image');
+    file = input.files[0]; console.log(file);
+    var filesizeMb = file.size/1024/1024;
+    if(filesizeMb >= 2.0){
+        alert('La dimensione dell\'immagine del profilo non deve superare i 2MB');
+        $('#btnChange').prop('disabled', true);
+    }
+    else{
+        $('#btnChange').prop('disabled', false);
+    }
 }

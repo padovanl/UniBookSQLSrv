@@ -147,7 +147,23 @@
                 };
 
                 reader.readAsDataURL(input.files[0]);
+
+                showFileSize();
             }
+        }
+
+        function showFileSize() {
+            var input, file;
+            input = document.getElementById('image');
+                file = input.files[0]; console.log(file);
+                var filesizeMb = file.size/1024/1024;
+                if(filesizeMb >= 2.0){
+                    alert('La dimensione dell\'immagine del profilo non deve superare i 2MB');
+                    $('#btnCreatePage').prop('disabled', true);
+                }
+                else{
+                    $('#btnCreatePage').prop('disabled', false);
+                }
         }
 
     </script>
