@@ -4,7 +4,7 @@
     <article class="content">
 
         <div class="new_post">
-            <div><textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea></div>
+            <div><textarea class="post_text" id="new_post_content" placeholder="Hey, che succede?" type="text"></textarea></div>
             <div class="btn_post"><button onclick="newPost()" class="btn btn-lg btn-primary ">Post</button></div>
         </div>
 
@@ -103,7 +103,7 @@
 
                                         <div class="comment-form">
                                                 <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
-                                                          class="form-control form-rounded comment_text" placeholder="Add a comment.."
+                                                          class="form-control form-rounded comment_text" placeholder="Aggiungi un commento.."
                                                           type="text"></textarea>
                                         </div>
                                     </div>

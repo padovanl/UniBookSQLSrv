@@ -61,7 +61,7 @@
                   </p>
                   <hr>
                   <!--grid images friends-->
-                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Friends</b></p>
+                  <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Amici</b></p>
                   <div class="rowI">
                       <div class="columnI">
                           @foreach($friends_array as $array)
@@ -89,7 +89,7 @@
       <article class="content">
 
           <div class="new_post">
-              <div><textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea></div>
+              <div><textarea class="post_text" id="new_post_content" placeholder="Hey, che succede?" type="text"></textarea></div>
               <div class="btn_post"><button onclick="newPost()" class="btn btn-lg btn-primary ">Post</button></div>
           </div>
           <div class="main_posts_list">
@@ -562,7 +562,7 @@
 
                                 <div class="comment-form">
                                                 <textarea onkeypress="newComment(event, this.id)" id="comment_insert"
-                                                          class="form-control form-rounded comment_text" placeholder="Add a comment.."
+                                                          class="form-control form-rounded comment_text" placeholder="Aggiungi un commento.."
                                                           type="text"></textarea>
                                 </div>
                             </div>

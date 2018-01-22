@@ -58,7 +58,7 @@
   <article class="content">
       @if ($logged_user->id_user == $page->id_user)
           <div class="new_post">
-              <div><textarea class="post_text" id="new_post_content" placeholder="Hey, What's Up?" type="text"></textarea></div>
+              <div><textarea class="post_text" id="new_post_content" placeholder="Hey, che succede?" type="text"></textarea></div>
               <div class="btn_post"><button onclick="newPost()" class="btn btn-lg btn-primary ">Post</button></div>
           </div>
       @endif
