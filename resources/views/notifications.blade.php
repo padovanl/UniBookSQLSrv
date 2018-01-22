@@ -4,6 +4,7 @@
 
     <article>
         <div class="container-full">
+            <div class="pre-scrollable">
             @foreach($notificationList as $n)
                 <div class="row">
                     <div class="col-md-12">
@@ -36,8 +37,17 @@
                     </div>
                 </div>
             @endforeach
+            </div>
         </div>
     </article>
+
+    <style>
+        .pre-scrollable {
+            max-height: 800px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+    </style>
 
     <script>
         $.ajaxSetup({
