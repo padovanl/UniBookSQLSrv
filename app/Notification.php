@@ -31,7 +31,7 @@ class Notification extends Model
         break;
       case "comment":
         if(($user['id_user']) != (Post::where('id_post', $id)->first()['id_author'])){
-          DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $user['name'] . " " . $user['surname'] . " ha commentato il al tuo post.", 'new' => 1,
+          DB::table('notifications')->insert(['created_at' => now(), 'updated_at' => now(), 'content' => $user['name'] . " " . $user['surname'] . " ha commentato il tuo post.", 'new' => 1,
                                               'id_user' => Post::where('id_post', $id)->first()['id_author'], 'link' => "/post/details/" . $post_id, 'id_sender' => $user['id_user']]);
         }
         break;
