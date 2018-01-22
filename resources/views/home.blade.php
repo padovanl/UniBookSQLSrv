@@ -136,7 +136,7 @@
                 </div>
 
                 <div class="nome_ps_friend">
-                    <div class="">{{$suggested->name . " " . $suggested->surname}}</div>
+                     <a href="/profile/user/{{$suggested->id_user}}"><div class="">{{$suggested->name . " " . $suggested->surname}}</div></a>
                 </div>
 
 
