@@ -170,7 +170,7 @@
 
                   </div> <!--/Panello post-->
           <div class="load_altri_post">
-              <button id="load_page" onclick="loadOlder(this.id)" type="button" class="button btn-default">Carica altri post...</button>
+              <button id="load_page" onclick="loadOlder(this.id)" type="button" class="button btn-default btn-load">Carica altri post...</button>
           </div>
 
           </div>

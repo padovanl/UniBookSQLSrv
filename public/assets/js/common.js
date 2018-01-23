@@ -343,10 +343,11 @@ function loadOlder(id){
                       $comment_clone.show();
                 }
               }
-            })
+            });
+                $('.btn-load').remove();
             }
             else{
-              $(".btn-load").text("Non ci sono altri post.");
+              $(".btn-load").text("Non ci sono altri post");
             }
           },
           error: function(data){
