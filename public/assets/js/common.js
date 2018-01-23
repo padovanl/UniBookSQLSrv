@@ -346,7 +346,7 @@ function loadOlder(id){
             })
             }
             else{
-              $("#load").text("Nothing More!");
+              $(".btn-load").text("Non ci sono altri post.");
             }
           },
           error: function(data){
