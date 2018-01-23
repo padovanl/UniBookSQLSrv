@@ -59,6 +59,10 @@ class RegisterController extends Controller
     $user -> name = request("name");
     $user -> surname = request("surname");
     $user -> birth_date = request("birth_date");
+    if($user->birth_date > date("Y-m-d")){
+      $error = "Sei nato nel futuro?";
+      return view('/register', compact('error'));
+    }
     $user -> email = request("email");
     $pwd = $request->input('pwd_hash');
     $rePwd = $request->input('re_pwd_hash');
