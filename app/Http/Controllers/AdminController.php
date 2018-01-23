@@ -376,7 +376,7 @@ class AdminController extends Controller
         }else{
             $author = Page::where('id_page', '=', $tmp->id_page)->first();
             $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
-            $viewModel->nomeAutore = $author->nome;
+            $viewModel->nomeAutore = $author->name;
             $viewModel->tipoAutore = 2;
         }
         $viewModel->totPage = $num_page_reportPost;
@@ -399,14 +399,13 @@ class AdminController extends Controller
     $viewModel->content = $comment->content;
     $viewModel->id_report = $report->id_report;
 
-    $tmp = CommentPage::where('id_comment', '=', $comment->id_comment)->first();
-    try{
-        $tmp = intval($comment->id_author);
+    
+    if(is_numeric($comment->id_author)){
         $author = Page::where('id_page', '=', $comment->id_author)->first();
         $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
-        $viewModel->nomeAutore = $author->nome;
+        $viewModel->nomeAutore = $author->name;
         $viewModel->tipoAutore = 2;
-    }catch(Exception $e){
+    }else{
         $author = User::where('id_user', '=', $comment->id_author)->first();
         $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
         $viewModel->nomeAutore = $author->name . " " . $author->surname;
@@ -497,13 +496,12 @@ class AdminController extends Controller
 
         $viewModel->created_at = $date->format('M j, Y H:i');
 
-        try{
-            $tmp = intval($comment->id_author);
+        if(is_numeric($comment->id_author)){
             $author = Page::where('id_page', '=', $comment->id_author)->first();
             $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
-            $viewModel->nomeAutore = $author->nome;
+            $viewModel->nomeAutore = $author->name;
             $viewModel->tipoAutore = 2;
-        }catch(Exception $e){
+        }else{
             $author = User::where('id_user', '=', $comment->id_author)->first();
             $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
             $viewModel->nomeAutore = $author->name . " " . $author->surname;
