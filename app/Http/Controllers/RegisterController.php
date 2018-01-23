@@ -74,6 +74,7 @@ class RegisterController extends Controller
     $user -> citta = request("citta");
     $user -> gender = request("gender");
     $user->confirmed = false;
+    $user->profiloPubblico = true;
     if(Input::hasFile('file')){
       $file = Input::file('file');
       $ext = pathinfo($file, PATHINFO_EXTENSION);
