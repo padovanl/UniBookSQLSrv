@@ -101,6 +101,7 @@ class SearchController extends Controller{
       $skip = 0;
 
     $users = User::select("id_user", "name", "surname", "email", "pic_path", "gender", "citta", "birth_date")
+                ->where('confirmed', '=', 1)
                 ->take($take)
                 ->skip($skip);
 
