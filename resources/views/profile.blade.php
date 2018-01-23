@@ -245,6 +245,9 @@
           <br>
       </nav>
       <article class="content">
+        <div class="page_alert" role="alert" style="margin: 10px 10px; padding: 5px 5px;">
+          <strong>Questo utente ha impostato la privacy su Privato. Invia una richiesta di amicizia per poter vedere i suoi post.</strong>
+        </div>
       </article>
     @break
     @case(2)
