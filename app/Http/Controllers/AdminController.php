@@ -400,18 +400,17 @@ class AdminController extends Controller
     $viewModel->id_report = $report->id_report;
 
     $tmp = CommentPage::where('id_comment', '=', $comment->id_comment)->first();
-    if(!$tmp){
-        //devo cercare l'autore tra gli utenti
-        $tmp = CommentUser::where('id_comment', '=', $comment->id_comment)->first();
-        $author = User::where('id_user', '=', $tmp->id_user)->first();
+    try{
+        $tmp = intval($comment->id_author);
+        $author = Page::where('id_page', '=', $comment->id_author)->first();
+        $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
+        $viewModel->nomeAutore = $author->nome;
+        $viewModel->tipoAutore = 2;
+    }catch(Exception $e){
+        $author = User::where('id_user', '=', $comment->id_author)->first();
         $viewModel->linkProfiloAutore = "/profile/user/" . $author->id_user;
         $viewModel->nomeAutore = $author->name . " " . $author->surname;
         $viewModel->tipoAutore = 1;
-    }else{
-        $author = Page::where('id_page', '=', $tmp->id_page)->first();
-        $viewModel->linkProfiloAutore = "/profile/page/" . $author->id_page;
-        $viewModel->nomeAutore = $author->name;
-        $viewModel->tipoAutore = 2;
     }
     return response()->json($viewModel);
 
