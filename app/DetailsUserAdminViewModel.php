@@ -16,5 +16,6 @@ class DetailsUserAdminViewModel //extends Model
     public $admin;
     public $picPath;
     public $link;
+    public $confirmEmail;
 
 }

@@ -579,6 +579,8 @@ class AdminController extends Controller
     }else{
         if($filter == "Bloccati"){
             $users = User::where('ban', '=', 1)->latest()->get();
+        }else if($filter == 'Non attivi'){
+            $users = User::where('confirmed', '=', false)->latest()->get();
         }else{
             $users = User::where('admin', '=', 1)->latest()->get();
         }
@@ -626,6 +628,7 @@ class AdminController extends Controller
         $viewModel->created_at = $u->created_at->format('M j, Y H:i');
         $viewModel->admin = $u->admin;
         $viewModel->picPath = $u->pic_path;
+        $viewModel->confirmEmail = $u->confirmed;
         $viewModel->totPage = $num_page_user;
         $array[$x] = $viewModel;
         $x++;
@@ -646,6 +649,7 @@ class AdminController extends Controller
      $viewModel->email = $u->email;
      $viewModel->created_at = $u->created_at->format('M j, Y H:i');
      $viewModel->admin = $u->admin;
+     $viewModel->confirmEmail = $u->confirmed;
      $viewModel->picPath = '..' . $u->pic_path;
      $viewModel->totPage = 1;
 

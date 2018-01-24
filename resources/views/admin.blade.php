@@ -294,6 +294,7 @@
                   <option selected>Tutti</option>
                   <option>Bloccati</option>
                   <option>Admin</option>
+                  <option>Non attivi</option>
                 </select> 
             </div>
             <div class="col-md-6">
@@ -332,6 +333,8 @@
                       <td>
                         @if($u->ban == 1)
                           <span class="badge badge-danger">Bloccato</span>
+                        @elseif(!$u->confirmEmail)
+                          <span class="badge badge-warning">Non attivo</span>
                         @else
                           <span></span>
                         @endif
@@ -1136,6 +1139,8 @@
         }else{
           if(value.admin == 1){
             rows = rows + '<td><span class="badge badge-primary" id="labelStatusUser' + value.id_user + '">Admin</span></td>';
+          }else if(!value.confirmEmail){
+            rows = rows + '<td><span class="badge badge-warning" id="labelStatusUser' + value.id_user + '">Non attivo</span></td>';
           }else{
             rows = rows + '<td><span id="labelStatusUser"></span></td>';
           }
