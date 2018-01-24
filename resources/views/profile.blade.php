@@ -54,6 +54,9 @@
               </div>
               <!--Add Friend and Message-->
               <div class="w3-container">
+                @if($user->admin)
+                 <p><i class="fa fa-star fa-fw w3-margin-right w3-large w3-text-teal"></i>Admin</p>
+                @endif
                   <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
                   <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
                   <p>
