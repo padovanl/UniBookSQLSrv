@@ -306,7 +306,6 @@ function loadOlder(id){
   var is_home = 0;
   var is_profile = 0;
   var is_page = 0;
-  console.log(id.split("_"));
   if(id.split("_")[1] == "home"){
     is_home = 1;
   }
@@ -344,7 +343,6 @@ function loadOlder(id){
                 }
               }
             });
-                $('.btn-load').remove();
             }
             else{
               $(".btn-load").text("Non ci sono altri post");
