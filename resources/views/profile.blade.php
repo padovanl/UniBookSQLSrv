@@ -284,6 +284,9 @@
                           <button class="btn btn-border btn-round color-1 material-design" cursor='pointer' data-toggle="modal" data-target="#messageUserModal">Invia messaggio</button>
                       </p>
               <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
+                  @if($user->admin)
+                   <p><i class="fa fa-star fa-fw w3-margin-right w3-large w3-text-teal"></i>Admin</p>
+                  @endif
                   <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
                   <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
                   <p>
@@ -448,6 +451,9 @@
                   </p>
               @endif
               <!--se è pubblico vedo le info e posso commentare, se è il proprio profilo vedo tutto-->
+                @if($user->admin)
+                 <p><i class="fa fa-star fa-fw w3-margin-right w3-large w3-text-teal"></i>Admin</p>
+                @endif
                   <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> citta}}</p>
                   <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{$user -> email}}</p>
                   <p>
