@@ -112,7 +112,7 @@ class HomeController extends Controller{
       return(json_encode($toreturn));
     }
     else{
-      for($i = 0; $i < count($toreturn); $i++){
+      for($i = 0; $i <= count($toreturn); $i++){
         if($toreturn[$i]->id_post == $request->input('post_id')){
             $toreturn = array_slice($toreturn, $i + 1, $i + 5);
             return(json_encode($toreturn));
