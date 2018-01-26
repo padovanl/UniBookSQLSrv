@@ -48,7 +48,10 @@ function getTimeDelta(time){
   if(minutes == 0){
     delta = "Adesso";
   }
-  else if(minutes < 60) {
+  else if(minutes <= 1){
+    delta = minutes + " minuto fa";
+  }
+  else if(minutes > 1 && minutes < 60) {
     delta = minutes + " minuti fa";
   }
   else if((minutes >= 60) && (minutes < 86400)) {
