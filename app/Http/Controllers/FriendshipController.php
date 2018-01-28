@@ -31,7 +31,7 @@ class FriendshipController extends Controller
   public function sendRequestFriend(Request $request){
     	if(!$this->controllaAutorizzazione())
     		return response()->json(['message' => 'Loggati!']);
-    	$id_destination_user = $request->input('id_destination_user');
+    		$id_destination_user = $request->input('id_destination_user');
         $logged_user = User::where('id_user', '=', Cookie::get('session'))->first();
         $alreadyFriends = Users_make_friends::where([['id_request_user', '=', $logged_user], ['id_user', '=', $id_destination_user]])->orWhere([['id_request_user', '=', $id_destination_user], ['id_user', '=', $logged_user]])->get();
         if(!$alreadyFriends){
@@ -41,7 +41,8 @@ class FriendshipController extends Controller
         	$friendship->status = 1;
         	$friendship->save();
         	return response()->json(['message' => 'Richiesta inviata!']);
-        }else{
+        }
+				else{
         	return response()->json(['message' => 'Siete gia\' amici!']);
         }
     }
@@ -83,9 +84,8 @@ class FriendshipController extends Controller
     	$friendRequest = Users_make_friends::where('id_request', '=', $id_request)->first();
     	if(!$friendRequest)
     		return response()->json(['message' => 'Richiesta di amicizia non trovata.']);
-		Users_make_friends::where('id_request', '=', $id_request)->delete();
+				Users_make_friends::where('id_request', '=', $id_request)->delete();
     	//creo la notifica da inviare all'utente
-
     	return response()->json(['message' => 'Richiesta rifiutata.']);
     }
 

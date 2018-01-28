@@ -38,9 +38,6 @@ class MessageController extends Controller
 
         //prendo tutti gli utenti
         $users = User::all();
-
-        //$allMessages = Message::where('receiver', '=', $id)->orderBy('created_at', 'desc')->get();
-
         $messages = array();
         $cnt = 0;
         for($x = 0; $x < count($users); $x++){
@@ -104,5 +101,5 @@ class MessageController extends Controller
         return response()->json(['message' => 'Operazione completata']);
     }
 
-  
+
 }

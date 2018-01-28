@@ -39,7 +39,6 @@ class HomeController extends Controller{
             $return[$key] = $value;
         }
     }
-
     return $return;
   }
 
@@ -107,6 +106,7 @@ class HomeController extends Controller{
     else if((request('details')) && (is_numeric(Post::where('id_post',request('id_post'))->first()['id_author']))) {
       $toreturn = Post::GetPosts(array(request('id_post')), $logged_user['id_user']);
     }
+    //una volta caricati i post, torno solo una piccola collezione di essi, per non affaticare troppo il client
     if($request->input('post_id') == -1){
       $toreturn = array_slice($toreturn, 0, 7);
       return(json_encode($toreturn));
@@ -127,17 +127,16 @@ class HomeController extends Controller{
       $logged_user = User::where('id_user', Cookie::get('session'))->first();
       $suggested_friends = User::Suggestedfriends($logged_user['id_user']);
       //log
+      $this->log($logged_user['id_user'], "Logged in");
       return view('home', compact('logged_user', 'suggested_friends'));
     }
     else{
-      //$this->log($logged_user['id_user'], "Try to log in.");
       return redirect('/login');
     }
   }
 
   //funzione che imposta le reazioni a commenti e post
   public function reaction(Request $request){
-    //manca controllo bontà dei parametri
     $logged_user = User::where('id_user', Cookie::get('session'))->first();
     if((Page::where('id_page', request('id_page'))->first()['id_user']) == $logged_user['id_user']){
       if((request('action') == 'like') || (request('action') == 'dislike')){
@@ -196,11 +195,6 @@ class HomeController extends Controller{
       if(!is_numeric(Post::where('id_post', request('id_post'))->first()['id_author'])){
         Notification::SendNotification($comment->id_post, $logged_user, "comment", $comment->id_post, null);
       }
-      // else{
-      //   //mando la notifica all'owner della Pagina
-      //   $id_user = Post::where('id_post', request('id_post'))->first()['id_author'];
-      //   Notification::SendNotification($comment->id_post, $id_user, "commentpage", $comment->id_post, null);
-      // }
       //log
       $this->log($logged_user['id_user'], 'New Comment_' . $comment->id_comment);
       return(json_encode($comment));

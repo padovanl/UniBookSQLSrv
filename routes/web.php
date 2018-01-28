@@ -35,9 +35,9 @@ Route::get('/logout', 'LoginController@logout');
 Route::get('/home/loadmore', 'HomeController@loadMore');
 
 //Ricerca
-Route::get('/search',   			  'SearchController@search');
-Route::get('/searchPages',            'SearchController@searchPage');
-Route::get('/searchUsers',            'SearchController@searchUsers');
+Route::get('/search', 'SearchController@search');
+Route::get('/searchPages', 'SearchController@searchPage');
+Route::get('/searchUsers', 'SearchController@searchUsers');
 
 
 //Profiles

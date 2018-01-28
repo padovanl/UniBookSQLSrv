@@ -1,3 +1,4 @@
+//vengono create le liste di utenti che hanno messo like o dislike ad un post/commento
 function createTooltipData(data){
     if(data.length > 0 && data.length <= 4){
       var toreturn = '<ul>';
@@ -31,10 +32,12 @@ function createTooltipData(data){
     }
   }
 
+//viene settato il focus sul pannello "new_comment"
 function commentfocus(id){
     $("#comment_insert_" + id.split("_")[1]).focus();
 }
 
+//funzione che gestisce gli orari di pubblicazione dei post
 function getTimeDelta(time){
   var now = new Date().getTime();
   if (navigator.userAgent.indexOf("Chrome") !== -1){
@@ -69,6 +72,7 @@ function getTimeDelta(time){
   return(delta);
 }
 
+//inserimento delle reazioni: like e dislike
 function reaction(id, page=null){
   if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
     var id_page = location.href.match(/([^\/]*)\/*$/)[1];
@@ -103,6 +107,7 @@ function reaction(id, page=null){
   })
 }
 
+//creazione del pannello commenti
 function createcomment(comment){
   $comment_clone = $("#comment_panel").clone();
   $comment_clone.attr("id", "comment_panel_" + comment.id_comment);
@@ -145,7 +150,9 @@ function createcomment(comment){
   return($comment_clone);
 }
 
+//creazione di un pannello post
 function createPost(data){
+  console.log(data);
   $post_clone = $("#post").clone();
   $post_clone.attr("id", "post_" + data.id_post);
   $post_clone.find("#input_panel").attr("id", "input_panel_" + data.id_post);
@@ -192,6 +199,7 @@ function createPost(data){
   return($post_clone);
 }
 
+//inserimento di un nuovo commento
 function newComment(e, id, page=null){
   if(e.keyCode === 13){
           e.preventDefault();
@@ -232,8 +240,8 @@ function newComment(e, id, page=null){
         }
 }
 
+//inserimento di un nuovo post
 function newPost(id_page=null){
-  //manca controllo che il campo non sia vuoto!
   if($.isNumeric(location.href.match(/([^\/]*)\/*$/)[1])){
     var id_page = location.href.match(/([^\/]*)\/*$/)[1];
   }
@@ -278,6 +286,7 @@ function newPost(id_page=null){
   }
 }
 
+//ajax richiamato una volta che viene caricata la pagina, che sia la home, una pagina profilo o un dettaglio post
 function onLoad(data, page=null){
   $("#post").hide();
   $("#comment_panel").hide();
@@ -305,6 +314,7 @@ function onLoad(data, page=null){
   })
 }
 
+//funzione richiamata quando viene premuto il pulsante "carica post più vecchi"
 function loadOlder(id){
   var is_home = 0;
   var is_profile = 0;

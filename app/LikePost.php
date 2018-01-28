@@ -60,7 +60,7 @@ class LikePost extends Model
           if(!is_numeric(Post::where('id_post', $id_post)->first()['id_author'])){
             Notification::SendNotification($id_post, $user, "likepost", $id_post, 'mipiace');
           }
-          DB::table('like_posts')->where('id_post', $id_post)->update(array('like' => 1));
+          DB::table('like_posts')->where('id_post', $id_post)->where('id_user', $user['id_user'])->update(array('like' => 1));
           return(array('type' => 'post', 'id_post' => $id_post, 'id_user' => $liker_id, 'status_like' => 'blue', 'status_dislike' => 'black'));
         }
         else{
@@ -90,7 +90,7 @@ class LikePost extends Model
           if(!is_numeric(Post::where('id_post', $id_post)->first()['id_author'])){
             Notification::SendNotification($id_post, $user, "likepost", $id_post, 'non mi piace');
           }
-          DB::table('like_posts')->where('id_post', $id_post)->update(array('like' => 0));
+          DB::table('like_posts')->where('id_post', $id_post)->where('id_user', $user['id_user'])->update(array('like' => 0));
           return(array('type' => 'post','id_post' => $id_post, 'id_user' => $liker_id, 'status_like' => 'black', 'status_dislike' => 'red'));
         }
         else{
