@@ -98,7 +98,7 @@ function reaction(id, page=null){
            $("#likecomm_" + data.id_comment).css({ 'color': data.status_like })
            $("#dislikecomm_" + data.id_comment).css({ 'color': data.status_dislike });
            break;
-       }
+       };
      },
      error: function(data){
      var errors = data.responseJSON;
@@ -106,6 +106,7 @@ function reaction(id, page=null){
    }
   })
 }
+
 
 //creazione del pannello commenti
 function createcomment(comment){

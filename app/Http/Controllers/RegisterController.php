@@ -10,7 +10,7 @@ use \Datetime;
 use App\User;
 use App\ResetPassword;
 use App\Message;
-
+use Carbon\Carbon;
 use Cookie;
 
 use App\Mail\ConfirmEmail;
@@ -55,7 +55,7 @@ class RegisterController extends Controller
       return view('/register', compact('error'));
     }
     $user = new User;
-    $user -> id_user = uniqid();
+    $user -> id_user = guid();
     $user -> name = request("name");
     $user -> surname = request("surname");
     $user -> birth_date = request("birth_date");
@@ -75,6 +75,11 @@ class RegisterController extends Controller
     $user -> gender = request("gender");
     $user->confirmed = false;
     $user->profiloPubblico = true;
+
+    $user->created_at = date("Y-m-d");
+    $user->updated_at =date("Y-m-d");
+
+
     if(Input::hasFile('file')){
       $file = Input::file('file');
       $ext = pathinfo($file, PATHINFO_EXTENSION);

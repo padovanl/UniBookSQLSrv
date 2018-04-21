@@ -226,7 +226,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Input'     => Illuminate\Support\Facades\Input::class,
-
+        'Uuid' => Webpatser\Uuid\Uuid::class,
+        'Guid' => Sujip\Guid\Guid::class,
     ],
 
 ];

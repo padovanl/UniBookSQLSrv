@@ -12,9 +12,9 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
@@ -55,6 +55,7 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
+            'Sujip\\Guid\\' => 11,
         ),
         'R' => 
         array (
@@ -119,8 +120,8 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'XdgBaseDir\\' => 
         array (
@@ -193,6 +194,10 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'Symfony\\Component\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
+        ),
+        'Sujip\\Guid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sudiptpa/guid/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -293,6 +298,13 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
     );
 
     public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Webpatser\\Uuid' => 
+            array (
+                0 => __DIR__ . '/..' . '/webpatser/laravel-uuid/src',
+            ),
+        ),
         'P' => 
         array (
             'Prophecy\\' => 
@@ -353,7 +365,6 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
-        'App\\Http\\Controllers\\DetailsController' => __DIR__ . '/../..' . '/app/Http/Controllers/DetailsController.php',
         'App\\Http\\Controllers\\FriendshipController' => __DIR__ . '/../..' . '/app/Http/Controllers/FriendshipController.php',
         'App\\Http\\Controllers\\GeneralAppController' => __DIR__ . '/../..' . '/app/Http/Controllers/GeneralAppController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
@@ -372,10 +383,13 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\LikeComment' => __DIR__ . '/../..' . '/app/LikeComment.php',
+        'App\\LikeCommentPage' => __DIR__ . '/../..' . '/app/LikeCommentPage.php',
         'App\\LikePost' => __DIR__ . '/../..' . '/app/LikePost.php',
+        'App\\LikePostPage' => __DIR__ . '/../..' . '/app/LikePostPage.php',
         'App\\Like_posts' => __DIR__ . '/../..' . '/app/Like_posts.php',
         'App\\Mail\\ConfirmEmail' => __DIR__ . '/../..' . '/app/Mail/ConfirmEmail.php',
         'App\\Mail\\ForgotPasswordEmail' => __DIR__ . '/../..' . '/app/Mail/ForgotPasswordEmail.php',
+        'App\\Mail\\SettingsEmail' => __DIR__ . '/../..' . '/app/Mail/SettingsEmail.php',
         'App\\Message' => __DIR__ . '/../..' . '/app/Message.php',
         'App\\MessageViewModel' => __DIR__ . '/../..' . '/app/MessageViewModel.php',
         'App\\Notification' => __DIR__ . '/../..' . '/app/Notification.php',
@@ -3104,6 +3118,9 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'SebastianBergmann\\ResourceOperations\\ResourceOperations' => __DIR__ . '/..' . '/sebastian/resource-operations/src/ResourceOperations.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
+        'Sujip\\Guid\\Facades\\Guid' => __DIR__ . '/..' . '/sudiptpa/guid/src/Sujip/Guid/Facades/Guid.php',
+        'Sujip\\Guid\\Guid' => __DIR__ . '/..' . '/sudiptpa/guid/src/Sujip/Guid/Guid.php',
+        'Sujip\\Guid\\GuidServiceProvider' => __DIR__ . '/..' . '/sudiptpa/guid/src/Sujip/Guid/GuidServiceProvider.php',
         'Symfony\\Component\\Console\\Application' => __DIR__ . '/..' . '/symfony/console/Application.php',
         'Symfony\\Component\\Console\\CommandLoader\\CommandLoaderInterface' => __DIR__ . '/..' . '/symfony/console/CommandLoader/CommandLoaderInterface.php',
         'Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader' => __DIR__ . '/..' . '/symfony/console/CommandLoader/ContainerCommandLoader.php',
@@ -3681,6 +3698,8 @@ class ComposerStaticInit2c1aff624ce3cca2ae275a8a7060106f
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
         'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
+        'Webpatser\\Uuid\\Uuid' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/Uuid.php',
+        'Webpatser\\Uuid\\UuidServiceProvider' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/UuidServiceProvider.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',
         'Whoops\\Exception\\Frame' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Frame.php',

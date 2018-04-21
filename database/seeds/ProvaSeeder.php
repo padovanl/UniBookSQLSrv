@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class ProvaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         'gender' => '1',
         'citta' => 'Ferrara',
         'ban' => 0,
-        'id_user' => guid(),
+        'id_user' => uniqid(),
         'pic_path' => '/assets/images/facebook1.jpg',
         'confirmed' => 1,
 	'created_at' => now(),

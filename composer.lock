@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb13913620747be7eeba1a0b0dd0e4ff",
+    "content-hash": "a1952af5d8b296687f55508a5d690d16",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1490,6 +1490,63 @@
             "time": "2018-01-13T22:22:03+00:00"
         },
         {
+            "name": "sudiptpa/guid",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sudiptpa/guid.git",
+                "reference": "fcf568932d7342ab23c19eb94f7a2020a569ec86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sudiptpa/guid/zipball/fcf568932d7342ab23c19eb94f7a2020a569ec86",
+                "reference": "fcf568932d7342ab23c19eb94f7a2020a569ec86",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Sujip\\Guid\\GuidServiceProvider"
+                    ],
+                    "aliases": {
+                        "Guid": "Sujip\\Guid\\Facades\\Guid"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sujip\\Guid\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sujip Thapa",
+                    "email": "sudiptpa@gmail.com",
+                    "homepage": "https://sujipthapa.co",
+                    "role": "Senior Developer"
+                }
+            ],
+            "description": "A Simple GUID generator Package for PHP.",
+            "keywords": [
+                "guid"
+            ],
+            "time": "2017-10-06T14:18:56+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.0.2",
             "source": {
@@ -2454,6 +2511,60 @@
                 "environment"
             ],
             "time": "2016-09-01T10:05:43+00:00"
+        },
+        {
+            "name": "webpatser/laravel-uuid",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webpatser/laravel-uuid.git",
+                "reference": "9c9bd4344f4aa78326b34a324d8a208e65c8221f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webpatser/laravel-uuid/zipball/9c9bd4344f4aa78326b34a324d8a208e65c8221f",
+                "reference": "9c9bd4344f4aa78326b34a324d8a208e65c8221f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "~1.4",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Webpatser\\Uuid\\UuidServiceProvider"
+                    ],
+                    "aliases": {
+                        "Uuid": "Webpatser\\Uuid\\Uuid"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Webpatser\\Uuid": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Kempen",
+                    "email": "christoph@downsized.nl"
+                }
+            ],
+            "description": "Class to generate a UUID according to the RFC 4122 standard. Support for version 1, 3, 4 and 5 UUID are built-in.",
+            "homepage": "https://github.com/webpatser/uuid",
+            "keywords": [
+                "UUID RFC4122"
+            ],
+            "time": "2017-09-03T23:32:05+00:00"
         }
     ],
     "packages-dev": [

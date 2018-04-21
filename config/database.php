@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'sqlsrv'),
 
     /*
     |--------------------------------------------------------------------------
@@ -67,16 +67,15 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-        ],
+        'sqlsrv' => array(
+           'driver' => 'sqlsrv',
+           'host' => 'DESKTOP-DOF7GS7\MSSQLSERVER2014', // Provide IP address here
+           'database' => 'facebook',
+           'username' => 'facebook',
+           'password' => 'LucaPadovan1993',
+           'prefix' => '',
+           //'datetimeformat' => 'Y-m-d H:i:s.u',
+          ),
 
     ],
 

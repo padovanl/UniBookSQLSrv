@@ -13,7 +13,7 @@ $factory->define(App\PostP::class, function (Faker $faker) {
           'fixed' => 0,
           'content' => $faker->paragraph,
           'id_author' => $faker->randomElement($pageIDs),
-          'created_at' =>now(),
-          'updated_at' =>now()
+          'created_at' =>date("Y-m-d"),
+          'updated_at' => date("Y-m-d"),
       ];
 });

@@ -19,7 +19,7 @@ class CreateTablePosts extends Migration
             $table->timestamps();
             $table->string('content', 1000);
             $table->boolean('fixed')->default(false);
-            $table->uuid('id_author');
+            $table->string('id_author');
 
             //foreign key
             //se fa riferimento solo agli utenti, allora le pagine non possono creare post e commenti

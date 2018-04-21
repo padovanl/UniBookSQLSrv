@@ -18,7 +18,7 @@ class CreateTableComments extends Migration
             $table->increments('id_comment');
             $table->timestamps();
             $table->string('content', 1000);
-            $table->uuid('id_author');
+            $table->string('id_author');
             $table->integer('id_post')->unsigned();
 
             //foreign key
