@@ -229,6 +229,8 @@ class HomeController extends Controller{
     $report->id_post = $id;
     $report->status = "aperta";
     $report->description = $motivo;
+      $report->created_at = date("Y-m-d");
+      $report->updated_at = date("Y-m-d");
     $report->save();
     //log
     $this->log($logged_user['id_user'], 'Report Post_' . $report['id_post']);
@@ -248,6 +250,8 @@ class HomeController extends Controller{
     $report->id_comment = $id;
     $report->status = "aperta";
     $report->description = $motivo;
+      $report->created_at = date("Y-m-d");
+      $report->updated_at = date("Y-m-d");
     $report->save();
     //log
     $this->log($logged_user['id_user'], 'Report Comment_' . $report['id_comment']);

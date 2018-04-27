@@ -180,7 +180,7 @@ class ProfileController extends Controller{
 
       DB::table('users')->where('id_user','=',$logged_user->id_user)->update(['name' => $name,'surname' => $surname,'citta' => $citta]);
 
-      Mail::to($logged_user->email)->send(new SettingsEmail($logged_user));
+      //Mail::to($logged_user->email)->send(new SettingsEmail($logged_user));
 
       return response()->json(['message' => 'Done']);
     }
