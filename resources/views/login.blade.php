@@ -55,14 +55,14 @@
                 </div>
             @endif
             <div id="rem-pwd">
-                <div class="md-checkbox">
+                <div class="md-checkbox" style="margin: 0 auto;">
                     <input id="rem" type="checkbox" name="rem" checked>
                     <label for="rem">Ricordami</label>
                 </div>
                 <div class="pwd_dimenticata">
-          <span>
+          <!--<span>
             <a href="{{ route('forgotPassword') }}">Password dimeticata?</a>
-          </span>
+          </span>-->
                 </div>
             </div>
 
