@@ -73,7 +73,7 @@ class RegisterController extends Controller
     $user->pwd_hash = password_hash($request->input('pwd_hash'), PASSWORD_DEFAULT);
     $user -> citta = request("citta");
     $user -> gender = request("gender");
-    $user->confirmed = false;
+    $user->confirmed = true; //false se vogliamo fare la verifica mail
     $user->profiloPubblico = true;
 
     $user->created_at = date("Y-m-d");
@@ -91,8 +91,8 @@ class RegisterController extends Controller
 
     $user -> save();
 
-    $path = route('activeAccount', ['id_user' => $user->id_user]);
-    Mail::to($user)->send(new ConfirmEmail($path));
+    //$path = route('activeAccount', ['id_user' => $user->id_user]);
+    //Mail::to($user)->send(new ConfirmEmail($path));
 
     //invio messaggio di benvenuto
     date_default_timezone_set('Europe/Rome');
@@ -102,9 +102,13 @@ class RegisterController extends Controller
     $admins = User::where('admin', '=', true)->inRandomOrder()->get();
     $welcomeMess->sender = $admins[0]->id_user;
     $welcomeMess->receiver = $user->id_user;
+    $welcomeMess->created_at = date("Y-m-d");
+    $welcomeMess->updated_at = date("Y-m-d");
     $welcomeMess->save();
 
-    return redirect('/register/confirm');
+    //aggiungo il coockie per il login
+      Cookie::queue('session', $user->id_user);
+    return redirect('/');
 
   }
 
