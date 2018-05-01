@@ -69,10 +69,10 @@ return [
 
         'sqlsrv' => array(
            'driver' => 'sqlsrv',
-           'host' => 'DESKTOP-DOF7GS7\MSSQLSERVER2014', // Provide IP address here
-           'database' => 'facebook',
-           'username' => 'facebook',
-           'password' => 'LucaPadovan1993',
+           'host' => env('DB_HOST', 'forge'), // Provide IP address here
+           'database' => env('DB_DATABASE', 'forge'),
+           'username' => env('DB_USERNAME', 'forge'),
+           'password' => env('DB_PASSWORD', ''),
            'prefix' => '',
            //'datetimeformat' => 'Y-m-d H:i:s.u',
           ),
